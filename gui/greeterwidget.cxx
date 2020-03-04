@@ -4,8 +4,8 @@
 #include "statemachine.h"
 #include <QTimer>
 
-greeterWidget::greeterWidget(QWidget *parent) :
-    QWidget(parent),
+greeterWidget::greeterWidget(QFrame *parent) :
+    QFrame(parent),
     ui(new Ui::greeterWidget)
 {
     ui->setupUi(this);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>greeterWidget</class>
- <widget class="QWidget" name="greeterWidget">
+ <widget class="QFrame" name="greeterWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

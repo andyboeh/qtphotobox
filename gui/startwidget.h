@@ -1,18 +1,18 @@
 #ifndef STARTWIDGET_H
 #define STARTWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
 class startWidget;
 }
 
-class startWidget : public QWidget
+class startWidget : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit startWidget(QWidget *parent = nullptr);
+    explicit startWidget(QFrame *parent = nullptr);
     ~startWidget();
 
 private slots:

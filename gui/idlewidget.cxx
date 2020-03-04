@@ -3,8 +3,8 @@
 #include "settings.h"
 #include "statemachine.h"
 
-idleWidget::idleWidget(QWidget *parent) :
-    QWidget(parent),
+idleWidget::idleWidget(QFrame *parent) :
+    QFrame(parent),
     ui(new Ui::idleWidget)
 {
     ui->setupUi(this);

@@ -1,7 +1,7 @@
 #ifndef COUNTDOWNWIDGET_H
 #define COUNTDOWNWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QPixmap>
 
 namespace Ui {
@@ -11,7 +11,7 @@ class countdownWidget;
 class QTimer;
 class pbCamera;
 
-class countdownWidget : public QWidget
+class countdownWidget : public QFrame
 {
     Q_OBJECT
 

@@ -13,6 +13,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QThread>
+#include <QFontDatabase>
 
 MainWindow::MainWindow()
 {
@@ -21,6 +22,7 @@ MainWindow::MainWindow()
     mCameraThreadObject = nullptr;
     mImagesCaptured = 0;
     mImagesToCapture = 0;
+    mFullscreen = false;
 }
 
 MainWindow::~MainWindow()
@@ -97,7 +99,7 @@ void MainWindow::changeState(QString name)
     }
 }
 
-void MainWindow::loadSettingsToGui()
+void MainWindow::loadSettingsToGui(bool showWindow)
 {
     pbSettings &pbs = pbSettings::getInstance();
     int numx = pbs.getInt("picture", "num_x");
@@ -111,7 +113,24 @@ void MainWindow::loadSettingsToGui()
     }
 
     mImagesToCapture = numx * numy - numskip;
-    qDebug() << "Going to capture " << mImagesToCapture << " images";
+
+    bool fs = pbs.getBool("gui", "fullscreen");
+    if(fs) {
+        mFullscreen = true;
+        if(isVisible() || showWindow) {
+            hide();
+            showFullScreen();
+        }
+    } else {
+        mFullscreen = false;
+        int width = pbs.getInt("gui", "width");
+        int height = pbs.getInt("gui", "height");
+        setFixedSize(width, height);
+        if(isVisible() || showWindow) {
+            hide();
+            show();
+        }
+    }
 }
 
 void MainWindow::imageCaptured()
@@ -123,6 +142,7 @@ void MainWindow::imageCaptured()
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainWindow w;
+    QFontDatabase db;
     StateMachine &sm = StateMachine::getInstance();
     QObject::connect(&sm, SIGNAL(performStateChange(QString)),
             &w, SLOT(changeState(QString)));
@@ -162,6 +182,31 @@ int main(int argc, char *argv[]) {
     }
     pbs.mergeConfigFile(basepath);
 
+    QString styleName = pbs.get("gui", "style");
+    qDebug() << styleName;
+
+    if(styleName != "default") {
+        QFile styleFile(":/" + styleName + ".qss");
+        if(styleFile.exists()) {
+            styleFile.open(QIODevice::ReadOnly);
+            app.setStyleSheet(QString(styleFile.readAll()));
+            styleFile.close();
+        }
+    }
+
+    // Add fonts
+    QStringList fontlist;
+    fontlist.append(":/gui/styles/fonts/AmaticSC-Bold.ttf");
+    fontlist.append(":/gui/styles/fonts/AmaticSC-Regular.ttf");
+    foreach(QString font, fontlist) {
+        QFile fontFile(font);
+        if(fontFile.exists()) {
+            fontFile.open(QIODevice::ReadOnly);
+            db.addApplicationFontFromData(fontFile.readAll());
+            fontFile.close();
+        }
+    }
+
     sm.addState("start");
     sm.addState("init");
     sm.addState("settings");
@@ -189,8 +234,8 @@ int main(int argc, char *argv[]) {
 
     sm.triggerState("start");
 
-    w.show();
-    QMetaObject::invokeMethod(&w, "loadSettingsToGui");
+    w.loadSettingsToGui(true);
+    //QMetaObject::invokeMethod(&w, "loadSettingsToGui");
     return app.exec();
 }
 

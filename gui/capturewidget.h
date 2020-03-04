@@ -1,7 +1,7 @@
 #ifndef CAPTUREWIDGET_H
 #define CAPTUREWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QPixmap>
 
 namespace Ui {
@@ -11,7 +11,7 @@ class captureWidget;
 class pbCamera;
 class QTimer;
 
-class captureWidget : public QWidget
+class captureWidget : public QFrame
 {
     Q_OBJECT
 

@@ -3,8 +3,8 @@
 #include "statemachine.h"
 #include "settings.h"
 
-settingsWidget::settingsWidget(QWidget *parent) :
-    QWidget(parent),
+settingsWidget::settingsWidget(QFrame *parent) :
+    QFrame(parent),
     ui(new Ui::settingsWidget)
 {
     ui->setupUi(this);

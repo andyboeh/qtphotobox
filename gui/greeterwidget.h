@@ -1,7 +1,7 @@
 #ifndef GREETERWIDGET_H
 #define GREETERWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
 class greeterWidget;
@@ -9,12 +9,12 @@ class greeterWidget;
 
 class QTimer;
 
-class greeterWidget : public QWidget
+class greeterWidget : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit greeterWidget(QWidget *parent = nullptr);
+    explicit greeterWidget(QFrame *parent = nullptr);
     ~greeterWidget();
 
 private slots:

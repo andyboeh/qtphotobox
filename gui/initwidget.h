@@ -1,7 +1,7 @@
 #ifndef INITWIDGET_H
 #define INITWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
 class initWidget;
@@ -10,7 +10,7 @@ class initWidget;
 class QTimer;
 class pbCamera;
 
-class initWidget : public QWidget
+class initWidget : public QFrame
 {
     Q_OBJECT
 

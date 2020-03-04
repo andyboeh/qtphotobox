@@ -14,7 +14,7 @@ public:
     ~MainWindow();
 public slots:
     void changeState(QString name);
-    void loadSettingsToGui(void);
+    void loadSettingsToGui(bool showWindow);
     void imageCaptured(void);
 signals:
     void stopCameraThread();
@@ -24,6 +24,7 @@ private:
     pbCamera* mCameraThreadObject;
     int mImagesCaptured;
     int mImagesToCapture;
+    bool mFullscreen;
 };
 
 #endif //_PHOTOBOOTH_REWRITE_H

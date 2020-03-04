@@ -1,0 +1,18 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="dark-800x600.qss">gui/styles/dark-800x600.qss</file>
+    <file alias="dark-1024x600.qss">gui/styles/dark-1024x600.qss</file>
+    <file alias="pastel-800x600.qss">gui/styles/pastel-800x600.qss</file>
+    <file alias="pastel-1024x600.qss">gui/styles/pastel-1024x600.qss</file>
+    <file>gui/styles/images/arrow.svg</file>
+    <file>gui/styles/images/arrow-800x600.png</file>
+    <file>gui/styles/images/arrow-1024x600.png</file>
+    <file>gui/styles/images/camera.svg</file>
+    <file>gui/styles/images/camera-800x600.png</file>
+    <file>gui/styles/images/camera-1024x600.png</file>
+    <file>gui/styles/images/checkmark.png</file>
+    <file>gui/styles/images/checkmark.svg</file>
+    <file>gui/styles/fonts/AmaticSC-Bold.ttf</file>
+    <file>gui/styles/fonts/AmaticSC-Regular.ttf</file>
+</qresource>
+</RCC>

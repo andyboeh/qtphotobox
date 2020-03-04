@@ -2,8 +2,8 @@
 #include "statemachine.h"
 #include "ui_startwidget.h"
 
-startWidget::startWidget(QWidget *parent) :
-    QWidget(parent),
+startWidget::startWidget(QFrame *parent) :
+    QFrame(parent),
     ui(new Ui::startWidget)
 {
     ui->setupUi(this);

@@ -94,7 +94,7 @@ SET(${NAME}_UI
 )
 
 SET(${NAME}_RES
-
+    photobooth-rewrite.qrc
 )
 
 IF(WIN32)

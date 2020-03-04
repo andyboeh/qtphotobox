@@ -1,18 +1,18 @@
 #ifndef IDLEWIDGET_H
 #define IDLEWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
 class idleWidget;
 }
 
-class idleWidget : public QWidget
+class idleWidget : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit idleWidget(QWidget *parent = nullptr);
+    explicit idleWidget(QFrame *parent = nullptr);
     ~idleWidget();
 
 private slots:

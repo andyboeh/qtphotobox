@@ -1,18 +1,18 @@
 #ifndef SETTINGSWIDGET_H
 #define SETTINGSWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
 class settingsWidget;
 }
 
-class settingsWidget : public QWidget
+class settingsWidget : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit settingsWidget(QWidget *parent = nullptr);
+    explicit settingsWidget(QFrame *parent = nullptr);
     ~settingsWidget();
 
 private:
