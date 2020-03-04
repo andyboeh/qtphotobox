@@ -19,6 +19,8 @@ MainWindow::MainWindow()
     mCurrentWidget = nullptr;
     mCameraThread = nullptr;
     mCameraThreadObject = nullptr;
+    mImagesCaptured = 0;
+    mImagesToCapture = 0;
 }
 
 MainWindow::~MainWindow()
@@ -34,6 +36,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeState(QString name)
 {
+    StateMachine &sm = StateMachine::getInstance();
     qDebug() << name;
     if(name == "start") {
         delete mCurrentWidget;
@@ -47,6 +50,7 @@ void MainWindow::changeState(QString name)
             mCameraThreadObject->moveToThread(mCameraThread);
             connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(quit()));
             connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(deleteLater()));
+            connect(mCameraThreadObject, SIGNAL(imageCaptured(QPixmap)), this, SLOT(imageCaptured()));
             connect(mCameraThread, SIGNAL(started()), mCameraThreadObject, SLOT(start()));
             connect(mCameraThread, SIGNAL(finished()), mCameraThreadObject, SLOT(deleteLater()));
             connect(this, SIGNAL(stopCameraThread()), mCameraThreadObject, SLOT(stop()));
@@ -66,6 +70,7 @@ void MainWindow::changeState(QString name)
     } else if(name == "archive") {
 
     } else if(name == "greeter") {
+        mImagesCaptured = 0;
         delete mCurrentWidget;
         mCurrentWidget = new greeterWidget();
         setCentralWidget(mCurrentWidget);
@@ -78,7 +83,11 @@ void MainWindow::changeState(QString name)
         mCurrentWidget = new captureWidget(mCameraThreadObject);
         setCentralWidget(mCurrentWidget);
     } else if(name == "assemble") {
-
+        if(mImagesCaptured < mImagesToCapture) {
+            sm.triggerState("countdown");
+        } else {
+            qDebug() << "All images captured, assembling...";
+        }
     } else if(name == "review") {
 
     } else if(name == "error") {
@@ -86,6 +95,29 @@ void MainWindow::changeState(QString name)
     } else if(name == "teardown") {
         QApplication::quit();
     }
+}
+
+void MainWindow::loadSettingsToGui()
+{
+    pbSettings &pbs = pbSettings::getInstance();
+    int numx = pbs.getInt("picture", "num_x");
+    int numy = pbs.getInt("picture", "num_y");
+    int numskip;
+    QString skip = pbs.get("picture", "skip");
+    if(skip.isEmpty()) {
+        numskip = 0;
+    } else {
+        numskip = skip.split(",").length();
+    }
+
+    mImagesToCapture = numx * numy - numskip;
+    qDebug() << "Going to capture " << mImagesToCapture << " images";
+}
+
+void MainWindow::imageCaptured()
+{
+    qDebug() << "Image captured.";
+    mImagesCaptured++;
 }
 
 int main(int argc, char *argv[]) {
@@ -158,6 +190,7 @@ int main(int argc, char *argv[]) {
     sm.triggerState("start");
 
     w.show();
+    QMetaObject::invokeMethod(&w, "loadSettingsToGui");
     return app.exec();
 }
 

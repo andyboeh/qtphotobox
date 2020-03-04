@@ -45,6 +45,7 @@ SET(${NAME}_SOURCES
   camera/pbcamera.cxx
   camera/camera_interface.cxx
   camera/camera_gphoto2.cxx
+  camera/camera_dummy.cxx
   gpio/gpio.cxx
   printer/printer.cxx
   statemachine/statemachine.cxx
@@ -63,6 +64,7 @@ SET(${NAME}_HEADERS
   camera/pbcamera.h
   camera/camera_interface.h
   camera/camera_gphoto2.h
+  camera/camera_dummy.h
   gpio/gpio.h
   printer/printer.h
   statemachine/statemachine.h

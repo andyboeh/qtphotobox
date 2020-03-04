@@ -95,6 +95,7 @@ void pbSettings::initDefaultConfg()
 
     cameraSettings.insert("backend", "gphoto2");
     cameraSettings.insert("rotation", 0);
+    cameraSettings.insert("fps", 10);
 
     gpioSettings.insert("enable", true);
     gpioSettings.insert("exit_pin", 24);

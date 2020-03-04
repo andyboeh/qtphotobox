@@ -14,12 +14,16 @@ public:
     ~MainWindow();
 public slots:
     void changeState(QString name);
+    void loadSettingsToGui(void);
+    void imageCaptured(void);
 signals:
     void stopCameraThread();
 private:
     QWidget* mCurrentWidget;
     QThread* mCameraThread;
     pbCamera* mCameraThreadObject;
+    int mImagesCaptured;
+    int mImagesToCapture;
 };
 
 #endif //_PHOTOBOOTH_REWRITE_H

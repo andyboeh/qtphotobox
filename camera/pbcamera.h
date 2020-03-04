@@ -5,6 +5,7 @@
 #include <QPixmap>
 
 class CameraInterface;
+class QTimer;
 
 class pbCamera : public Worker
 {
@@ -13,7 +14,7 @@ public:
     pbCamera();
     ~pbCamera();
 public slots:
-    bool initCamera(void);
+    void initCamera(void);
     void start(void);
     void stop(void);
     void startPreview(void);
@@ -25,9 +26,9 @@ signals:
     void previewImageCaptured(QPixmap image);
     void imageCaptured(QPixmap image);
 private:
-    QString mCommand;
     CameraInterface* mCamera;
-    bool checkForNewCommand();
+    bool mLimitFps;
+    QTimer *mLimitTimer;
 };
 
 #endif //_PBCAMERA_H

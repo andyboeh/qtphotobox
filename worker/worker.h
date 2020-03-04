@@ -21,53 +21,35 @@ signals:
     void finished();
 
 public slots:
-    void pause()
-    {
-        auto const dispatcher = QThread::currentThread()->eventDispatcher();
-        if (!dispatcher) {
-            qCritical() << "thread with no dispatcher";
-            return;
-        }
-
-        if (state != RUNNING)
-            return;
-
-        state = PAUSED;
-        qDebug() << "paused";
-        do {
-            dispatcher->processEvents(QEventLoop::WaitForMoreEvents);
-        } while (state == PAUSED);
-    }
-
-    void resume()
-    {
-        if (state == PAUSED) {
-            state = RUNNING;
-            qDebug() << "resumed";
-        }
-    }
 
     void cancel() {
-        if (state != IDLE) {
-            state = IDLE;
-            qDebug() << "cancelled";
-        }
+        mCommandList.append("stopThread");
     }
 
 protected:
 
-    enum State { IDLE, RUNNING, PAUSED };
-    State state = IDLE;
-
-    bool isCancelled() {
+    void waitForCommand() {
         auto const dispatcher = QThread::currentThread()->eventDispatcher();
-        if (!dispatcher) {
-            qCritical() << "thread with no dispatcher";
+        if(!dispatcher) {
+            qCritical() << "thread with no dispatcher.";
+            return;
+        }
+        while(mCommandList.isEmpty()) {
+            dispatcher->processEvents(QEventLoop::WaitForMoreEvents);
+        }
+    }
+
+    bool checkForNewCommand() {
+        auto const dispatcher = QThread::currentThread()->eventDispatcher();
+        if(!dispatcher) {
+            qCritical() << "thread with no dispatcher.";
             return false;
         }
         dispatcher->processEvents(QEventLoop::AllEvents);
-        return state == IDLE;
+        return !mCommandList.isEmpty();
     }
+
+    QStringList mCommandList;
 
 };
 
