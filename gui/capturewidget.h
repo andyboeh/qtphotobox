@@ -9,7 +9,6 @@ class captureWidget;
 }
 
 class pbCamera;
-class QTimer;
 
 class captureWidget : public QFrame
 {
@@ -20,13 +19,11 @@ public:
     ~captureWidget();
 public slots:
     void imageCaptured(QPixmap image);
-    void timeout(void);
 signals:
     void captureImage(void);
 private:
     Ui::captureWidget *ui;
     pbCamera *mCameraObject;
-    QTimer *mTimer;
 };
 
 #endif // CAPTUREWIDGET_H

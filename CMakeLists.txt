@@ -56,6 +56,9 @@ SET(${NAME}_SOURCES
   gui/countdownwidget.cxx
   gui/startwidget.cxx
   gui/capturewidget.cxx
+  gui/assemblewidget.cxx
+  gui/waitingspinnerwidget.cpp
+  gui/reviewwidget.cxx
 )
 
 SET(${NAME}_HEADERS
@@ -75,6 +78,9 @@ SET(${NAME}_HEADERS
   gui/countdownwidget.h
   gui/startwidget.h
   gui/capturewidget.h
+  gui/assemblewidget.h
+  gui/waitingspinnerwidget.h
+  gui/reviewwidget.h
   worker/worker.h
 )
 
@@ -91,6 +97,8 @@ SET(${NAME}_UI
   gui/countdownwidget.ui
   gui/startwidget.ui
   gui/capturewidget.ui
+  gui/assemblewidget.ui
+  gui/reviewwidget.ui
 )
 
 SET(${NAME}_RES

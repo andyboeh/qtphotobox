@@ -9,6 +9,8 @@
 #include "capturewidget.h"
 #include "countdownwidget.h"
 #include "pbcamera.h"
+#include "assemblewidget.h"
+#include "reviewwidget.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -88,10 +90,15 @@ void MainWindow::changeState(QString name)
         if(mImagesCaptured < mImagesToCapture) {
             sm.triggerState("countdown");
         } else {
+            delete mCurrentWidget;
+            mCurrentWidget = new assembleWidget();
+            setCentralWidget(mCurrentWidget);
             qDebug() << "All images captured, assembling...";
         }
     } else if(name == "review") {
-
+        delete mCurrentWidget;
+        mCurrentWidget = new reviewWidget();
+        setCentralWidget(mCurrentWidget);
     } else if(name == "error") {
 
     } else if(name == "teardown") {
