@@ -12,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Gui)
 FIND_PACKAGE(Qt5Widgets)
+FIND_PACKAGE(Qt5DBus)
 FIND_PACKAGE(Gphoto2)
 
 include_directories(SYSTEM ${Gphoto2_INCLUDE_DIRS})
@@ -27,6 +28,7 @@ INCLUDE_DIRECTORIES(${QT5_DIR})
 SET(QT_LIBRARIES
   ${Qt5Gui_LIBRARIES}
   ${Qt5Widgets_LIBRARIES}
+  ${Qt5DBus_LIBRARIES}
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
@@ -37,6 +39,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
     printer
     statemachine
     worker
+    storage
     )
 
 SET(${NAME}_SOURCES
@@ -59,6 +62,8 @@ SET(${NAME}_SOURCES
   gui/assemblewidget.cxx
   gui/waitingspinnerwidget.cpp
   gui/reviewwidget.cxx
+  worker/pictureWorker.cxx
+  storage/storageManager.cxx
 )
 
 SET(${NAME}_HEADERS
@@ -82,6 +87,8 @@ SET(${NAME}_HEADERS
   gui/waitingspinnerwidget.h
   gui/reviewwidget.h
   worker/worker.h
+  worker/pictureWorker.h
+  storage/storageManager.h
 )
 
 SET(${NAME}_HEADERS_NO_MOC
@@ -114,6 +121,7 @@ ENDIF(WIN32)
 QT5_WRAP_CPP(${NAME}_HEADERS_MOC ${${NAME}_HEADERS})
 QT5_WRAP_UI(${NAME}_HEADERS_UI ${${NAME}_UI})
 QT5_ADD_RESOURCES(${NAME}_RES_RCC ${${NAME}_RES})
+QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
 
 ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
   ${${NAME}_HEADERS}
@@ -122,6 +130,7 @@ ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
   ${${NAME}_HEADERS_NO_MOC}
   ${${NAME}_HEADERS_UI}
   ${${NAME}_RES_RCC}
+  ${${NAME}_DBUS_INTERFACE_OM}
 )
 
 TARGET_LINK_LIBRARIES(${NAME}

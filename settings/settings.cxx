@@ -132,6 +132,7 @@ void pbSettings::initDefaultConfg()
     storageSettings.insert("basename", "photobooth");
     storageSettings.insert("keep_pictures", false);
     storageSettings.insert("wait_removable", false);
+    storageSettings.insert("ignore_removable", "/dev/mmcblk0p1,/dev/mmcblk0p2");
 
     archiveSettings.insert("enable", true);
     archiveSettings.insert("allow_reprint", true);

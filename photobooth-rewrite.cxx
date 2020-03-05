@@ -11,6 +11,7 @@
 #include "pbcamera.h"
 #include "assemblewidget.h"
 #include "reviewwidget.h"
+#include "storageManager.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -240,6 +241,9 @@ int main(int argc, char *argv[]) {
     sm.addTargetState("postprocess", "idle");
 
     sm.triggerState("start");
+
+    storageManager &stm = storageManager::getInstance();
+    stm.waitForRemovableDevice(false);
 
     w.loadSettingsToGui(true);
     //QMetaObject::invokeMethod(&w, "loadSettingsToGui");
