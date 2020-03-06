@@ -14,8 +14,10 @@ FIND_PACKAGE(Qt5Gui)
 FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(Qt5DBus)
 FIND_PACKAGE(Gphoto2)
+FIND_PACKAGE(Cups)
 
 include_directories(SYSTEM ${Gphoto2_INCLUDE_DIRS})
+include_directories(${CUPS_INCLUDE_DIRS})
 add_definitions(${Gphoto2_DEFINITIONS})
 
 get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
@@ -153,6 +155,7 @@ ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
 TARGET_LINK_LIBRARIES(${NAME}
   ${QT_LIBRARIES}
   ${Gphoto2_LIBRARIES}
+  ${CUPS_LIBRARIES}
 )
 
 IF(WIN32)

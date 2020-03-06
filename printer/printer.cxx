@@ -4,15 +4,22 @@
 #include "printJob.h"
 #include "settings.h"
 #include <QThread>
-
+#include <QTimer>
 
 printerThreadObject::printerThreadObject()
 {
     mPrinter = nullptr;
+    mTimer = new QTimer();
+    mTimer->setInterval(5000);
+    mTimer->setSingleShot(false);
+    connect(mTimer, SIGNAL(timeout()), this, SLOT(startStatusPolling()));
 }
 
 printerThreadObject::~printerThreadObject()
 {
+    mTimer->stop();
+    delete mTimer;
+    mTimer = nullptr;
     delete mPrinter;
     mPrinter = nullptr;
 }
@@ -50,15 +57,24 @@ void printerThreadObject::start()
         } else if(command == "initPrinter") {
             mPrinter->initPrinter();
         } else if(command == "startStatusPolling") {
-
+            if(!mTimer->isActive()) {
+                mTimer->start();
+            }
+            QString status = mPrinter->getStatus();
+            if(status != "ok") {
+                emit printerError(status);
+            }
         } else if(command == "stopStatusPolling") {
-
+            mTimer->stop();
         } else if(command == "stopThread") {
             qDebug() << "stopThread in printerThread";
             running = false;
         }
     }
 
+    mTimer->stop();
+    delete mTimer;
+    mTimer = nullptr;
     delete mPrinter;
     mPrinter = nullptr;
     emit finished();
