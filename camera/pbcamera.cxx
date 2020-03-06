@@ -59,6 +59,8 @@ void pbCamera::start()
         connect(mLimitTimer, SIGNAL(timeout()), this, SLOT(startPreview()));
     }
 
+    emit started();
+
     while(running) {
         waitForCommand();
         if(mCommandList.isEmpty())

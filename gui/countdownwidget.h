@@ -16,7 +16,7 @@ class countdownWidget : public QFrame
     Q_OBJECT
 
 public:
-    explicit countdownWidget(pbCamera *cameraObject);
+    explicit countdownWidget(pbCamera *cameraObject, QFrame *parent = nullptr);
     ~countdownWidget();
 
 public slots:

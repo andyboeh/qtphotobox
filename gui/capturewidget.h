@@ -15,7 +15,7 @@ class captureWidget : public QFrame
     Q_OBJECT
 
 public:
-    explicit captureWidget(pbCamera *cameraObject);
+    explicit captureWidget(pbCamera *cameraObject, QFrame *parent = nullptr);
     ~captureWidget();
 public slots:
     void imageCaptured(QPixmap image);

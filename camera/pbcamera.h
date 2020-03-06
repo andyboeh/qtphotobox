@@ -22,7 +22,6 @@ public slots:
     void captureImage(void);
 signals:
     void cameraInitialized(bool ret);
-    void finished();
     void previewImageCaptured(QPixmap image);
     void imageCaptured(QPixmap image);
 private:

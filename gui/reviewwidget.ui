@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>reviewWidget</class>
- <widget name="reviewWidget" class="QFrame">
+ <widget class="QFrame" name="reviewWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,5 +13,19 @@
   <property name="windowTitle">
    <string>Frame</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="lblReviewImage">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
+ <resources/>
+ <connections/>
 </ui>

@@ -3,7 +3,8 @@
 #include "pbcamera.h"
 #include "statemachine.h"
 
-captureWidget::captureWidget(pbCamera *cameraObject) :
+captureWidget::captureWidget(pbCamera *cameraObject, QFrame *parent) :
+    QFrame(parent),
     ui(new Ui::captureWidget)
 {
     ui->setupUi(this);

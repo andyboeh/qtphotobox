@@ -15,7 +15,7 @@ class initWidget : public QFrame
     Q_OBJECT
 
 public:
-    explicit initWidget(pbCamera *cameraObject);
+    explicit initWidget(pbCamera *cameraObject, QFrame *parent = nullptr);
     ~initWidget();
 signals:
     void initializeCamera(void);

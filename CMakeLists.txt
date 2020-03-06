@@ -51,6 +51,10 @@ SET(${NAME}_SOURCES
   camera/camera_dummy.cxx
   gpio/gpio.cxx
   printer/printer.cxx
+  printer/printer_interface.cxx
+  printer/printer_selphy.cxx
+  printer/printer_cups.cxx
+  printer/printJob.cxx
   statemachine/statemachine.cxx
   gui/initwidget.cxx
   gui/settingswidget.cxx
@@ -62,7 +66,11 @@ SET(${NAME}_SOURCES
   gui/assemblewidget.cxx
   gui/waitingspinnerwidget.cpp
   gui/reviewwidget.cxx
+  gui/postprocesswidget.cxx
   worker/pictureWorker.cxx
+  worker/pictureTask.cxx
+  worker/postprocessWorker.cxx
+  worker/postprocessTask.cxx
   storage/storageManager.cxx
 )
 
@@ -75,6 +83,10 @@ SET(${NAME}_HEADERS
   camera/camera_dummy.h
   gpio/gpio.h
   printer/printer.h
+  printer/printer_interface.h
+  printer/printer_cups.h
+  printer/printer_selphy.h
+  printer/printJob.h
   statemachine/statemachine.h
   gui/initwidget.h
   gui/settingswidget.h
@@ -86,8 +98,12 @@ SET(${NAME}_HEADERS
   gui/assemblewidget.h
   gui/waitingspinnerwidget.h
   gui/reviewwidget.h
+  gui/postprocesswidget.h
   worker/worker.h
   worker/pictureWorker.h
+  worker/pictureTask.h
+  worker/postprocessWorker.h
+  worker/postprocessTask.h
   storage/storageManager.h
 )
 
@@ -106,6 +122,7 @@ SET(${NAME}_UI
   gui/capturewidget.ui
   gui/assemblewidget.ui
   gui/reviewwidget.ui
+  gui/postprocesswidget.ui
 )
 
 SET(${NAME}_RES

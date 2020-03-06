@@ -3,26 +3,37 @@
 
 #include <QObject>
 
+class QTimer;
 class OrgFreedesktopDBusObjectManagerInterface;
 
 class storageManager : public QObject
 {
     Q_OBJECT
 public:
+    enum fileType {
+        FILETYPE_FULL,
+        FILETYPE_ASSEMBLED
+    };
     static storageManager &getInstance();
-    bool waitForRemovableDevice(bool blocking);
     QString getPictureStoragePath();
     QString getRemovableStoragePath();
+    QString getNextFilename(QString path, fileType type);
 public slots:
-    void waitForRemovableDevice();
+    bool waitForRemovableDevice();
 signals:
-    void removeDeviceDetected(bool result);
+    void removableDeviceDetected(QString path);
 private:
     storageManager();
     ~storageManager();
     QString getMountPath(QString device);
     QString mountDevice(QString device);
+    QString mMountPath;
+    QString mStoragePath;
+    QTimer *mMountTimer;
     OrgFreedesktopDBusObjectManagerInterface *mInterface;
+    QString getBaseDir();
+    bool mUseRemovable;
+    QStringList mIgnoreRemovable;
 };
 
 #endif //_STORAGE_MANAGER_H

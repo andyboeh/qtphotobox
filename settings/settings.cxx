@@ -110,6 +110,7 @@ void pbSettings::initDefaultConfg()
     printerSettings.insert("max_copies", 10);
     printerSettings.insert("width", 148);
     printerSettings.insert("height", 100);
+    printerSettings.insert("backend", "selphy");
 
     photoboothSettings.insert("show_preview", true);
     photoboothSettings.insert("greeter_time", 3);
@@ -117,15 +118,13 @@ void pbSettings::initDefaultConfg()
     photoboothSettings.insert("display_time", 5);
     photoboothSettings.insert("postprocess_time", 60);
 
-    pictureSettings.insert("num_x", 2);
-    pictureSettings.insert("num_y", 2);
+    pictureSettings.insert("num_pictures", 4);
+    pictureSettings.insert("filters_picture1", "scale:45,move:top=30:left=30");
+    pictureSettings.insert("filters_picture2", "scale:45,move:top=30:right=30");
+    pictureSettings.insert("filters_picture3", "scale:45,move:bottom=30:left=30");
+    pictureSettings.insert("filters_picture4", "scale:45,move:bottom=30:right=30");
     pictureSettings.insert("size_x", 3496);
     pictureSettings.insert("size_y", 2362);
-    pictureSettings.insert("inner_dist_x", 20);
-    pictureSettings.insert("inner_dist_y", 20);
-    pictureSettings.insert("outer_dist_x", 40);
-    pictureSettings.insert("outer_dist_y", 40);
-    pictureSettings.insert("skip", "");
     pictureSettings.insert("background", "");
 
     storageSettings.insert("basedir", "%Y-%m-%d");

@@ -10,15 +10,6 @@ greeterWidget::greeterWidget(QFrame *parent) :
 {
     ui->setupUi(this);
     pbSettings &pbs = pbSettings::getInstance();
-    int numx = pbs.getInt("picture", "num_x");
-    int numy = pbs.getInt("picture", "num_y");
-    int numskip;
-    QString skip = pbs.get("picture", "skip");
-    if(skip.isEmpty()) {
-        numskip = 0;
-    } else {
-        numskip = skip.split(",").length();
-    }
 
     int timeout = pbs.getInt("photobooth", "greeter_time");
 
@@ -27,7 +18,7 @@ greeterWidget::greeterWidget(QFrame *parent) :
     mTimer->setSingleShot(true);
     connect(mTimer, SIGNAL(timeout()), this, SLOT(on_btnStartCountdown_clicked()));
 
-    int numpics = numx * numy - numskip;
+    int numpics = pbs.getInt("picture", "num_pictures");
     QString text = QString(tr("for %1 pictures")).arg(numpics);
     ui->lblNumPictures->setText(text);
     mTimer->start();

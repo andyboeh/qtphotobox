@@ -7,7 +7,8 @@
 
 static const int fps = 10;
 
-countdownWidget::countdownWidget(pbCamera *cameraObject) :
+countdownWidget::countdownWidget(pbCamera *cameraObject, QFrame *parent) :
+    QFrame(parent),
     ui(new Ui::countdownWidget)
 {
     ui->setupUi(this);
@@ -42,7 +43,8 @@ countdownWidget::~countdownWidget()
 
 void countdownWidget::setPreviewImage(QPixmap image)
 {
-    ui->lblPreview->setPixmap(image);
+    QPixmap scaledImage = image.scaled(ui->lblPreview->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->lblPreview->setPixmap(scaledImage);
 }
 
 void countdownWidget::handleTimeout()

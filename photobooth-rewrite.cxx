@@ -12,6 +12,10 @@
 #include "assemblewidget.h"
 #include "reviewwidget.h"
 #include "storageManager.h"
+#include "pictureWorker.h"
+#include "printer.h"
+#include "postprocessWorker.h"
+#include "postprocesswidget.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -21,7 +25,14 @@
 MainWindow::MainWindow()
 {
     mCurrentWidget = nullptr;
+    mOverlayWidget = nullptr;
     mCameraThread = nullptr;
+    mPrinterThread = nullptr;
+    mPrinterThreadObject = nullptr;
+    mPictureWorkerThread = nullptr;
+    mPictureWorkerThreadObject = nullptr;
+    mPostprocessWorkerThread = nullptr;
+    mPostprocessWorkerThreadObject = nullptr;
     mCameraThreadObject = nullptr;
     mImagesCaptured = 0;
     mImagesToCapture = 0;
@@ -35,6 +46,21 @@ MainWindow::~MainWindow()
         mCameraThread->quit();
         mCameraThread->wait();
     }
+    if(mPictureWorkerThread) {
+        emit stopPictureWorkerThread();
+        mPictureWorkerThread->quit();
+        mPictureWorkerThread->wait();
+    }
+    if(mPostprocessWorkerThread) {
+        emit stopPostprocessWorkerThread();
+        mPostprocessWorkerThread->quit();
+        mPostprocessWorkerThread->wait();
+    }
+    if(mPrinterThread) {
+        emit stopPrinterThread();
+        mPrinterThread->quit();
+        mPrinterThread->wait();
+    }
     delete mCurrentWidget;
     mCurrentWidget = nullptr;
 }
@@ -43,6 +69,10 @@ void MainWindow::changeState(QString name)
 {
     StateMachine &sm = StateMachine::getInstance();
     qDebug() << name;
+    if(mOverlayWidget) {
+        delete mOverlayWidget;
+        mOverlayWidget = nullptr;
+    }
     if(name == "start") {
         delete mCurrentWidget;
         mCurrentWidget = new startWidget();
@@ -55,11 +85,58 @@ void MainWindow::changeState(QString name)
             mCameraThreadObject->moveToThread(mCameraThread);
             connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(quit()));
             connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(deleteLater()));
-            connect(mCameraThreadObject, SIGNAL(imageCaptured(QPixmap)), this, SLOT(imageCaptured()));
+            connect(mCameraThreadObject, SIGNAL(imageCaptured(QPixmap)), this, SLOT(imageCaptured(QPixmap)));
             connect(mCameraThread, SIGNAL(started()), mCameraThreadObject, SLOT(start()));
             connect(mCameraThread, SIGNAL(finished()), mCameraThreadObject, SLOT(deleteLater()));
             connect(this, SIGNAL(stopCameraThread()), mCameraThreadObject, SLOT(stop()));
             mCameraThread->start();
+        }
+        if(!mPictureWorkerThread) {
+            mPictureWorkerThread = new QThread();
+            mPictureWorkerThreadObject = new pictureWorker();
+            mPictureWorkerThreadObject->moveToThread(mPictureWorkerThread);
+            connect(mPictureWorkerThreadObject, SIGNAL(finished()), mPictureWorkerThread, SLOT(quit()));
+            connect(mPictureWorkerThreadObject, SIGNAL(finished()), mPictureWorkerThread, SLOT(deleteLater()));
+            connect(mPictureWorkerThreadObject, SIGNAL(pictureAssembled(QPixmap)), this, SLOT(pictureAssembled(QPixmap)));
+            connect(mPictureWorkerThread, SIGNAL(started()), mPictureWorkerThreadObject, SLOT(start()));
+            connect(mPictureWorkerThread, SIGNAL(finished()), mPictureWorkerThreadObject, SLOT(deleteLater()));
+            connect(this, SIGNAL(stopPictureWorkerThread()), mPictureWorkerThreadObject, SLOT(stop()));
+            connect(this, SIGNAL(initAssembleTask()), mPictureWorkerThreadObject, SLOT(initAssembleTask()));
+            connect(this, SIGNAL(finishTask()), mPictureWorkerThreadObject, SLOT(finishTask()));
+            connect(this, SIGNAL(addPicture(QPixmap)), mPictureWorkerThreadObject, SLOT(addPicture(QPixmap)));
+            mPictureWorkerThread->start();
+        }
+        if(!mPostprocessWorkerThread) {
+            mPostprocessWorkerThread = new QThread();
+            mPostprocessWorkerThreadObject = new postprocessWorker();
+            mPostprocessWorkerThreadObject->moveToThread(mPostprocessWorkerThread);
+            connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(quit()));
+            connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(deleteLater()));
+            connect(mPostprocessWorkerThreadObject, SIGNAL(fullImageSaved(QString)), this, SLOT(fullImageSaved(QString)));
+            connect(mPostprocessWorkerThreadObject, SIGNAL(assmbledImageSaved(QString)), this, SLOT(assembledImageSaved(QString)));
+            connect(mPostprocessWorkerThread, SIGNAL(started()), mPostprocessWorkerThreadObject, SLOT(start()));
+            connect(mPostprocessWorkerThread, SIGNAL(finished()), mPostprocessWorkerThreadObject, SLOT(deleteLater()));
+            connect(this, SIGNAL(stopPostprocessWorkerThread()), mPostprocessWorkerThreadObject, SLOT(stop()));
+            connect(this, SIGNAL(saveFullPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveFullImage(QPixmap)));
+            connect(this, SIGNAL(saveAssembledPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveAssembledImage(QPixmap)));
+            mPostprocessWorkerThread->start();
+        }
+        pbSettings &pbs = pbSettings::getInstance();
+        if(pbs.getBool("printer", "enable")) {
+            if(!mPrinterThread) {
+                mPrinterThread = new QThread();
+                mPrinterThreadObject = new printerThreadObject();
+                mPrinterThreadObject->moveToThread(mPrinterThread);
+                connect(mPrinterThreadObject, SIGNAL(finished()), mPrinterThread, SLOT(quit()));
+                connect(mPrinterThreadObject, SIGNAL(finished()), mPrinterThread, SLOT(deleteLater()));
+                connect(mPrinterThread, SIGNAL(started()), mPrinterThreadObject, SLOT(start()));
+                connect(mPrinterThread, SIGNAL(finished()), mPrinterThreadObject, SLOT(deleteLater()));
+                connect(this, SIGNAL(stopPrinterThread()), mPrinterThreadObject, SLOT(stop()));
+                connect(this, SIGNAL(printPicture(QPixmap,int)), mPrinterThreadObject, SLOT(addPrintJob(QPixmap,int)));
+                connect(this, SIGNAL(initPrinter()), mPrinterThreadObject, SLOT(initPrinter()));
+                mPrinterThread->start();
+            }
+            emit initPrinter();
         }
         delete mCurrentWidget;
         mCurrentWidget = new initWidget(mCameraThreadObject);
@@ -91,6 +168,7 @@ void MainWindow::changeState(QString name)
         if(mImagesCaptured < mImagesToCapture) {
             sm.triggerState("countdown");
         } else {
+            emit finishTask();
             delete mCurrentWidget;
             mCurrentWidget = new assembleWidget();
             setCentralWidget(mCurrentWidget);
@@ -98,10 +176,14 @@ void MainWindow::changeState(QString name)
         }
     } else if(name == "review") {
         delete mCurrentWidget;
-        mCurrentWidget = new reviewWidget();
+        mCurrentWidget = new reviewWidget(mImageToReview);
         setCentralWidget(mCurrentWidget);
+    } else if(name == "postprocess") {
+        mOverlayWidget = new postprocessWidget(centralWidget());
+        connect(mOverlayWidget, SIGNAL(startPrintJob(int)), this, SLOT(startPrintJob(int)));
+        mOverlayWidget->show();
     } else if(name == "error") {
-
+        //mOverlayWidget = new errorWidget(centralWidget());
     } else if(name == "teardown") {
         QApplication::quit();
     }
@@ -110,17 +192,7 @@ void MainWindow::changeState(QString name)
 void MainWindow::loadSettingsToGui(bool showWindow)
 {
     pbSettings &pbs = pbSettings::getInstance();
-    int numx = pbs.getInt("picture", "num_x");
-    int numy = pbs.getInt("picture", "num_y");
-    int numskip;
-    QString skip = pbs.get("picture", "skip");
-    if(skip.isEmpty()) {
-        numskip = 0;
-    } else {
-        numskip = skip.split(",").length();
-    }
-
-    mImagesToCapture = numx * numy - numskip;
+    mImagesToCapture = pbs.getInt("picture", "num_pictures");
 
     bool fs = pbs.getBool("gui", "fullscreen");
     if(fs) {
@@ -141,10 +213,39 @@ void MainWindow::loadSettingsToGui(bool showWindow)
     }
 }
 
-void MainWindow::imageCaptured()
+void MainWindow::imageCaptured(QPixmap image)
 {
+    pbSettings &pbs = pbSettings::getInstance();
+    if(mImagesCaptured == 0) {
+        emit initAssembleTask();
+    }
+    emit addPicture(image);
+    if(pbs.getBool("storage", "keep_pictures")) {
+        emit saveFullPicture(image);
+    }
     qDebug() << "Image captured.";
     mImagesCaptured++;
+}
+
+void MainWindow::pictureAssembled(QPixmap image)
+{
+    qDebug() << "Picture assembled.";
+    mImageToReview = image;
+    // FIXME: This should be triggered if the users chooses not to delete the image
+    emit saveAssembledPicture(image);
+    StateMachine &sm = StateMachine::getInstance();
+    sm.triggerState("review");
+}
+
+void MainWindow::printerError(QString error)
+{
+
+}
+
+void MainWindow::startPrintJob(int numcopies)
+{
+    qDebug() << "startPrintJob: " << numcopies;
+    emit printPicture(mImageToReview, numcopies);
 }
 
 int main(int argc, char *argv[]) {
@@ -242,8 +343,9 @@ int main(int argc, char *argv[]) {
 
     sm.triggerState("start");
 
+    // Temporary
     storageManager &stm = storageManager::getInstance();
-    stm.waitForRemovableDevice(false);
+    stm.waitForRemovableDevice();
 
     w.loadSettingsToGui(true);
     //QMetaObject::invokeMethod(&w, "loadSettingsToGui");

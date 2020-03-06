@@ -107,24 +107,24 @@ QFrame#captureWidget QLabel {
 
 /* Wait Screen */
 
-QFrame#WaitMessage {
+QFrame#assembleWidget {
     padding: 350px 80px 80px 80px;
 }
 
-QFrame#WaitMessage QLabel {
+QFrame#assembleWidget QLabel {
     font-size: 70px;
     qproperty-alignment: AlignCenter;
 }
 
 /* Picture Screen */
 
-QFrame#PictureMessage {
+QFrame#reviewWidget {
     margin: 30px;
 }
 
 /* Overlay message */
 
-QWidget#TransparentOverlay {
+QFrame#postprocessWidget {
     background-color: #aaeeeeee;
     border-style: outset;
     border-width: 2px;
@@ -136,23 +136,23 @@ QWidget#TransparentOverlay {
 
 /* Postprocess message */
 
-QWidget#PostprocessMessage QLabel {
+QFrame#postprocessWidget QLabel {
     color: #333333;
     font-size: 110px;
     qproperty-alignment: AlignCenter;
 }
 
-QWidget#PostprocessMessage QPushButton {
+QFrame#postprocessWidget QPushButton {
     color: #333333;
     border-color: #333333;
     margin: 20px;
 }
 
-QWidget#PostprocessMessage QPushButton:pressed {
+QFrame#postprocessWidget QPushButton:pressed {
     background-color: #66eeeeee;
 }
 
-QWidget#PostprocessMessage QPushButton:disabled {
+QFrame#postprocessWidget QPushButton:disabled {
     background-color: #66eeeeee;
     color: #33eeeeee;
     border-color: #33eeeeee;

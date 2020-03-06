@@ -5,7 +5,8 @@
 #include <QTimer>
 #include <QDebug>
 
-initWidget::initWidget(pbCamera* cameraObject) :
+initWidget::initWidget(pbCamera* cameraObject, QFrame *parent) :
+    QFrame(parent),
     ui(new Ui::initWidget)
 {
     ui->setupUi(this);
