@@ -20,6 +20,7 @@ public slots:
     void startStatusPolling(void);
     void stopStatusPolling(void);
     void addPrintJob(QPixmap image, int numcopies);
+    void addFilePrintJob(QString filename, int numcopies);
     void initPrinter(void);
 signals:
     void printerError(QString error);

@@ -15,6 +15,13 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QPushButton" name="btnArchive">
+     <property name="text">
+      <string>Review Images</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="lblHit">
      <property name="text">
       <string>Hit the</string>

@@ -32,7 +32,6 @@ QPushButton:pressed {
 QFrame#idleWidget {
     background-image: url(:/gui/styles/images/arrow-800x600.png);
     background-repeat: no-repeat;
-    padding: 80px 40px 60px 40px;
 }
 
 QFrame#idleWidget QLabel {
@@ -40,13 +39,24 @@ QFrame#idleWidget QLabel {
     qproperty-alignment: AlignCenter;
 }
 
-QFrame#idleWidget QPushButton {
+QFrame#idleWidget QPushButton#btnTrigger {
     color: rgba(255, 27, 0, 200);
     font-size: 120px;
     text-align: center;
 }
 
-QFrame#idleWidget QPushButton:pressed {
+QFrame#idleWidget QPushButton#btnArchive {
+    color: rgba(255, 27, 0, 200);
+    font-size: 50px;
+    text-align: center;
+}
+
+QFrame#idleWidget QPushButton#btnTrigger:pressed {
+    background-color: rgba(255, 27, 0, 200);
+    color: #eeeeee;
+}
+
+QFrame#idleWidget QPushButton#btnArchive:pressed {
     background-color: rgba(255, 27, 0, 200);
     color: #eeeeee;
 }

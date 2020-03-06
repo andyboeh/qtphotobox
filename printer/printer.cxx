@@ -17,7 +17,8 @@ printerThreadObject::printerThreadObject()
 
 printerThreadObject::~printerThreadObject()
 {
-    mTimer->stop();
+    if(mTimer)
+        mTimer->stop();
     delete mTimer;
     mTimer = nullptr;
     delete mPrinter;
@@ -101,6 +102,12 @@ void printerThreadObject::addPrintJob(QPixmap image, int numcopies)
     printJob job(image, numcopies);
     mPrintJobs.append(job);
     mCommandList.append("processJob");
+}
+
+void printerThreadObject::addFilePrintJob(QString filename, int numcopies)
+{
+    QPixmap image(filename);
+    addPrintJob(image, numcopies);
 }
 
 void printerThreadObject::initPrinter()

@@ -91,6 +91,11 @@ QString storageManager::getPictureStoragePath()
     return mStoragePath;
 }
 
+QString storageManager::getThumbnailStoragePath()
+{
+    return mStoragePath + QDir::separator() + "thumbs";
+}
+
 QString storageManager::getBaseDir() {
     pbSettings &pbs = pbSettings::getInstance();
     QString basedir = pbs.get("storage", "basedir");
@@ -113,6 +118,7 @@ QString storageManager::getNextFilename(QString path, storageManager::fileType t
 
     QDir dir(path);
     dir.mkpath(path);
+    dir.mkpath(path + QDir::separator() + "thumbs");
     pbSettings &pbs = pbSettings::getInstance();
     QString basename = pbs.get("storage", "basename");
     if(type == FILETYPE_FULL) {

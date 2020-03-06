@@ -18,6 +18,7 @@ public:
     QString getPictureStoragePath();
     QString getRemovableStoragePath();
     QString getNextFilename(QString path, fileType type);
+    QString getThumbnailStoragePath();
 public slots:
     bool waitForRemovableDevice();
 signals:

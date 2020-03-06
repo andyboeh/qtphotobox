@@ -16,7 +16,7 @@ void postprocessTask::setTaskType(ePostprocessType type)
     mTaskType = type;
 }
 
-ePostprocessType postprocessTask::getTaskType()
+postprocessTask::ePostprocessType postprocessTask::getTaskType()
 {
     return mTaskType;
 }
@@ -31,7 +31,17 @@ void postprocessTask::setPicture(QPixmap image)
     mImage = image;
 }
 
+void postprocessTask::setFile(QString filename)
+{
+    mFilename = filename;
+}
+
 QPixmap postprocessTask::getImage()
 {
     return mImage;
+}
+
+QString postprocessTask::getFile()
+{
+    return mFilename;
 }

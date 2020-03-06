@@ -27,7 +27,7 @@ private:
     QStringList mFilterList;
     bool mTaskOpened;
     pictureTask mOpenPictureTask;
-    void initTask(eTaskType type);
+    void initTask(pictureTask::eTaskType type);
     QPixmap assemblePictureTask(pictureTask task);
     QList<pictureTask> mPictureTasks;
     int mPictureSizeX;

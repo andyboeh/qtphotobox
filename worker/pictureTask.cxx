@@ -15,7 +15,7 @@ void pictureTask::setTaskType(eTaskType type)
     mTaskType = type;
 }
 
-eTaskType pictureTask::getTaskType()
+pictureTask::eTaskType pictureTask::getTaskType()
 {
     return mTaskType;
 }

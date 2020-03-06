@@ -16,6 +16,7 @@
 #include "printer.h"
 #include "postprocessWorker.h"
 #include "postprocesswidget.h"
+#include "archivewidget.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -112,13 +113,15 @@ void MainWindow::changeState(QString name)
             mPostprocessWorkerThreadObject->moveToThread(mPostprocessWorkerThread);
             connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(quit()));
             connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(deleteLater()));
-            connect(mPostprocessWorkerThreadObject, SIGNAL(fullImageSaved(QString)), this, SLOT(fullImageSaved(QString)));
-            connect(mPostprocessWorkerThreadObject, SIGNAL(assmbledImageSaved(QString)), this, SLOT(assembledImageSaved(QString)));
+            connect(mPostprocessWorkerThreadObject, SIGNAL(fullImageSaved(QString,bool)), this, SLOT(fullImageSaved(QString,bool)));
+            connect(mPostprocessWorkerThreadObject, SIGNAL(assembledImageSaved(QString,bool)), this, SLOT(assembledImageSaved(QString,bool)));
             connect(mPostprocessWorkerThread, SIGNAL(started()), mPostprocessWorkerThreadObject, SLOT(start()));
             connect(mPostprocessWorkerThread, SIGNAL(finished()), mPostprocessWorkerThreadObject, SLOT(deleteLater()));
             connect(this, SIGNAL(stopPostprocessWorkerThread()), mPostprocessWorkerThreadObject, SLOT(stop()));
             connect(this, SIGNAL(saveFullPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveFullImage(QPixmap)));
             connect(this, SIGNAL(saveAssembledPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveAssembledImage(QPixmap)));
+            connect(this, SIGNAL(saveThumbnail(QString)), mPostprocessWorkerThreadObject, SLOT(saveThumbnail(QString)));
+            connect(mPostprocessWorkerThreadObject, SIGNAL(thumbnailScaled(QString)), this, SLOT(thumbnailScaled(QString)));
             mPostprocessWorkerThread->start();
         }
         pbSettings &pbs = pbSettings::getInstance();
@@ -150,7 +153,10 @@ void MainWindow::changeState(QString name)
         mCurrentWidget = new idleWidget();
         setCentralWidget(mCurrentWidget);
     } else if(name == "archive") {
-
+        delete mCurrentWidget;
+        mCurrentWidget = new archiveWidget();
+        connect(mCurrentWidget, SIGNAL(printAssembledPicture(QString,int)), mPrinterThreadObject, SLOT(addFilePrintJob(QString,int)));
+        setCentralWidget(mCurrentWidget);
     } else if(name == "greeter") {
         mImagesCaptured = 0;
         delete mCurrentWidget;
@@ -246,6 +252,22 @@ void MainWindow::startPrintJob(int numcopies)
 {
     qDebug() << "startPrintJob: " << numcopies;
     emit printPicture(mImageToReview, numcopies);
+}
+
+void MainWindow::thumbnailScaled(QString path)
+{
+    qDebug() << "Thumbnail scaled: " << path;
+}
+
+void MainWindow::fullImageSaved(QString filename, bool ret)
+{
+
+}
+
+void MainWindow::assembledImageSaved(QString filename, bool ret)
+{
+    if(ret)
+        emit saveThumbnail(filename);
 }
 
 int main(int argc, char *argv[]) {

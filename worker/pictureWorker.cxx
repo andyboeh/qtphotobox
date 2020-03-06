@@ -14,7 +14,7 @@ pictureWorker::~pictureWorker()
 
 void pictureWorker::initAssembleTask()
 {
-    initTask(TASK_TYPE_ASSEMBLE_PICTURE);
+    initTask(pictureTask::TASK_TYPE_ASSEMBLE_PICTURE);
 }
 
 void pictureWorker::cancelTask()
@@ -71,7 +71,7 @@ void pictureWorker::start()
                 continue;
             pictureTask task = mPictureTasks.takeFirst();
             switch(task.getTaskType()) {
-            case TASK_TYPE_ASSEMBLE_PICTURE:
+            case pictureTask::TASK_TYPE_ASSEMBLE_PICTURE:
             {
                 qDebug() << "TASK_TYPE_ASSEMBLE_PICTURE";
                 QPixmap image = assemblePictureTask(task);
@@ -95,7 +95,7 @@ void pictureWorker::stop()
     mCommandList.append("stopThread");
 }
 
-void pictureWorker::initTask(eTaskType type)
+void pictureWorker::initTask(pictureTask::eTaskType type)
 {
     mTaskOpened = true;
     mOpenPictureTask = pictureTask(type);

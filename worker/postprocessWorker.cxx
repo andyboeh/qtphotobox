@@ -14,9 +14,17 @@ postprocessWorker::~postprocessWorker()
 
 }
 
+void postprocessWorker::saveThumbnail(QString file)
+{
+    postprocessTask task(postprocessTask::POSTPROCESS_TYPE_CREATE_THUMBNAIL);
+    task.setFile(file);
+    mPostprocessTasks.append(task);
+    mCommandList.append("processTask");
+}
+
 void postprocessWorker::saveFullImage(QPixmap image)
 {
-    postprocessTask task(POSTPROCESS_TYPE_SAVE_FULL_IMAGE);
+    postprocessTask task(postprocessTask::POSTPROCESS_TYPE_SAVE_FULL_IMAGE);
     task.setPicture(image);
     mPostprocessTasks.append(task);
     mCommandList.append("processTask");
@@ -24,7 +32,7 @@ void postprocessWorker::saveFullImage(QPixmap image)
 
 void postprocessWorker::saveAssembledImage(QPixmap image)
 {
-    postprocessTask task(POSTPROCESS_TYPE_SAVE_ASSEMBLED_IMAGE);
+    postprocessTask task(postprocessTask::POSTPROCESS_TYPE_SAVE_ASSEMBLED_IMAGE);
     task.setPicture(image);
     mPostprocessTasks.append(task);
     mCommandList.append("processTask");
@@ -53,13 +61,17 @@ void postprocessWorker::start()
             postprocessTask task = mPostprocessTasks.takeFirst();
 
             switch(task.getTaskType()) {
-            case POSTPROCESS_TYPE_SAVE_FULL_IMAGE:
+            case postprocessTask::POSTPROCESS_TYPE_SAVE_FULL_IMAGE:
                 qDebug() << "saveFullImage";
                 saveFullImageReal(task.getImage());
                 break;
-            case POSTPROCESS_TYPE_SAVE_ASSEMBLED_IMAGE:
+            case postprocessTask::POSTPROCESS_TYPE_SAVE_ASSEMBLED_IMAGE:
                 qDebug() << "saveAssembledImage";
                 saveAssembledImageReal(task.getImage());
+                break;
+            case postprocessTask::POSTPROCESS_TYPE_CREATE_THUMBNAIL:
+                qDebug() << "createThumbnail";
+                saveThumbnailReal(task.getFile());
                 break;
             default:
                 break;
@@ -80,16 +92,39 @@ void postprocessWorker::stop()
 
 bool postprocessWorker::saveFullImageReal(QPixmap image)
 {
+    bool ret;
     storageManager &sm = storageManager::getInstance();
     QString path = sm.getPictureStoragePath();
     QString filename = sm.getNextFilename(path, storageManager::FILETYPE_FULL);
-    return image.save(path + QDir::separator() + filename, "JPG");
+    ret = image.save(path + QDir::separator() + filename, "JPG");
+    emit fullImageSaved(filename, ret);
+    return ret;
 }
 
 bool postprocessWorker::saveAssembledImageReal(QPixmap image)
 {
+    bool ret;
     storageManager &sm = storageManager::getInstance();
     QString path = sm.getPictureStoragePath();
     QString filename = sm.getNextFilename(path, storageManager::FILETYPE_ASSEMBLED);
-    return image.save(path + QDir::separator() + filename, "JPG");
+    ret = image.save(path + QDir::separator() + filename, "JPG");
+    emit assembledImageSaved(filename, ret);
+    return ret;
+}
+
+bool postprocessWorker::saveThumbnailReal(QString filename)
+{
+    bool ret;
+    storageManager &sm = storageManager::getInstance();
+    QString path = sm.getPictureStoragePath();
+    QFile picture(path + QDir::separator() + filename);
+    if(!picture.exists())
+        return false;
+
+    QPixmap image(path + QDir::separator() + filename);
+    QString savePath = sm.getThumbnailStoragePath();
+    QPixmap scaled = image.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ret = scaled.save(savePath + QDir::separator() + filename);
+    emit thumbnailScaled(filename);
+    return ret;
 }

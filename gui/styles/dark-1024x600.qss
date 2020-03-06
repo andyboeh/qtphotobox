@@ -32,7 +32,6 @@ QPushButton:pressed {
 QFrame#idleWidget {
     background-image: url(:/gui/styles/images/arrow-1024x600.png);
     background-repeat: no-repeat;
-    padding: 80px 400px 120px 80px;
 }
 
 QFrame#idleWidget QLabel {
@@ -40,17 +39,30 @@ QFrame#idleWidget QLabel {
     qproperty-alignment: AlignCenter;
 }
 
-QFrame#idleWidget QPushButton {
+QFrame#idleWidget QPushButton#btnArchive {
+    border: none;
+    color: rgba(255, 27, 0, 200);
+    font-size: 75px;
+    text-align: center;
+}
+
+QFrame#idleWidget QPushButton#btnTrigger {
     border: none;
     color: rgba(255, 27, 0, 200);
     font-size: 200px;
     text-align: center;
 }
 
-QFrame#idleWidget QPushButton:pressed {
+QFrame#idleWidget QPushButton#btnTrigger:pressed {
     background-color: rgba(255, 27, 0, 200);
     color: #eeeeee;
 }
+
+QFrame#idleWidget QPushButton#btnArchive:pressed {
+    background-color: rgba(255, 27, 0, 200);
+    color: #eeeeee;
+}
+
 
 /* Greeter Screen */
 
@@ -154,6 +166,49 @@ QFrame#postprocessWidget QPushButton:pressed {
 }
 
 QFrame#postprocessWidget QPushButton:disabled {
+    background-color: #66eeeeee;
+    color: #33eeeeee;
+    border-color: #33eeeeee;
+}
+
+/* Archive Widgets */
+
+QFrame#archiveWidget QListView#listView {
+    font-size: 25px;
+    background-color: #000000;
+}
+
+QFrame#archiveWidget QListView#listView::item {
+    background-color: #000000;
+}
+
+QFrame#picturedetailWidget {
+    background-color: #aaeeeef0;
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 30px;
+    border-color: #eeeeee;
+    color: #333333;
+    padding: 40px;
+}
+
+QFrame#picturedetailWidget QLabel {
+    color: #333333;
+    font-size: 50px;
+    qproperty-alignment: AlignCenter;
+}
+
+QFrame#picturedetailWidget QPushButton {
+    color: #333333;
+    border-color: #333333;
+    margin: 20px;
+}
+
+QFrame#picturedetailWidget QPushButton:pressed {
+    background-color: #66eeeeee;
+}
+
+QFrame#picturedetailWidget QPushButton:disabled {
     background-color: #66eeeeee;
     color: #33eeeeee;
     border-color: #33eeeeee;

@@ -12,7 +12,6 @@ postprocessWidget::postprocessWidget(QWidget *parent) :
     if(parent) {
         QRect parentRect = parent->rect();
         setGeometry(parentRect);
-        qDebug() << parentRect;
     }
     pbSettings &pbs = pbSettings::getInstance();
     if(pbs.getBool("printer", "enable")) {
@@ -56,5 +55,5 @@ void postprocessWidget::on_btnStartOver_clicked()
 
 void postprocessWidget::on_sliderNumCopies_valueChanged(int value)
 {
-    ui->lblNumCopies->setText(tr("Print %1 copies.").arg(ui->sliderNumCopies->value()));
+    ui->lblNumCopies->setText(tr("Print %1 copies.").arg(value));
 }

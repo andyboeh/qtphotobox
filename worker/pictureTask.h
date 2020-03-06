@@ -4,13 +4,14 @@
 #include <QPixmap>
 #include <QList>
 
-typedef enum {
-    TASK_TYPE_NONE = 0,
-    TASK_TYPE_ASSEMBLE_PICTURE,
-} eTaskType;
-
 class pictureTask {
 public:
+    typedef enum {
+        TASK_TYPE_NONE = 0,
+        TASK_TYPE_ASSEMBLE_PICTURE,
+        TASK_TYPE_SCALE_THUMBNAIL,
+    } eTaskType;
+
     pictureTask();
     pictureTask(eTaskType type);
     void setTaskType(eTaskType type);

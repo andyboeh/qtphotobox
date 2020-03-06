@@ -20,3 +20,9 @@ void idleWidget::on_btnTrigger_clicked()
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerNextState();
 }
+
+void idleWidget::on_btnArchive_clicked()
+{
+    StateMachine &sm = StateMachine::getInstance();
+    sm.triggerState("archive");
+}

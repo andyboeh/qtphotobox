@@ -69,6 +69,9 @@ SET(${NAME}_SOURCES
   gui/waitingspinnerwidget.cpp
   gui/reviewwidget.cxx
   gui/postprocesswidget.cxx
+  gui/archivewidget.cxx
+  gui/iconlistmodel.cxx
+  gui/picturedetailwidget.cxx
   worker/pictureWorker.cxx
   worker/pictureTask.cxx
   worker/postprocessWorker.cxx
@@ -101,6 +104,9 @@ SET(${NAME}_HEADERS
   gui/waitingspinnerwidget.h
   gui/reviewwidget.h
   gui/postprocesswidget.h
+  gui/archivewidget.h
+  gui/iconlistmodel.h
+  gui/picturedetailwidget.h
   worker/worker.h
   worker/pictureWorker.h
   worker/pictureTask.h
@@ -125,6 +131,8 @@ SET(${NAME}_UI
   gui/assemblewidget.ui
   gui/reviewwidget.ui
   gui/postprocesswidget.ui
+  gui/archivewidget.ui
+  gui/picturedetailwidget.ui
 )
 
 SET(${NAME}_RES

@@ -23,6 +23,9 @@ public slots:
     void pictureAssembled(QPixmap image);
     void printerError(QString error);
     void startPrintJob(int numcopies);
+    void thumbnailScaled(QString path);
+    void fullImageSaved(QString filename, bool ret);
+    void assembledImageSaved(QString filename, bool ret);
 signals:
     void stopCameraThread();
     void stopPictureWorkerThread();
@@ -33,6 +36,7 @@ signals:
     void addPicture(QPixmap image);
     void saveFullPicture(QPixmap image);
     void saveAssembledPicture(QPixmap image);
+    void saveThumbnail(QString name);
     void printPicture(QPixmap image, int copies);
     void initPrinter();
 private:

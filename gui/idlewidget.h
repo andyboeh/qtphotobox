@@ -18,6 +18,8 @@ public:
 private slots:
     void on_btnTrigger_clicked();
 
+    void on_btnArchive_clicked();
+
 private:
     Ui::idleWidget *ui;
 };
