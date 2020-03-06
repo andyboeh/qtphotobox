@@ -72,10 +72,12 @@ SET(${NAME}_SOURCES
   gui/archivewidget.cxx
   gui/iconlistmodel.cxx
   gui/picturedetailwidget.cxx
+  gui/showwidget.cxx
   worker/pictureWorker.cxx
   worker/pictureTask.cxx
   worker/postprocessWorker.cxx
   worker/postprocessTask.cxx
+  worker/showWorker.cxx
   storage/storageManager.cxx
 )
 
@@ -107,11 +109,13 @@ SET(${NAME}_HEADERS
   gui/archivewidget.h
   gui/iconlistmodel.h
   gui/picturedetailwidget.h
+  gui/showwidget.h
   worker/worker.h
   worker/pictureWorker.h
   worker/pictureTask.h
   worker/postprocessWorker.h
   worker/postprocessTask.h
+  worker/showWorker.h
   storage/storageManager.h
 )
 
@@ -133,6 +137,7 @@ SET(${NAME}_UI
   gui/postprocesswidget.ui
   gui/archivewidget.ui
   gui/picturedetailwidget.ui
+  gui/showwidget.ui
 )
 
 SET(${NAME}_RES

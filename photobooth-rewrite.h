@@ -9,6 +9,7 @@ class pbCamera;
 class pictureWorker;
 class postprocessWorker;
 class printerThreadObject;
+class showWorker;
 
 class MainWindow : public QMainWindow
 {
@@ -31,6 +32,7 @@ signals:
     void stopPictureWorkerThread();
     void stopPostprocessWorkerThread();
     void stopPrinterThread();
+    void stopShowThread();
     void initAssembleTask();
     void finishTask();
     void addPicture(QPixmap image);
@@ -46,6 +48,8 @@ private:
     QThread *mPictureWorkerThread;
     QThread *mPostprocessWorkerThread;
     QThread *mPrinterThread;
+    QThread *mShowThread;
+    showWorker *mShowThreadObject;
     pbCamera *mCameraThreadObject;
     pictureWorker *mPictureWorkerThreadObject;
     postprocessWorker *mPostprocessWorkerThreadObject;

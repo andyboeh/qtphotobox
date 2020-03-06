@@ -140,6 +140,11 @@ void pbSettings::initDefaultConfg()
     showSettings.insert("swap_screens", false);
     showSettings.insert("display_time", 5);
     showSettings.insert("random", false);
+    showSettings.insert("fullscreen", false);
+    showSettings.insert("width", 1024);
+    showSettings.insert("height", 600);
+    showSettings.insert("footertext", "photobooth-rewrite");
+    showSettings.insert("full_images", false);
 
     mSettings.insert("gui", guiSettings);
     mSettings.insert("photobooth", photoboothSettings);

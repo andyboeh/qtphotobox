@@ -17,6 +17,7 @@
 #include "postprocessWorker.h"
 #include "postprocesswidget.h"
 #include "archivewidget.h"
+#include "showWorker.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -29,6 +30,8 @@ MainWindow::MainWindow()
     mOverlayWidget = nullptr;
     mCameraThread = nullptr;
     mPrinterThread = nullptr;
+    mShowThread = nullptr;
+    mShowThreadObject = nullptr;
     mPrinterThreadObject = nullptr;
     mPictureWorkerThread = nullptr;
     mPictureWorkerThreadObject = nullptr;
@@ -61,6 +64,11 @@ MainWindow::~MainWindow()
         emit stopPrinterThread();
         mPrinterThread->quit();
         mPrinterThread->wait();
+    }
+    if(mShowThread) {
+        emit stopShowThread();
+        mShowThread->quit();
+        mShowThread->wait();
     }
     delete mCurrentWidget;
     mCurrentWidget = nullptr;
@@ -140,6 +148,19 @@ void MainWindow::changeState(QString name)
                 mPrinterThread->start();
             }
             emit initPrinter();
+        }
+        if(pbs.getBool("show", "enable")) {
+            if(!mShowThread) {
+                mShowThread = new QThread();
+                mShowThreadObject = new showWorker();
+                mShowThreadObject->moveToThread(mShowThread);
+                connect(mShowThreadObject, SIGNAL(finished()), mShowThread, SLOT(quit()));
+                connect(mShowThreadObject, SIGNAL(finished()), mShowThread, SLOT(deleteLater()));
+                connect(mShowThread, SIGNAL(started()), mShowThreadObject, SLOT(start()));
+                connect(mShowThread, SIGNAL(finished()), mShowThreadObject, SLOT(deleteLater()));
+                connect(this, SIGNAL(stopShowThread()), mShowThreadObject, SLOT(stop()));
+                mShowThread->start();
+            }
         }
         delete mCurrentWidget;
         mCurrentWidget = new initWidget(mCameraThreadObject);

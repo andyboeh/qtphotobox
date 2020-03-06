@@ -55,8 +55,8 @@ void archiveWidget::on_listView_clicked(const QModelIndex &index)
 {
     QMap<int,QVariant> data = ui->listView->model()->itemData(index);
     QString filename = data.value(Qt::DisplayRole).toString();
-    qDebug() << mStoragepath << QDir::separator() << mBasename << filename;
     QString fullname = mStoragepath + QDir::separator() + mBasename + filename;
+    qDebug() << fullname;
     delete mDetailWidget;
     mDetailWidget = new picturedetailWidget(fullname, this);
     connect(mDetailWidget, SIGNAL(printArchivePicture(QString,int)), this, SLOT(printArchivePicture(QString,int)));

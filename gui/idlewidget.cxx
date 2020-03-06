@@ -8,6 +8,12 @@ idleWidget::idleWidget(QFrame *parent) :
     ui(new Ui::idleWidget)
 {
     ui->setupUi(this);
+    pbSettings &pbs = pbSettings::getInstance();
+    if(pbs.getBool("archive", "enable")) {
+        ui->btnArchive->setVisible(true);
+    } else {
+        ui->btnArchive->setVisible(false);
+    }
 }
 
 idleWidget::~idleWidget()

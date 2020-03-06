@@ -13,7 +13,7 @@ picturedetailWidget::picturedetailWidget(QString filename, QWidget *parent) :
         setGeometry(parentRect);
     }
     pbSettings &pbs = pbSettings::getInstance();
-    if(pbs.getBool("printer", "enable")) {
+    if(pbs.getBool("printer", "enable") && pbs.getBool("archive", "allow_reprint")) {
         ui->btnPrint->setVisible(true);
         int maxcopies = pbs.getInt("printer", "max_copies");
         if(maxcopies > 1) {
