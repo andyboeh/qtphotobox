@@ -111,6 +111,7 @@ void pbSettings::initDefaultConfg()
     printerSettings.insert("width", 148);
     printerSettings.insert("height", 100);
     printerSettings.insert("backend", "selphy");
+    printerSettings.insert("ip", "192.168.123.123");
 
     photoboothSettings.insert("show_preview", true);
     photoboothSettings.insert("greeter_time", 3);
