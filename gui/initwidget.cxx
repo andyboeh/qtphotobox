@@ -1,18 +1,14 @@
 #include "initwidget.h"
 #include "ui_initwidget.h"
-#include "pbcamera.h"
 #include "statemachine.h"
 #include <QTimer>
 #include <QDebug>
 
-initWidget::initWidget(pbCamera* cameraObject, QFrame *parent) :
+initWidget::initWidget(QFrame *parent) :
     QFrame(parent),
     ui(new Ui::initWidget)
 {
     ui->setupUi(this);
-    mCameraObject = cameraObject;
-    connect(mCameraObject, SIGNAL(cameraInitialized(bool)), this, SLOT(cameraInitialized(bool)));
-    connect(this, SIGNAL(initializeCamera()), mCameraObject, SLOT(initCamera()));
 
     ui->progressBar->setMaximum(10);
     ui->progressBar->setMinimum(0);

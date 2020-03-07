@@ -46,6 +46,7 @@ signals:
     void printPicture(QPixmap image, int copies);
     void initPrinter();
     void retryOperation();
+    void addPictureToShow(QString path);
 private slots:
     void keyPressEvent(QKeyEvent *event);
     void errorOk();

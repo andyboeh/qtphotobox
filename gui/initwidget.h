@@ -8,14 +8,13 @@ class initWidget;
 }
 
 class QTimer;
-class pbCamera;
 
 class initWidget : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit initWidget(pbCamera *cameraObject, QFrame *parent = nullptr);
+    explicit initWidget(QFrame *parent = nullptr);
     ~initWidget();
 signals:
     void initializeCamera(void);
@@ -26,7 +25,6 @@ private slots:
 private:
     Ui::initWidget *ui;
     QTimer *mTimer;
-    pbCamera *mCameraObject;
     int mIncrement;
 };
 

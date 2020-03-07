@@ -1,4 +1,4 @@
-#include "photobooth-rewrite.h"
+﻿#include "photobooth-rewrite.h"
 #include "statemachine.h"
 #include "initwidget.h"
 #include "settingswidget.h"
@@ -114,9 +114,11 @@ void MainWindow::changeState(QString name)
         setCentralWidget(mCurrentWidget);
     } else if(name == "init") {
         delete mCurrentWidget;
-        mCurrentWidget = new initWidget(mCameraThreadObject);
+        mCurrentWidget = new initWidget();
         setCentralWidget(mCurrentWidget);
         initThreads();
+        connect(mCameraThreadObject, SIGNAL(cameraInitialized(bool)), mCurrentWidget, SLOT(cameraInitialized(bool)));
+        connect(mCurrentWidget, SIGNAL(initializeCamera()), mCameraThreadObject, SLOT(initCamera()));
     } else if(name == "settings") {
         delete mCurrentWidget;
         mCurrentWidget = new settingsWidget();
@@ -245,6 +247,7 @@ void MainWindow::initThreads()
             connect(mShowThread, SIGNAL(started()), mShowThreadObject, SLOT(start()));
             connect(mShowThread, SIGNAL(finished()), mShowThreadObject, SLOT(deleteLater()));
             connect(this, SIGNAL(stopShowThread()), mShowThreadObject, SLOT(stop()));
+            connect(this, SIGNAL(addPictureToShow(QString)), mShowThreadObject, SLOT(addPicture(QString)));
             mShowThread->start();
         }
     }
@@ -402,6 +405,7 @@ void MainWindow::startPrintJob(int numcopies)
 void MainWindow::thumbnailScaled(QString path)
 {
     qDebug() << "Thumbnail scaled: " << path;
+    emit addPictureToShow(path);
 }
 
 void MainWindow::fullImageSaved(QString filename, bool ret)
