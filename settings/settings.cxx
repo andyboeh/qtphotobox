@@ -89,7 +89,7 @@ void pbSettings::initDefaultConfg()
     guiSettings.insert("fullscreen", false);
     guiSettings.insert("width", 1024);
     guiSettings.insert("height", 600);
-    guiSettings.insert("hideCursor", false);
+    guiSettings.insert("hide_cursor", false);
     guiSettings.insert("style", "default");
     guiSettings.insert("direct_start", false);
 

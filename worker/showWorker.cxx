@@ -8,6 +8,7 @@
 #include <QRandomGenerator>
 #include <QWindow>
 #include <QApplication>
+#include <QScreen>
 
 showWorker::showWorker()
 {
@@ -52,19 +53,19 @@ void showWorker::start()
     QString footertext = pbs.get("show", "footertext");
 
     mWidget = new showWidget(footertext);
-    if(pbs.getBool("show", "swap_screens")) {
-        mWidget->windowHandle()->setScreen(qApp->screens().last());
-    } else {
-        mWidget->windowHandle()->setScreen(qApp->screens().first());
-    }
+
     if(pbs.getBool("show", "fullscreen")) {
-        mWidget->hide();
+        if(pbs.getBool("show", "swap_screens")) {
+            mWidget->setGeometry(QGuiApplication::screens().first()->geometry());
+        } else {
+            mWidget->setGeometry(QGuiApplication::screens().last()->geometry());
+        }
         mWidget->showFullScreen();
     } else {
         mWidget->setFixedSize(width, height);
-        mWidget->hide();
         mWidget->show();
     }
+
     connect(this, SIGNAL(showPicture(QPixmap)), mWidget, SLOT(showPicture(QPixmap)));
 
     storageManager &sm = storageManager::getInstance();

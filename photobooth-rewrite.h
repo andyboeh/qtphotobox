@@ -41,6 +41,8 @@ signals:
     void saveThumbnail(QString name);
     void printPicture(QPixmap image, int copies);
     void initPrinter();
+private slots:
+    void keyPressEvent(QKeyEvent *event);
 private:
     QWidget *mCurrentWidget;
     QWidget *mOverlayWidget;

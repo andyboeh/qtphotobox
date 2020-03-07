@@ -24,6 +24,8 @@
 #include <QThread>
 #include <QFontDatabase>
 #include <QWindow>
+#include <QScreen>
+#include <QKeyEvent>
 
 MainWindow::MainWindow()
 {
@@ -231,9 +233,9 @@ void MainWindow::loadSettingsToGui(bool showWindow)
             pbs.setBool("show", "enable", false);
         } else {
             if(pbs.getBool("show", "swap_screens")) {
-                windowHandle()->setScreen(qApp->screens().first());
+                setGeometry(screens.last()->geometry());
             } else {
-                windowHandle()->setScreen(qApp->screens().last());
+                setGeometry(screens.first()->geometry());
             }
         }
     }
@@ -254,6 +256,16 @@ void MainWindow::loadSettingsToGui(bool showWindow)
             hide();
             show();
         }
+    }
+    if(pbs.getBool("gui", "hide_cursor")) {
+        qApp->setOverrideCursor(Qt::BlankCursor);
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Escape) {
+        qApp->quit();
     }
 }
 
@@ -408,7 +420,7 @@ int main(int argc, char *argv[]) {
     stm.waitForRemovableDevice();
 
     w.loadSettingsToGui(true);
-    //QMetaObject::invokeMethod(&w, "loadSettingsToGui");
+    //QMetaObject::invokeMethod(&w, "loadSettingsToGui", Qt::QueuedConnection, Q_ARG(bool, true));
     return app.exec();
 }
 
