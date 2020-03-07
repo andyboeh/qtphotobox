@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QThread>
 #include <QFontDatabase>
+#include <QWindow>
 
 MainWindow::MainWindow()
 {
@@ -220,6 +221,22 @@ void MainWindow::loadSettingsToGui(bool showWindow)
 {
     pbSettings &pbs = pbSettings::getInstance();
     mImagesToCapture = pbs.getInt("picture", "num_pictures");
+
+    bool showEnabled = pbs.getBool("show", "enable");
+
+    if(showEnabled) {
+        QList<QScreen*> screens = qApp->screens();
+        if(screens.size() == 1) {
+            qDebug() << "Only one screen available, disabling show";
+            pbs.setBool("show", "enable", false);
+        } else {
+            if(pbs.getBool("show", "swap_screens")) {
+                windowHandle()->setScreen(qApp->screens().first());
+            } else {
+                windowHandle()->setScreen(qApp->screens().last());
+            }
+        }
+    }
 
     bool fs = pbs.getBool("gui", "fullscreen");
     if(fs) {

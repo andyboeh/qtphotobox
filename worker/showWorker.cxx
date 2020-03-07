@@ -6,6 +6,8 @@
 #include <QPixmap>
 #include <QDir>
 #include <QRandomGenerator>
+#include <QWindow>
+#include <QApplication>
 
 showWorker::showWorker()
 {
@@ -50,6 +52,11 @@ void showWorker::start()
     QString footertext = pbs.get("show", "footertext");
 
     mWidget = new showWidget(footertext);
+    if(pbs.getBool("show", "swap_screens")) {
+        mWidget->windowHandle()->setScreen(qApp->screens().last());
+    } else {
+        mWidget->windowHandle()->setScreen(qApp->screens().first());
+    }
     if(pbs.getBool("show", "fullscreen")) {
         mWidget->hide();
         mWidget->showFullScreen();
