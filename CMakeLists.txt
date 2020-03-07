@@ -16,6 +16,7 @@ FIND_PACKAGE(Qt5DBus)
 FIND_PACKAGE(Qt5Network)
 FIND_PACKAGE(Gphoto2)
 FIND_PACKAGE(Cups)
+FIND_LIBRARY(PIGPIO_LIBRARY pigpiod_if2)
 
 include_directories(SYSTEM ${Gphoto2_INCLUDE_DIRS})
 include_directories(${CUPS_INCLUDE_DIRS})
@@ -53,7 +54,7 @@ SET(${NAME}_SOURCES
   camera/camera_interface.cxx
   camera/camera_gphoto2.cxx
   camera/camera_dummy.cxx
-  gpio/gpio.cxx
+  gpio/gpioWorker.cxx
   printer/printer.cxx
   printer/printer_interface.cxx
   printer/printer_selphy.cxx
@@ -75,6 +76,7 @@ SET(${NAME}_SOURCES
   gui/iconlistmodel.cxx
   gui/picturedetailwidget.cxx
   gui/showwidget.cxx
+  gui/errorwidget.cxx
   worker/pictureWorker.cxx
   worker/pictureTask.cxx
   worker/postprocessWorker.cxx
@@ -90,13 +92,14 @@ SET(${NAME}_HEADERS
   camera/camera_interface.h
   camera/camera_gphoto2.h
   camera/camera_dummy.h
-  gpio/gpio.h
+  gpio/gpioWorker.h
   printer/printer.h
   printer/printer_interface.h
   printer/printer_cups.h
   printer/printer_selphy.h
   printer/printJob.h
   statemachine/statemachine.h
+  gui/errorwidget.h
   gui/initwidget.h
   gui/settingswidget.h
   gui/idlewidget.h
@@ -140,6 +143,7 @@ SET(${NAME}_UI
   gui/archivewidget.ui
   gui/picturedetailwidget.ui
   gui/showwidget.ui
+  gui/errorwidget.ui
 )
 
 SET(${NAME}_RES
@@ -171,6 +175,7 @@ TARGET_LINK_LIBRARIES(${NAME}
   ${QT_LIBRARIES}
   ${Gphoto2_LIBRARIES}
   ${CUPS_LIBRARIES}
+  ${PIGPIO_LIBRARY}
 )
 
 IF(WIN32)

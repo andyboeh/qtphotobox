@@ -100,10 +100,10 @@ void pbSettings::initDefaultConfg()
     gpioSettings.insert("enable", true);
     gpioSettings.insert("exit_pin", 24);
     gpioSettings.insert("trigger_pin", 23);
-    gpioSettings.insert("lamp_pin", 4);
-    gpioSettings.insert("chan_b_pin", 17);
-    gpioSettings.insert("chan_r_pin", 27);
-    gpioSettings.insert("chan_g_pin", 22);
+    gpioSettings.insert("af_lamp_pin", 16);
+    gpioSettings.insert("af_lamp_pwm_value", 50);
+    gpioSettings.insert("idle_lamp_pin", 12);
+    gpioSettings.insert("idle_lamp_pwm_value", 50);
 
     printerSettings.insert("enable", true);
     printerSettings.insert("confirmation", true);

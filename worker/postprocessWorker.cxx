@@ -63,15 +63,18 @@ void postprocessWorker::start()
             switch(task.getTaskType()) {
             case postprocessTask::POSTPROCESS_TYPE_SAVE_FULL_IMAGE:
                 qDebug() << "saveFullImage";
-                saveFullImageReal(task.getImage());
+                if(!saveFullImageReal(task.getImage()))
+                    emit postprocessError(tr("Error saving full image."));
                 break;
             case postprocessTask::POSTPROCESS_TYPE_SAVE_ASSEMBLED_IMAGE:
                 qDebug() << "saveAssembledImage";
-                saveAssembledImageReal(task.getImage());
+                if(!saveAssembledImageReal(task.getImage()))
+                    emit postprocessError(tr("Error saving assembled image."));
                 break;
             case postprocessTask::POSTPROCESS_TYPE_CREATE_THUMBNAIL:
                 qDebug() << "createThumbnail";
-                saveThumbnailReal(task.getFile());
+                if(!saveThumbnailReal(task.getFile()))
+                    emit postprocessError(tr("Error saving thumbnail image."));
                 break;
             default:
                 break;

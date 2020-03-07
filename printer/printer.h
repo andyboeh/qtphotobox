@@ -8,12 +8,12 @@ class printJob;
 class printerInterface;
 class QTimer;
 
-class printerThreadObject : public Worker
+class printerWorker : public Worker
 {
     Q_OBJECT
 public:
-    printerThreadObject();
-    ~printerThreadObject();
+    printerWorker();
+    ~printerWorker();
 public slots:
     void start(void);
     void stop(void);

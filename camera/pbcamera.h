@@ -20,10 +20,12 @@ public slots:
     void startPreview(void);
     void stopPreview(void);
     void captureImage(void);
+    void retryOperation();
 signals:
     void cameraInitialized(bool ret);
     void previewImageCaptured(QPixmap image);
     void imageCaptured(QPixmap image);
+    void cameraError(QString message);
 private:
     CameraInterface* mCamera;
     bool mLimitFps;

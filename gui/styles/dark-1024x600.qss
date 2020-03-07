@@ -147,22 +147,6 @@ QFrame#postprocessWidget {
     padding: 40px;
 }
 
-QFrame#showWidget {
-    background-color: #aaeeeeee;
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 30px;
-    border-color: #eeeeee;
-    color: #333333;
-    padding: 20px;
-}
-
-QFrame#showWidget QLabel#lblStatus {
-    color: #333333;
-    font-size: 30px;
-    qproperty-alignment: AlignLeft;
-}
-
 /* Postprocess message */
 
 QFrame#postprocessWidget QLabel {
@@ -225,6 +209,58 @@ QFrame#picturedetailWidget QPushButton:pressed {
 }
 
 QFrame#picturedetailWidget QPushButton:disabled {
+    background-color: #66eeeeee;
+    color: #33eeeeee;
+    border-color: #33eeeeee;
+}
+
+/* Show Widget */
+
+QFrame#showWidget {
+    background-color: #aaeeeeee;
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 30px;
+    border-color: #eeeeee;
+    color: #333333;
+    padding: 20px;
+}
+
+QFrame#showWidget QLabel#lblStatus {
+    color: #333333;
+    font-size: 30px;
+    qproperty-alignment: AlignLeft;
+}
+
+/* error Widget */
+
+QFrame#errorWidget {
+    background-color: #aaeeeeee;
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 30px;
+    border-color: #eeeeee;
+    color: #333333;
+    padding: 40px;
+}
+
+QFrame#errorWidget QLabel {
+    color: #333333;
+    font-size: 40px;
+    qproperty-alignment: AlignCenter;
+}
+
+QFrame#errorWidget QPushButton {
+    color: #333333;
+    border-color: #333333;
+    margin: 20px;
+}
+
+QFrame#errorWidget QPushButton:pressed {
+    background-color: #66eeeeee;
+}
+
+QFrame#errorWidget QPushButton:disabled {
     background-color: #66eeeeee;
     color: #33eeeeee;
     border-color: #33eeeeee;

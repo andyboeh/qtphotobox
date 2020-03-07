@@ -6,7 +6,7 @@
 #include <QThread>
 #include <QTimer>
 
-printerThreadObject::printerThreadObject()
+printerWorker::printerWorker()
 {
     mPrinter = nullptr;
     mTimer = new QTimer();
@@ -15,7 +15,7 @@ printerThreadObject::printerThreadObject()
     connect(mTimer, SIGNAL(timeout()), this, SLOT(startStatusPolling()));
 }
 
-printerThreadObject::~printerThreadObject()
+printerWorker::~printerWorker()
 {
     if(mTimer)
         mTimer->stop();
@@ -25,7 +25,7 @@ printerThreadObject::~printerThreadObject()
     mPrinter = nullptr;
 }
 
-void printerThreadObject::start()
+void printerWorker::start()
 {
     pbSettings &pbs = pbSettings::getInstance();
     QString backend = pbs.get("printer", "backend");
@@ -56,7 +56,8 @@ void printerThreadObject::start()
                 mPrinter->printImage(job.getImage(), job.getCopies());
             }
         } else if(command == "initPrinter") {
-            mPrinter->initPrinter();
+            if(!mPrinter->initPrinter())
+                emit printerError(tr("Error initializing printer. Is it turned on?"));
         } else if(command == "startStatusPolling") {
             if(!mTimer->isActive()) {
                 mTimer->start();
@@ -81,36 +82,36 @@ void printerThreadObject::start()
     emit finished();
 }
 
-void printerThreadObject::stop()
+void printerWorker::stop()
 {
-    qDebug() << "printerThreadObject::stop";
+    qDebug() << "printerWorker::stop";
     mCommandList.append("stopThread");
 }
 
-void printerThreadObject::startStatusPolling()
+void printerWorker::startStatusPolling()
 {
     mCommandList.append("startStatusPolling");
 }
 
-void printerThreadObject::stopStatusPolling()
+void printerWorker::stopStatusPolling()
 {
     mCommandList.append("stopStatusPolling");
 }
 
-void printerThreadObject::addPrintJob(QPixmap image, int numcopies)
+void printerWorker::addPrintJob(QPixmap image, int numcopies)
 {
     printJob job(image, numcopies);
     mPrintJobs.append(job);
     mCommandList.append("processJob");
 }
 
-void printerThreadObject::addFilePrintJob(QString filename, int numcopies)
+void printerWorker::addFilePrintJob(QString filename, int numcopies)
 {
     QPixmap image(filename);
     addPrintJob(image, numcopies);
 }
 
-void printerThreadObject::initPrinter()
+void printerWorker::initPrinter()
 {
     mCommandList.append("initPrinter");
 }

@@ -66,11 +66,13 @@ void pbCamera::start()
         if(mCommandList.isEmpty())
             continue;
         QString command = mCommandList.takeFirst();
-        if(command == "initCamera") {
+        if(command == "initCamera" || command == "retryOperation") {
             if(mCamera) {
                 bool ret = mCamera->initCamera();
                 if(ret)
                     mCamera->setIdle();
+                else
+                    emit cameraError(tr("Error initializing camera. Check connection."));
                 emit cameraInitialized(ret);
             }
         } else if(command == "startPreview") {
@@ -80,13 +82,19 @@ void pbCamera::start()
                     mLimitTimer->start();
                 }
                 QPixmap image = mCamera->getPreviewImage();
-                emit previewImageCaptured(image);
+                if(image.isNull())
+                    emit cameraError(tr("Error capturing image. Camera connected?"));
+                else
+                    emit previewImageCaptured(image);
             } else {
                 mCamera->setActive();
                 // Check for stopPreview
                 while(!checkForNewCommand()) {
                     QPixmap image = mCamera->getPreviewImage();
-                    emit previewImageCaptured(image);
+                    if(image.isNull())
+                        emit cameraError(tr("Error capturing image. Camera connected?"));
+                    else
+                        emit previewImageCaptured(image);
                 }
                 mCamera->setIdle();
             }
@@ -98,7 +106,10 @@ void pbCamera::start()
         } else if(command == "captureImage") {
             mCamera->setActive();
             QPixmap image = mCamera->getCaptureImage();
-            emit imageCaptured(image);
+            if(image.isNull())
+                emit cameraError(tr("Error capturing image. Camera connected?"));
+            else
+                emit imageCaptured(image);
             mCamera->setIdle();
         } else if(command == "stopThread") {
             running = false;
@@ -126,6 +137,12 @@ void pbCamera::stopPreview()
 {
     qDebug() << "stopPreview";
     mCommandList.append("stopPreview");
+}
+
+void pbCamera::retryOperation()
+{
+    qDebug() << "retryOperation";
+    mCommandList.append("retryOperation");
 }
 
 void pbCamera::captureImage()

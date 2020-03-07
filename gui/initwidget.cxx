@@ -41,14 +41,12 @@ void initWidget::cameraInitialized(bool ret)
 void initWidget::timeout()
 {
     qDebug() << "timeout";
-    if(mIncrement == 1) {
-        int val = ui->progressBar->value();
-        if(val == ui->progressBar->maximum())
-        {
-            mIncrement = -1;
-        } else if(val == ui->progressBar->minimum()) {
-            mIncrement = 1;
-        }
-        ui->progressBar->setValue(val + mIncrement);
+    int val = ui->progressBar->value();
+    if(val == ui->progressBar->maximum())
+    {
+        mIncrement = -1;
+    } else if(val == ui->progressBar->minimum()) {
+        mIncrement = 1;
     }
+    ui->progressBar->setValue(val + mIncrement);
 }

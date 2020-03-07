@@ -22,6 +22,7 @@ signals:
     void fullImageSaved(QString path, bool ret);
     void assembledImageSaved(QString path, bool ret);
     void thumbnailScaled(QString path);
+    void postprocessError(QString message);
 private:
     QList<postprocessTask> mPostprocessTasks;
     bool saveFullImageReal(QPixmap image);

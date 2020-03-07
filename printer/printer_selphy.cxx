@@ -73,7 +73,6 @@ bool printerSelphy::initPrinter()
     pbSettings &pbs = pbSettings::getInstance();
     QString ip = pbs.get("printer", "ip");
     int port = 8609;
-    bool ret;
 
     if(mUdpSocket->isValid())
         mUdpSocket->disconnectFromHost();

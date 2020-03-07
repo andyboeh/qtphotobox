@@ -75,7 +75,10 @@ void pictureWorker::start()
             {
                 qDebug() << "TASK_TYPE_ASSEMBLE_PICTURE";
                 QPixmap image = assemblePictureTask(task);
-                emit pictureAssembled(image);
+                if(image.isNull())
+                    emit pictureError(tr("Error assembling picture."));
+                else
+                    emit pictureAssembled(image);
                 break;
             }
             default:

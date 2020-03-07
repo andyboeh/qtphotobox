@@ -23,6 +23,7 @@ public slots:
     void stop();
 signals:
     void pictureAssembled(QPixmap image);
+    void pictureError(QString message);
 private:
     QStringList mFilterList;
     bool mTaskOpened;

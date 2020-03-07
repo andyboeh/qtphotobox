@@ -18,6 +18,8 @@
 #include "postprocesswidget.h"
 #include "archivewidget.h"
 #include "showWorker.h"
+#include "gpioWorker.h"
+#include "errorwidget.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -41,37 +43,56 @@ MainWindow::MainWindow()
     mPostprocessWorkerThread = nullptr;
     mPostprocessWorkerThreadObject = nullptr;
     mCameraThreadObject = nullptr;
+    mGpioThread = nullptr;
+    mGpioThreadObject = nullptr;
     mImagesCaptured = 0;
     mImagesToCapture = 0;
-    mFullscreen = false;
+    mErrorPresent = false;
 }
 
 MainWindow::~MainWindow()
 {
     if(mCameraThread) {
-        emit stopCameraThread();
-        mCameraThread->quit();
-        mCameraThread->wait();
+        if(mCameraThread->isRunning()) {
+            emit stopCameraThread();
+            mCameraThread->quit();
+            mCameraThread->wait();
+        }
     }
     if(mPictureWorkerThread) {
-        emit stopPictureWorkerThread();
-        mPictureWorkerThread->quit();
-        mPictureWorkerThread->wait();
+        if(mPictureWorkerThread->isRunning()) {
+            emit stopPictureWorkerThread();
+            mPictureWorkerThread->quit();
+            mPictureWorkerThread->wait();
+        }
     }
     if(mPostprocessWorkerThread) {
-        emit stopPostprocessWorkerThread();
-        mPostprocessWorkerThread->quit();
-        mPostprocessWorkerThread->wait();
+        if(mPostprocessWorkerThread->isRunning()) {
+            emit stopPostprocessWorkerThread();
+            mPostprocessWorkerThread->quit();
+            mPostprocessWorkerThread->wait();
+        }
     }
     if(mPrinterThread) {
-        emit stopPrinterThread();
-        mPrinterThread->quit();
-        mPrinterThread->wait();
+        if(mPrinterThread->isRunning()) {
+            emit stopPrinterThread();
+            mPrinterThread->quit();
+            mPrinterThread->wait();
+        }
     }
     if(mShowThread) {
-        emit stopShowThread();
-        mShowThread->quit();
-        mShowThread->wait();
+        if(mShowThread->isRunning()) {
+            emit stopShowThread();
+            mShowThread->quit();
+            mShowThread->wait();
+        }
+    }
+    if(mGpioThread) {
+        if(mGpioThread->isRunning()) {
+            emit stopGpioThread();
+            mGpioThread->quit();
+            mGpioThread->wait();
+        }
     }
     delete mCurrentWidget;
     mCurrentWidget = nullptr;
@@ -81,6 +102,8 @@ void MainWindow::changeState(QString name)
 {
     StateMachine &sm = StateMachine::getInstance();
     qDebug() << name;
+    if(mErrorPresent)
+        return;
     if(mOverlayWidget) {
         delete mOverlayWidget;
         mOverlayWidget = nullptr;
@@ -90,84 +113,10 @@ void MainWindow::changeState(QString name)
         mCurrentWidget = new startWidget();
         setCentralWidget(mCurrentWidget);
     } else if(name == "init") {
-        qDebug() << QThread::currentThreadId();
-        if(!mCameraThread) {
-            mCameraThread = new QThread();
-            mCameraThreadObject = new pbCamera();
-            mCameraThreadObject->moveToThread(mCameraThread);
-            connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(quit()));
-            connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(deleteLater()));
-            connect(mCameraThreadObject, SIGNAL(imageCaptured(QPixmap)), this, SLOT(imageCaptured(QPixmap)));
-            connect(mCameraThread, SIGNAL(started()), mCameraThreadObject, SLOT(start()));
-            connect(mCameraThread, SIGNAL(finished()), mCameraThreadObject, SLOT(deleteLater()));
-            connect(this, SIGNAL(stopCameraThread()), mCameraThreadObject, SLOT(stop()));
-            mCameraThread->start();
-        }
-        if(!mPictureWorkerThread) {
-            mPictureWorkerThread = new QThread();
-            mPictureWorkerThreadObject = new pictureWorker();
-            mPictureWorkerThreadObject->moveToThread(mPictureWorkerThread);
-            connect(mPictureWorkerThreadObject, SIGNAL(finished()), mPictureWorkerThread, SLOT(quit()));
-            connect(mPictureWorkerThreadObject, SIGNAL(finished()), mPictureWorkerThread, SLOT(deleteLater()));
-            connect(mPictureWorkerThreadObject, SIGNAL(pictureAssembled(QPixmap)), this, SLOT(pictureAssembled(QPixmap)));
-            connect(mPictureWorkerThread, SIGNAL(started()), mPictureWorkerThreadObject, SLOT(start()));
-            connect(mPictureWorkerThread, SIGNAL(finished()), mPictureWorkerThreadObject, SLOT(deleteLater()));
-            connect(this, SIGNAL(stopPictureWorkerThread()), mPictureWorkerThreadObject, SLOT(stop()));
-            connect(this, SIGNAL(initAssembleTask()), mPictureWorkerThreadObject, SLOT(initAssembleTask()));
-            connect(this, SIGNAL(finishTask()), mPictureWorkerThreadObject, SLOT(finishTask()));
-            connect(this, SIGNAL(addPicture(QPixmap)), mPictureWorkerThreadObject, SLOT(addPicture(QPixmap)));
-            mPictureWorkerThread->start();
-        }
-        if(!mPostprocessWorkerThread) {
-            mPostprocessWorkerThread = new QThread();
-            mPostprocessWorkerThreadObject = new postprocessWorker();
-            mPostprocessWorkerThreadObject->moveToThread(mPostprocessWorkerThread);
-            connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(quit()));
-            connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(deleteLater()));
-            connect(mPostprocessWorkerThreadObject, SIGNAL(fullImageSaved(QString,bool)), this, SLOT(fullImageSaved(QString,bool)));
-            connect(mPostprocessWorkerThreadObject, SIGNAL(assembledImageSaved(QString,bool)), this, SLOT(assembledImageSaved(QString,bool)));
-            connect(mPostprocessWorkerThread, SIGNAL(started()), mPostprocessWorkerThreadObject, SLOT(start()));
-            connect(mPostprocessWorkerThread, SIGNAL(finished()), mPostprocessWorkerThreadObject, SLOT(deleteLater()));
-            connect(this, SIGNAL(stopPostprocessWorkerThread()), mPostprocessWorkerThreadObject, SLOT(stop()));
-            connect(this, SIGNAL(saveFullPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveFullImage(QPixmap)));
-            connect(this, SIGNAL(saveAssembledPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveAssembledImage(QPixmap)));
-            connect(this, SIGNAL(saveThumbnail(QString)), mPostprocessWorkerThreadObject, SLOT(saveThumbnail(QString)));
-            connect(mPostprocessWorkerThreadObject, SIGNAL(thumbnailScaled(QString)), this, SLOT(thumbnailScaled(QString)));
-            mPostprocessWorkerThread->start();
-        }
-        pbSettings &pbs = pbSettings::getInstance();
-        if(pbs.getBool("printer", "enable")) {
-            if(!mPrinterThread) {
-                mPrinterThread = new QThread();
-                mPrinterThreadObject = new printerThreadObject();
-                mPrinterThreadObject->moveToThread(mPrinterThread);
-                connect(mPrinterThreadObject, SIGNAL(finished()), mPrinterThread, SLOT(quit()));
-                connect(mPrinterThreadObject, SIGNAL(finished()), mPrinterThread, SLOT(deleteLater()));
-                connect(mPrinterThread, SIGNAL(started()), mPrinterThreadObject, SLOT(start()));
-                connect(mPrinterThread, SIGNAL(finished()), mPrinterThreadObject, SLOT(deleteLater()));
-                connect(this, SIGNAL(stopPrinterThread()), mPrinterThreadObject, SLOT(stop()));
-                connect(this, SIGNAL(printPicture(QPixmap,int)), mPrinterThreadObject, SLOT(addPrintJob(QPixmap,int)));
-                connect(this, SIGNAL(initPrinter()), mPrinterThreadObject, SLOT(initPrinter()));
-                mPrinterThread->start();
-            }
-            emit initPrinter();
-        }
-        if(pbs.getBool("show", "enable")) {
-            if(!mShowThread) {
-                mShowThread = new QThread();
-                mShowThreadObject = new showWorker();
-                mShowThreadObject->moveToThread(mShowThread);
-                connect(mShowThreadObject, SIGNAL(finished()), mShowThread, SLOT(quit()));
-                connect(mShowThreadObject, SIGNAL(finished()), mShowThread, SLOT(deleteLater()));
-                connect(mShowThread, SIGNAL(started()), mShowThreadObject, SLOT(start()));
-                connect(mShowThread, SIGNAL(finished()), mShowThreadObject, SLOT(deleteLater()));
-                connect(this, SIGNAL(stopShowThread()), mShowThreadObject, SLOT(stop()));
-                mShowThread->start();
-            }
-        }
         delete mCurrentWidget;
         mCurrentWidget = new initWidget(mCameraThreadObject);
         setCentralWidget(mCurrentWidget);
+        initThreads();
     } else if(name == "settings") {
         delete mCurrentWidget;
         mCurrentWidget = new settingsWidget();
@@ -219,6 +168,102 @@ void MainWindow::changeState(QString name)
     }
 }
 
+void MainWindow::initThreads()
+{
+    pbSettings &pbs = pbSettings::getInstance();
+    if(!mCameraThread) {
+        mCameraThread = new QThread();
+        mCameraThreadObject = new pbCamera();
+        mCameraThreadObject->moveToThread(mCameraThread);
+        connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(quit()));
+        connect(mCameraThreadObject, SIGNAL(finished()), mCameraThread, SLOT(deleteLater()));
+        connect(mCameraThreadObject, SIGNAL(imageCaptured(QPixmap)), this, SLOT(imageCaptured(QPixmap)));
+        connect(mCameraThreadObject, SIGNAL(cameraError(QString)), this, SLOT(cameraError(QString)));
+        connect(mCameraThread, SIGNAL(started()), mCameraThreadObject, SLOT(start()));
+        connect(mCameraThread, SIGNAL(finished()), mCameraThreadObject, SLOT(deleteLater()));
+        connect(this, SIGNAL(stopCameraThread()), mCameraThreadObject, SLOT(stop()));
+        mCameraThread->start();
+    }
+    if(!mPictureWorkerThread) {
+        mPictureWorkerThread = new QThread();
+        mPictureWorkerThreadObject = new pictureWorker();
+        mPictureWorkerThreadObject->moveToThread(mPictureWorkerThread);
+        connect(mPictureWorkerThreadObject, SIGNAL(finished()), mPictureWorkerThread, SLOT(quit()));
+        connect(mPictureWorkerThreadObject, SIGNAL(finished()), mPictureWorkerThread, SLOT(deleteLater()));
+        connect(mPictureWorkerThreadObject, SIGNAL(pictureAssembled(QPixmap)), this, SLOT(pictureAssembled(QPixmap)));
+        connect(mPictureWorkerThreadObject, SIGNAL(pictureError(QString)), this, SLOT(genericError(QString)));
+        connect(mPictureWorkerThread, SIGNAL(started()), mPictureWorkerThreadObject, SLOT(start()));
+        connect(mPictureWorkerThread, SIGNAL(finished()), mPictureWorkerThreadObject, SLOT(deleteLater()));
+        connect(this, SIGNAL(stopPictureWorkerThread()), mPictureWorkerThreadObject, SLOT(stop()));
+        connect(this, SIGNAL(initAssembleTask()), mPictureWorkerThreadObject, SLOT(initAssembleTask()));
+        connect(this, SIGNAL(finishTask()), mPictureWorkerThreadObject, SLOT(finishTask()));
+        connect(this, SIGNAL(addPicture(QPixmap)), mPictureWorkerThreadObject, SLOT(addPicture(QPixmap)));
+        mPictureWorkerThread->start();
+    }
+    if(!mPostprocessWorkerThread) {
+        mPostprocessWorkerThread = new QThread();
+        mPostprocessWorkerThreadObject = new postprocessWorker();
+        mPostprocessWorkerThreadObject->moveToThread(mPostprocessWorkerThread);
+        connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(quit()));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(deleteLater()));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(fullImageSaved(QString,bool)), this, SLOT(fullImageSaved(QString,bool)));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(assembledImageSaved(QString,bool)), this, SLOT(assembledImageSaved(QString,bool)));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(postprocessError(QString)), this, SLOT(genericError(QString)));
+        connect(mPostprocessWorkerThread, SIGNAL(started()), mPostprocessWorkerThreadObject, SLOT(start()));
+        connect(mPostprocessWorkerThread, SIGNAL(finished()), mPostprocessWorkerThreadObject, SLOT(deleteLater()));
+        connect(this, SIGNAL(stopPostprocessWorkerThread()), mPostprocessWorkerThreadObject, SLOT(stop()));
+        connect(this, SIGNAL(saveFullPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveFullImage(QPixmap)));
+        connect(this, SIGNAL(saveAssembledPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveAssembledImage(QPixmap)));
+        connect(this, SIGNAL(saveThumbnail(QString)), mPostprocessWorkerThreadObject, SLOT(saveThumbnail(QString)));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(thumbnailScaled(QString)), this, SLOT(thumbnailScaled(QString)));
+        mPostprocessWorkerThread->start();
+    }
+    if(pbs.getBool("printer", "enable")) {
+        if(!mPrinterThread) {
+            mPrinterThread = new QThread();
+            mPrinterThreadObject = new printerWorker();
+            mPrinterThreadObject->moveToThread(mPrinterThread);
+            connect(mPrinterThreadObject, SIGNAL(finished()), mPrinterThread, SLOT(quit()));
+            connect(mPrinterThreadObject, SIGNAL(finished()), mPrinterThread, SLOT(deleteLater()));
+            connect(mPrinterThreadObject, SIGNAL(printerError(QString)), this, SLOT(printerError(QString)));
+            connect(mPrinterThread, SIGNAL(started()), mPrinterThreadObject, SLOT(start()));
+            connect(mPrinterThread, SIGNAL(finished()), mPrinterThreadObject, SLOT(deleteLater()));
+            connect(this, SIGNAL(stopPrinterThread()), mPrinterThreadObject, SLOT(stop()));
+            connect(this, SIGNAL(printPicture(QPixmap,int)), mPrinterThreadObject, SLOT(addPrintJob(QPixmap,int)));
+            connect(this, SIGNAL(initPrinter()), mPrinterThreadObject, SLOT(initPrinter()));
+            mPrinterThread->start();
+        }
+        emit initPrinter();
+    }
+    if(pbs.getBool("show", "enable")) {
+        if(!mShowThread) {
+            mShowThread = new QThread();
+            mShowThreadObject = new showWorker();
+            mShowThreadObject->moveToThread(mShowThread);
+            connect(mShowThreadObject, SIGNAL(finished()), mShowThread, SLOT(quit()));
+            connect(mShowThreadObject, SIGNAL(finished()), mShowThread, SLOT(deleteLater()));
+            connect(mShowThread, SIGNAL(started()), mShowThreadObject, SLOT(start()));
+            connect(mShowThread, SIGNAL(finished()), mShowThreadObject, SLOT(deleteLater()));
+            connect(this, SIGNAL(stopShowThread()), mShowThreadObject, SLOT(stop()));
+            mShowThread->start();
+        }
+    }
+    if(pbs.getBool("gpio", "enable")) {
+        if(!mGpioThread) {
+            mGpioThread = new QThread();
+            mGpioThreadObject = new gpioWorker();
+            mGpioThreadObject->moveToThread(mGpioThread);
+            connect(mGpioThreadObject, SIGNAL(finished()), mGpioThread, SLOT(quit()));
+            connect(mGpioThreadObject, SIGNAL(finished()), mGpioThread, SLOT(deleteLater()));
+            connect(mGpioThreadObject, SIGNAL(gpioError(QString)), this, SLOT(genericError(QString)));
+            connect(mGpioThread, SIGNAL(started()), mGpioThreadObject, SLOT(start()));
+            connect(mGpioThread, SIGNAL(finished()), mGpioThreadObject, SLOT(deleteLater()));
+            connect(this, SIGNAL(stopGpioThread()), mGpioThreadObject, SLOT(stop()));
+            mGpioThread->start();
+        }
+    }
+}
+
 void MainWindow::loadSettingsToGui(bool showWindow)
 {
     pbSettings &pbs = pbSettings::getInstance();
@@ -242,13 +287,11 @@ void MainWindow::loadSettingsToGui(bool showWindow)
 
     bool fs = pbs.getBool("gui", "fullscreen");
     if(fs) {
-        mFullscreen = true;
         if(isVisible() || showWindow) {
             hide();
             showFullScreen();
         }
     } else {
-        mFullscreen = false;
         int width = pbs.getInt("gui", "width");
         int height = pbs.getInt("gui", "height");
         setFixedSize(width, height);
@@ -267,6 +310,33 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Escape) {
         qApp->quit();
     }
+}
+
+void MainWindow::errorOk()
+{
+    delete mOverlayWidget;
+    mOverlayWidget = nullptr;
+    mErrorPresent = false;
+    StateMachine &sm = StateMachine::getInstance();
+    sm.triggerState(sm.getCurrentState());
+}
+
+void MainWindow::errorQuit()
+{
+    delete mOverlayWidget;
+    mOverlayWidget = nullptr;
+    qApp->quit();
+}
+
+void MainWindow::errorRetry()
+{
+    delete mOverlayWidget;
+    mOverlayWidget = nullptr;
+    emit retryOperation();
+    disconnect(this, SIGNAL(retryOperation()));
+    mErrorPresent = false;
+    StateMachine &sm = StateMachine::getInstance();
+    sm.triggerState(sm.getCurrentState());
 }
 
 void MainWindow::imageCaptured(QPixmap image)
@@ -295,7 +365,32 @@ void MainWindow::pictureAssembled(QPixmap image)
 
 void MainWindow::printerError(QString error)
 {
+    mErrorPresent = true;
+    delete mOverlayWidget;
+    mOverlayWidget = new errorWidget(errorWidget::BTN_OK, error, this);
+    mOverlayWidget->show();
+    connect(mOverlayWidget, SIGNAL(errorOk()), this, SLOT(errorOk()));
+}
 
+void MainWindow::cameraError(QString error)
+{
+    mErrorPresent = true;
+    delete mOverlayWidget;
+    mOverlayWidget = new errorWidget(errorWidget::BTN_RETRY_QUIT, error, this);
+    mOverlayWidget->show();
+    connect(mOverlayWidget, SIGNAL(errorRetry()), this, SLOT(errorRetry()));
+    connect(mOverlayWidget, SIGNAL(errorQuit()), this, SLOT(errorQuit()));
+    connect(this, SIGNAL(retryOperation()), mCameraThreadObject, SLOT(retryOperation()));
+}
+
+void MainWindow::genericError(QString error)
+{
+    mErrorPresent = true;
+    delete mOverlayWidget;
+    mOverlayWidget = new errorWidget(errorWidget::BTN_OK_QUIT, error, this);
+    mOverlayWidget->show();
+    connect(mOverlayWidget, SIGNAL(errorOk()), this, SLOT(errorOk()));
+    connect(mOverlayWidget, SIGNAL(errorQuit()), this, SLOT(errorQuit()));
 }
 
 void MainWindow::startPrintJob(int numcopies)

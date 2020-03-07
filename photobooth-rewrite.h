@@ -8,8 +8,9 @@ class QThread;
 class pbCamera;
 class pictureWorker;
 class postprocessWorker;
-class printerThreadObject;
+class printerWorker;
 class showWorker;
+class gpioWorker;
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +24,8 @@ public slots:
     void imageCaptured(QPixmap image);
     void pictureAssembled(QPixmap image);
     void printerError(QString error);
+    void cameraError(QString error);
+    void genericError(QString error);
     void startPrintJob(int numcopies);
     void thumbnailScaled(QString path);
     void fullImageSaved(QString filename, bool ret);
@@ -33,6 +36,7 @@ signals:
     void stopPostprocessWorkerThread();
     void stopPrinterThread();
     void stopShowThread();
+    void stopGpioThread();
     void initAssembleTask();
     void finishTask();
     void addPicture(QPixmap image);
@@ -41,8 +45,12 @@ signals:
     void saveThumbnail(QString name);
     void printPicture(QPixmap image, int copies);
     void initPrinter();
+    void retryOperation();
 private slots:
     void keyPressEvent(QKeyEvent *event);
+    void errorOk();
+    void errorQuit();
+    void errorRetry();
 private:
     QWidget *mCurrentWidget;
     QWidget *mOverlayWidget;
@@ -51,15 +59,18 @@ private:
     QThread *mPostprocessWorkerThread;
     QThread *mPrinterThread;
     QThread *mShowThread;
+    QThread *mGpioThread;
     showWorker *mShowThreadObject;
     pbCamera *mCameraThreadObject;
     pictureWorker *mPictureWorkerThreadObject;
     postprocessWorker *mPostprocessWorkerThreadObject;
-    printerThreadObject *mPrinterThreadObject;
+    printerWorker *mPrinterThreadObject;
+    gpioWorker *mGpioThreadObject;
     int mImagesCaptured;
     int mImagesToCapture;
     QPixmap mImageToReview;
-    bool mFullscreen;
+    bool mErrorPresent;
+    void initThreads();
 };
 
 #endif //_PHOTOBOOTH_REWRITE_H
