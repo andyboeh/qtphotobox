@@ -53,7 +53,11 @@ void printerWorker::start()
 
             printJob job = mPrintJobs.takeFirst();
             if(mPrinter) {
-                mPrinter->printImage(job.getImage(), job.getCopies());
+                if(job.isFileJob()) {
+                    mPrinter->printFile(job.getFile(), job.getCopies());
+                } else {
+                    mPrinter->printImage(job.getImage(), job.getCopies());
+                }
             }
         } else if(command == "initPrinter") {
             if(!mPrinter->initPrinter())
@@ -107,8 +111,15 @@ void printerWorker::addPrintJob(QPixmap image, int numcopies)
 
 void printerWorker::addFilePrintJob(QString filename, int numcopies)
 {
-    QPixmap image(filename);
-    addPrintJob(image, numcopies);
+    if(mPrinter->canPrintFiles())
+    {
+        printJob job(filename, numcopies);
+        mPrintJobs.append(job);
+        mCommandList.append("processJob");
+    } else {
+        QPixmap image(filename);
+        addPrintJob(image, numcopies);
+    }
 }
 
 void printerWorker::initPrinter()

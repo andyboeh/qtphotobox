@@ -19,9 +19,9 @@ public slots:
     void start();
     void stop();
 signals:
-    void fullImageSaved(QString path, bool ret);
-    void assembledImageSaved(QString path, bool ret);
-    void thumbnailScaled(QString path);
+    void fullImageSaved(QString path, QString filename, bool ret);
+    void assembledImageSaved(QString path, QString filename, bool ret);
+    void thumbnailScaled(QString path, QString filename);
     void postprocessError(QString message);
 private:
     QList<postprocessTask> mPostprocessTasks;

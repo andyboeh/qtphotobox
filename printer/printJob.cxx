@@ -17,9 +17,20 @@ printJob::printJob(QPixmap image, int copies)
     mCopies = copies;
 }
 
+printJob::printJob(QString filename, int copies)
+{
+    mFilename = filename;
+    mCopies = copies;
+}
+
 printJob::~printJob()
 {
 
+}
+
+bool printJob::isFileJob()
+{
+    return !mFilename.isEmpty();
 }
 
 void printJob::setCopies(int copies)
@@ -34,4 +45,9 @@ int printJob::getCopies()
 
 QPixmap printJob::getImage() {
     return mImage;
+}
+
+QString printJob::getFile()
+{
+    return mFilename;
 }

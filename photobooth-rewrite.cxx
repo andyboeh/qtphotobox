@@ -142,6 +142,8 @@ void MainWindow::changeState(QString name)
         mCurrentWidget = new countdownWidget(mCameraThreadObject);
         setCentralWidget(mCurrentWidget);
     } else if(name == "capture") {
+        mImageToPrint = "";
+        mImageToReview = QPixmap();
         delete mCurrentWidget;
         mCurrentWidget = new captureWidget(mCameraThreadObject);
         setCentralWidget(mCurrentWidget);
@@ -208,8 +210,8 @@ void MainWindow::initThreads()
         mPostprocessWorkerThreadObject->moveToThread(mPostprocessWorkerThread);
         connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(quit()));
         connect(mPostprocessWorkerThreadObject, SIGNAL(finished()), mPostprocessWorkerThread, SLOT(deleteLater()));
-        connect(mPostprocessWorkerThreadObject, SIGNAL(fullImageSaved(QString,bool)), this, SLOT(fullImageSaved(QString,bool)));
-        connect(mPostprocessWorkerThreadObject, SIGNAL(assembledImageSaved(QString,bool)), this, SLOT(assembledImageSaved(QString,bool)));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(fullImageSaved(QString,QString,bool)), this, SLOT(fullImageSaved(QString,QString,bool)));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(assembledImageSaved(QString,QString,bool)), this, SLOT(assembledImageSaved(QString,QString,bool)));
         connect(mPostprocessWorkerThreadObject, SIGNAL(postprocessError(QString)), this, SLOT(genericError(QString)));
         connect(mPostprocessWorkerThread, SIGNAL(started()), mPostprocessWorkerThreadObject, SLOT(start()));
         connect(mPostprocessWorkerThread, SIGNAL(finished()), mPostprocessWorkerThreadObject, SLOT(deleteLater()));
@@ -217,7 +219,7 @@ void MainWindow::initThreads()
         connect(this, SIGNAL(saveFullPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveFullImage(QPixmap)));
         connect(this, SIGNAL(saveAssembledPicture(QPixmap)), mPostprocessWorkerThreadObject, SLOT(saveAssembledImage(QPixmap)));
         connect(this, SIGNAL(saveThumbnail(QString)), mPostprocessWorkerThreadObject, SLOT(saveThumbnail(QString)));
-        connect(mPostprocessWorkerThreadObject, SIGNAL(thumbnailScaled(QString)), this, SLOT(thumbnailScaled(QString)));
+        connect(mPostprocessWorkerThreadObject, SIGNAL(thumbnailScaled(QString,QString)), this, SLOT(thumbnailScaled(QString,QString)));
         mPostprocessWorkerThread->start();
     }
     if(pbs.getBool("printer", "enable")) {
@@ -232,6 +234,7 @@ void MainWindow::initThreads()
             connect(mPrinterThread, SIGNAL(finished()), mPrinterThreadObject, SLOT(deleteLater()));
             connect(this, SIGNAL(stopPrinterThread()), mPrinterThreadObject, SLOT(stop()));
             connect(this, SIGNAL(printPicture(QPixmap,int)), mPrinterThreadObject, SLOT(addPrintJob(QPixmap,int)));
+            connect(this, SIGNAL(printPictureFile(QString,int)), mPrinterThreadObject, SLOT(addFilePrintJob(QString,int)));
             connect(this, SIGNAL(initPrinter()), mPrinterThreadObject, SLOT(initPrinter()));
             mPrinterThread->start();
         }
@@ -399,22 +402,27 @@ void MainWindow::genericError(QString error)
 void MainWindow::startPrintJob(int numcopies)
 {
     qDebug() << "startPrintJob: " << numcopies;
-    emit printPicture(mImageToReview, numcopies);
+    if(!mImageToPrint.isEmpty()) {
+        emit printPictureFile(mImageToPrint, numcopies);
+    } else {
+        emit printPicture(mImageToReview, numcopies);
+    }
 }
 
-void MainWindow::thumbnailScaled(QString path)
+void MainWindow::thumbnailScaled(QString path, QString filename)
 {
     qDebug() << "Thumbnail scaled: " << path;
     emit addPictureToShow(path);
 }
 
-void MainWindow::fullImageSaved(QString filename, bool ret)
+void MainWindow::fullImageSaved(QString path, QString filename, bool ret)
 {
 
 }
 
-void MainWindow::assembledImageSaved(QString filename, bool ret)
+void MainWindow::assembledImageSaved(QString path, QString filename, bool ret)
 {
+    mImageToPrint = path + QDir::separator() + filename;
     if(ret)
         emit saveThumbnail(filename);
 }

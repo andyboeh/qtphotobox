@@ -100,7 +100,7 @@ bool postprocessWorker::saveFullImageReal(QPixmap image)
     QString path = sm.getPictureStoragePath();
     QString filename = sm.getNextFilename(path, storageManager::FILETYPE_FULL);
     ret = image.save(path + QDir::separator() + filename, "JPG");
-    emit fullImageSaved(filename, ret);
+    emit fullImageSaved(path, filename, ret);
     return ret;
 }
 
@@ -111,7 +111,7 @@ bool postprocessWorker::saveAssembledImageReal(QPixmap image)
     QString path = sm.getPictureStoragePath();
     QString filename = sm.getNextFilename(path, storageManager::FILETYPE_ASSEMBLED);
     ret = image.save(path + QDir::separator() + filename, "JPG");
-    emit assembledImageSaved(filename, ret);
+    emit assembledImageSaved(path, filename, ret);
     return ret;
 }
 
@@ -128,6 +128,6 @@ bool postprocessWorker::saveThumbnailReal(QString filename)
     QString savePath = sm.getThumbnailStoragePath();
     QPixmap scaled = image.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ret = scaled.save(savePath + QDir::separator() + filename);
-    emit thumbnailScaled(filename);
+    emit thumbnailScaled(path, filename);
     return ret;
 }
