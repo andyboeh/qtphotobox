@@ -98,7 +98,7 @@ QPixmap CameraGphoto2::getPreviewImage()
     int ret;
     CameraFile *file = NULL;
     const char *data;
-    size_t size;
+    unsigned long size;
 
     ret = gp_file_new(&file);
     if(ret != GP_OK) {
@@ -128,7 +128,7 @@ out:
 QPixmap CameraGphoto2::getCaptureImage()
 {
     QPixmap image;
-    size_t size;
+    unsigned long size;
     int ret;
     const char *data;
     CameraFile *file = NULL;

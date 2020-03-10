@@ -90,7 +90,7 @@ void pbCamera::start()
                     mCamera->setActive();
                     mLimitTimer->start();
                 }
-                QPixmap image = mCamera->getPreviewImage();
+                QPixmap image = mCamera->getPreviewImage().transformed(QTransform().scale(-1, 1));
                 if(image.isNull())
                     emit cameraError(tr("Error capturing image. Camera connected?"));
                 else
@@ -99,7 +99,7 @@ void pbCamera::start()
                 mCamera->setActive();
                 // Check for stopPreview
                 while(!checkForNewCommand()) {
-                    QPixmap image = mCamera->getPreviewImage();
+                    QPixmap image = mCamera->getPreviewImage().transformed(QTransform().scale(-1, 1));
                     if(image.isNull())
                         emit cameraError(tr("Error capturing image. Camera connected?"));
                     else

@@ -79,12 +79,17 @@ void gpioWorker::start()
             if(mState == "idle") {
                 set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), 0);
                 set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), mGpioMapping.value("idle_lamp_pwm_value"));
+                qDebug() << "set " << mGpioMapping.value("af_lamp_pin") << "to 0";
+                qDebug() << "set " << mGpioMapping.value("idle_lamp_pin") << "to" << mGpioMapping.value("idle_lamp_pwm_value");
             } else if(mState == "greeter" || mState == "init") {
                 set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), 0);
                 set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), mGpioMapping.value("af_lamp_pwm_value"));
+                qDebug() << "set " << mGpioMapping.value("af_lamp_pin") << "to" << mGpioMapping.value("af_lamp_pwm_value");
+                qDebug() << "set " << mGpioMapping.value("idle_lamp_pin") << "to 0";
             } else if(mState == "archive") {
                 set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), 0);
                 set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), 0);
+                qDebug() << "set all to 0";
             }
         } else if(command == "initGpio") {
             if(!setupGpio())
