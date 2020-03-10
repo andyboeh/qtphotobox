@@ -19,8 +19,6 @@ initWidget::initWidget(QFrame *parent) :
     mTimer->setSingleShot(false);
     connect(mTimer, SIGNAL(timeout()), this, SLOT(timeout()));
     mTimer->start();
-
-    emit initializeCamera();
 }
 
 initWidget::~initWidget()

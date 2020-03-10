@@ -25,6 +25,10 @@ printerWorker::~printerWorker()
     mPrinter = nullptr;
 }
 
+void printerWorker::printerErrorInternal(QString err_code, QString error) {
+    emit printerError(error);
+}
+
 void printerWorker::start()
 {
     pbSettings &pbs = pbSettings::getInstance();
@@ -34,6 +38,7 @@ void printerWorker::start()
     } else if(backend == "cups") {
         mPrinter = new printerCups();
     }
+    connect(mPrinter, SIGNAL(printerError(QString,QString)), this, SLOT(printerErrorInternal(QString,QString)));
 
     bool running = true;
 

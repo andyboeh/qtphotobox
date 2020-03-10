@@ -128,6 +128,6 @@ bool postprocessWorker::saveThumbnailReal(QString filename)
     QString savePath = sm.getThumbnailStoragePath();
     QPixmap scaled = image.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ret = scaled.save(savePath + QDir::separator() + filename);
-    emit thumbnailScaled(path, filename);
+    emit thumbnailScaled(savePath, filename);
     return ret;
 }

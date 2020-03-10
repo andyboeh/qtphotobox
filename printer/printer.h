@@ -24,6 +24,8 @@ public slots:
     void initPrinter(void);
 signals:
     void printerError(QString error);
+private slots:
+    void printerErrorInternal(QString err_code, QString error);
 private:
     printerInterface* mPrinter;
     QTimer *mTimer;

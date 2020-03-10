@@ -5,6 +5,7 @@
 #include <QByteArray>
 #include "printJob.h"
 #include <QList>
+#include <QAbstractSocket>
 
 class QFile;
 class QTcpSocket;
@@ -33,6 +34,7 @@ class printerSelphy : public printerInterface {
     typedef enum {
         JOB_STATE_DONE,
         JOB_STATE_IDLE,
+        JOB_STATE_TCP_CONNECTING,
         JOB_STATE_TCP_STARTED,
         JOB_STATE_FAILED,
         JOB_STATE_FLAGS_SENT,
@@ -50,6 +52,11 @@ private slots:
     void processTcpData();
     void processPrintJob(bool tcp = false);
     void pollTcpDelayed();
+    void tcpConnected();
+    void tcpError(QAbstractSocket::SocketError error);
+    void sendChunk();
+    void sendJobDone();
+    void sendFlags();
 private:
     QTcpSocket *mTcpSocket;
     QUdpSocket *mUdpSocket;
@@ -71,9 +78,9 @@ private:
     selphyState getSelphyState();
     selphyJobState mJobState;
     bool connectTcp(bool reconnect);
-    void sendJobDone();
-    void sendChunk();
-    void sendFlags();
+
+    QByteArray makeFileHeader(quint32 offset, quint32 length);
+    QByteArray bs(QByteArray data);
 };
 
 #endif //_PRINTER_SELPHY

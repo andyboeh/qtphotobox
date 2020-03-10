@@ -16,8 +16,6 @@ class initWidget : public QFrame
 public:
     explicit initWidget(QFrame *parent = nullptr);
     ~initWidget();
-signals:
-    void initializeCamera(void);
 public slots:
     void cameraInitialized(bool ret);
 private slots:

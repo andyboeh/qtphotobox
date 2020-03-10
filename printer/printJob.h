@@ -14,11 +14,18 @@ public:
     bool isFileJob();
     void setCopies(int copies);
     int getCopies();
+    int getCopiesPrinted();
+    void setCopiesPrinted(int copies);
     QPixmap getImage();
     QString getFile();
+    int getWidth();
+    int getHeight();
 private:
+    int mCopiesPrinted;
     QString mFilename;
     QPixmap mImage;
+    int mHeight;
+    int mWidth;
     int mCopies;
 };
 

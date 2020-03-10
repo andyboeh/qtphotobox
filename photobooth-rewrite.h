@@ -48,6 +48,7 @@ signals:
     void initPrinter();
     void retryOperation();
     void addPictureToShow(QString path);
+    void initializeCamera();
 private slots:
     void keyPressEvent(QKeyEvent *event);
     void errorOk();

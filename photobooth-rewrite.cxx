@@ -118,7 +118,8 @@ void MainWindow::changeState(QString name)
         setCentralWidget(mCurrentWidget);
         initThreads();
         connect(mCameraThreadObject, SIGNAL(cameraInitialized(bool)), mCurrentWidget, SLOT(cameraInitialized(bool)));
-        connect(mCurrentWidget, SIGNAL(initializeCamera()), mCameraThreadObject, SLOT(initCamera()));
+        connect(this, SIGNAL(initializeCamera()), mCameraThreadObject, SLOT(initCamera()));
+        emit initializeCamera();
     } else if(name == "settings") {
         delete mCurrentWidget;
         mCurrentWidget = new settingsWidget();
@@ -411,8 +412,8 @@ void MainWindow::startPrintJob(int numcopies)
 
 void MainWindow::thumbnailScaled(QString path, QString filename)
 {
-    qDebug() << "Thumbnail scaled: " << path;
-    emit addPictureToShow(path);
+    qDebug() << "Thumbnail scaled: " << path << QDir::separator() << filename;
+    emit addPictureToShow(filename);
 }
 
 void MainWindow::fullImageSaved(QString path, QString filename, bool ret)

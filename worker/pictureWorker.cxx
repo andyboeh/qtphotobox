@@ -1,5 +1,7 @@
 #include "pictureWorker.h"
 #include "settings.h"
+#include <QFile>
+#include "storageManager.h"
 #include <QPainter>
 
 pictureWorker::pictureWorker()
@@ -56,6 +58,17 @@ void pictureWorker::start()
 
     mPictureSizeX = pbs.getInt("picture", "size_x");
     mPictureSizeY = pbs.getInt("picture", "size_y");
+
+
+    QString backgroundImage = pbs.get("picture", "background");
+    if(!backgroundImage.isEmpty()) {
+        QFile file(backgroundImage);
+        if(!file.exists()) {
+            emit pictureError(tr("Background image not found: %1").arg(backgroundImage));
+        } else {
+            mBackgroundImage = QPixmap(backgroundImage).scaled(mPictureSizeX, mPictureSizeY, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+    }
 
     emit started();
 
@@ -121,7 +134,11 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
     qDebug() << "New image dimensions: " << image.width() << " x " << image.height();
     QPainter painter(&image);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(image.rect(), Qt::white);
+    if(mBackgroundImage.isNull()) {
+        painter.fillRect(image.rect(), Qt::white);
+    } else {
+        painter.drawImage(0, 0, mBackgroundImage.toImage());
+    }
 
     for(int i=0; i<numPics; i++) {
         int dx = 0;
@@ -153,6 +170,11 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                             dx = image.width() - off - imageToDraw.width();
                         }
                     }
+                } else if(op == "rotate") {
+                    int angle = filterArgs.at(1).toInt();
+                    qDebug() << "Applying rotation: " << angle;
+                    QTransform transform = QTransform().rotate(angle);
+                    imageToDraw = imageToDraw.transformed(transform);
                 }
             }
             if(dx < 0)

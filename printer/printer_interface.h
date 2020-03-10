@@ -15,5 +15,7 @@ public:
     virtual bool printFile(QString filename, int numcopies);
     virtual bool printImage(QPixmap image, int numcopies);
     virtual QString getStatus();
+signals:
+    void printerError(QString err_code, QString error);
 };
 #endif //_PRINTER_INTERFACE_H

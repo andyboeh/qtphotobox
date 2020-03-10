@@ -10,7 +10,7 @@
 
 pbCamera::pbCamera() {
     mCamera = nullptr;
-    mLimitFps = true;
+    mLimitFps = false;
     mLimitTimer = nullptr;
 }
 
@@ -37,6 +37,8 @@ void pbCamera::start()
     int fps = pbs.getInt("camera", "fps");
     if(fps > 0) {
         mLimitFps = true;
+    } else {
+        mLimitFps = false;
     }
 
     if(backend == "gphoto2") {
@@ -52,7 +54,7 @@ void pbCamera::start()
     QEventLoop loop;
     bool running = true;
 
-    if(!mLimitTimer) {
+    if(!mLimitTimer && mLimitFps) {
         mLimitTimer = new QTimer();
         mLimitTimer->setInterval(1000 / fps);
         mLimitTimer->setSingleShot(false);
@@ -69,10 +71,17 @@ void pbCamera::start()
         if(command == "initCamera" || command == "retryOperation") {
             if(mCamera) {
                 bool ret = mCamera->initCamera();
-                if(ret)
-                    mCamera->setIdle();
-                else
+                if(!ret) {
                     emit cameraError(tr("Error initializing camera. Check connection."));
+                } else {
+                    mCamera->setIdle();
+                    QPixmap testshot = mCamera->getCaptureImage();
+                    if(testshot.isNull()) {
+                        emit cameraError(tr("Error capturing image. Camera connected?"));
+                    } else {
+                        emit testshotCaptured(testshot);
+                    }
+                }
                 emit cameraInitialized(ret);
             }
         } else if(command == "startPreview") {
@@ -104,14 +113,14 @@ void pbCamera::start()
                 mCamera->setIdle();
             }
         } else if(command == "captureImage") {
-            mCamera->setActive();
+            mCamera->setIdle();
             QPixmap image = mCamera->getCaptureImage();
             if(image.isNull())
                 emit cameraError(tr("Error capturing image. Camera connected?"));
             else
                 emit imageCaptured(image);
-            mCamera->setIdle();
         } else if(command == "stopThread") {
+            mCamera->setIdle();
             running = false;
         }
     }

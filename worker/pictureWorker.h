@@ -30,6 +30,7 @@ private:
     pictureTask mOpenPictureTask;
     void initTask(pictureTask::eTaskType type);
     QPixmap assemblePictureTask(pictureTask task);
+    QPixmap mBackgroundImage;
     QList<pictureTask> mPictureTasks;
     int mPictureSizeX;
     int mPictureSizeY;

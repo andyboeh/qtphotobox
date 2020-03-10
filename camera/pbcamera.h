@@ -26,6 +26,7 @@ signals:
     void previewImageCaptured(QPixmap image);
     void imageCaptured(QPixmap image);
     void cameraError(QString message);
+    void testshotCaptured(QPixmap image);
 private:
     CameraInterface* mCamera;
     bool mLimitFps;
