@@ -60,7 +60,7 @@ out:
 void gpioWorker::rampTimeout()
 {
     int afValue = get_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"));
-    int idleValue = get_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pwm_value"));
+    int idleValue = get_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"));
 
     if((afValue == mAfTarget) && (idleValue == mIdleTarget))
         mTimer->stop();
@@ -124,9 +124,11 @@ void gpioWorker::start()
             } else if(mState == "archive") {
                 mAfTarget = 0;
                 mIdleTarget = 0;
+                mTimer->start();
             } else if(mState == "review") {
                 mAfTarget = 0;
                 mIdleTarget = 0;
+                mTimer->start();
             }
         } else if(command == "initGpio") {
             if(!setupGpio())
