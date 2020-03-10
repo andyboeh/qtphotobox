@@ -7,7 +7,7 @@ gpioWorker::gpioWorker()
 {
     mTimer = nullptr;
     mGpioMapping.clear();
-    mPWMRampSize = 5;
+    mPWMRampSize = 1;
 }
 
 gpioWorker::~gpioWorker()

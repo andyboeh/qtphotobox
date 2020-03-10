@@ -50,6 +50,12 @@
    </item>
    <item row="3" column="0" colspan="2">
     <widget class="QSlider" name="sliderNumCopies">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="pageStep">
       <number>1</number>
      </property>
