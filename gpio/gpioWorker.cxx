@@ -7,6 +7,7 @@ gpioWorker::gpioWorker()
 {
     mTimer = nullptr;
     mGpioMapping.clear();
+    mPWMRampSize = 5;
 }
 
 gpioWorker::~gpioWorker()
@@ -56,11 +57,47 @@ out:
     return false;
 }
 
+void gpioWorker::rampTimeout()
+{
+    int afValue = get_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"));
+    int idleValue = get_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pwm_value"));
+
+    if((afValue == mAfTarget) && (idleValue == mIdleTarget))
+        mTimer->stop();
+
+    if(afValue > mAfTarget) {
+        afValue = afValue - mPWMRampSize;
+        if(afValue < mAfTarget)
+            afValue = mAfTarget;
+    } else {
+        afValue = afValue + mPWMRampSize;
+        if(afValue > mAfTarget)
+            afValue = mAfTarget;
+    }
+
+    if(idleValue > mIdleTarget) {
+        idleValue = idleValue - mPWMRampSize;
+        if(idleValue < mIdleTarget)
+            idleValue = mIdleTarget;
+    } else {
+        idleValue = idleValue + mPWMRampSize;
+        if(idleValue > mIdleTarget)
+            idleValue = mIdleTarget;
+    }
+
+    set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), afValue);
+    set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), idleValue);
+}
+
 void gpioWorker::start()
 {
     bool running = true;
 
     qDebug() << "gpioThread start.";
+
+    mTimer = new QTimer();
+    mTimer->setInterval(50);
+    connect(mTimer, SIGNAL(timeout()), this, SLOT(rampTimeout()));
 
     if(!setupGpio())
         emit gpioError(tr("Error initializing GPIO."));
@@ -77,19 +114,19 @@ void gpioWorker::start()
 
         if(command == "setState") {
             if(mState == "idle") {
-                set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), 0);
-                set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), mGpioMapping.value("idle_lamp_pwm_value"));
-                qDebug() << "set " << mGpioMapping.value("af_lamp_pin") << "to 0";
-                qDebug() << "set " << mGpioMapping.value("idle_lamp_pin") << "to" << mGpioMapping.value("idle_lamp_pwm_value");
+                mAfTarget = 0;
+                mIdleTarget = mGpioMapping.value("idle_lamp_pwm_value");
+                mTimer->start();
             } else if(mState == "greeter" || mState == "init") {
-                set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), 0);
-                set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), mGpioMapping.value("af_lamp_pwm_value"));
-                qDebug() << "set " << mGpioMapping.value("af_lamp_pin") << "to" << mGpioMapping.value("af_lamp_pwm_value");
-                qDebug() << "set " << mGpioMapping.value("idle_lamp_pin") << "to 0";
+                mAfTarget = mGpioMapping.value("af_lamp_pwm_value");
+                mIdleTarget = 0;
+                mTimer->start();
             } else if(mState == "archive") {
-                set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), 0);
-                set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), 0);
-                qDebug() << "set all to 0";
+                mAfTarget = 0;
+                mIdleTarget = 0;
+            } else if(mState == "review") {
+                mAfTarget = 0;
+                mIdleTarget = 0;
             }
         } else if(command == "initGpio") {
             if(!setupGpio())
@@ -98,6 +135,7 @@ void gpioWorker::start()
             set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), 0);
             set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), 0);
             pigpio_stop(mPi);
+            mTimer->stop();
             running = false;
         }
     }

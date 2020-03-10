@@ -20,7 +20,12 @@ public slots:
     void initGpio();
 signals:
     void gpioError(QString message);
+private slots:
+    void rampTimeout();
 private:
+    int mPWMRampSize;
+    int mIdleTarget;
+    int mAfTarget;
     QTimer *mTimer;
     QString mState;
     bool setupGpio();
