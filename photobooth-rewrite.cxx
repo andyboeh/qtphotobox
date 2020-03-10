@@ -257,6 +257,7 @@ void MainWindow::initThreads()
     }
     if(pbs.getBool("gpio", "enable")) {
         if(!mGpioThread) {
+            StateMachine &sm = StateMachine::getInstance();
             mGpioThread = new QThread();
             mGpioThreadObject = new gpioWorker();
             mGpioThreadObject->moveToThread(mGpioThread);
@@ -266,6 +267,7 @@ void MainWindow::initThreads()
             connect(mGpioThread, SIGNAL(started()), mGpioThreadObject, SLOT(start()));
             connect(mGpioThread, SIGNAL(finished()), mGpioThreadObject, SLOT(deleteLater()));
             connect(this, SIGNAL(stopGpioThread()), mGpioThreadObject, SLOT(stop()));
+            connect(&sm, SIGNAL(performStateChange(QString)), mGpioThreadObject, SLOT(setState(QString)));
             mGpioThread->start();
         }
     }
