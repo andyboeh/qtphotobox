@@ -47,7 +47,8 @@ Configuration
 -------------
 
 The GUI settings screen is still WiP. You can customize the settings by modifying
-the file ~/.qtphotobox/settings.ini with your favorite text editor.
+the file ~/.qtphotobox/settings.ini with your favorite text editor. Not all
+settings have an effect yet.
 
 License
 -------

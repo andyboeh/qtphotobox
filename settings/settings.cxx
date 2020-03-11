@@ -92,6 +92,7 @@ void pbSettings::initDefaultConfg()
     guiSettings.insert("hide_cursor", false);
     guiSettings.insert("style", "default");
     guiSettings.insert("direct_start", false);
+    guiSettings.insert("language", "english");
 
     cameraSettings.insert("backend", "gphoto2");
     cameraSettings.insert("rotation", 0);
