@@ -16,7 +16,7 @@ reviewWidget::reviewWidget(QPixmap image, QFrame *parent) :
     mTimer = new QTimer();
 
     pbSettings &pbs = pbSettings::getInstance();
-    int timeout = pbs.getInt("photobooth", "display_time");
+    int timeout = pbs.getInt("qtphotobox", "display_time");
     mTimer->setInterval(timeout * 1000);
     mTimer->setSingleShot(true);
     connect(mTimer, SIGNAL(timeout()), this, SLOT(timeout()));

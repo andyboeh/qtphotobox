@@ -294,7 +294,7 @@ void printerSelphy::processPrintJob(bool tcp) {
         QString username("pb_selphy");
         QByteArray un = encoderWithoutBom->fromUnicode(username);
 
-        QString appname("photobooth");
+        QString appname("QtPhotobox");
         QByteArray an = encoderWithoutBom->fromUnicode(appname);
 
         QFileInfo info(job.getFile());

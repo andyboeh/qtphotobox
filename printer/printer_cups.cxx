@@ -36,7 +36,7 @@ bool printerCups::printImage(QPixmap image, int numcopies)
 
     num_options = cupsAddOption("copies", QString::number(numcopies).toStdString().c_str(), num_options, &options);
     const char *name = cupsGetDefault();
-    int jobid = cupsPrintFile(name, saveFile.fileName().toStdString().c_str(), "Photobooth", num_options, options);
+    int jobid = cupsPrintFile(name, saveFile.fileName().toStdString().c_str(), "QtPhotobox", num_options, options);
     if(jobid < 1) {
         qDebug() << "Error submitting print job.";
         return false;

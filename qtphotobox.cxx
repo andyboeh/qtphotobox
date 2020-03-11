@@ -1,4 +1,4 @@
-﻿#include "photobooth-rewrite.h"
+﻿#include "qtphotobox.h"
 #include "statemachine.h"
 #include "initwidget.h"
 #include "settingswidget.h"
@@ -455,9 +455,9 @@ int main(int argc, char *argv[]) {
     if(!basepath.endsWith(QDir::separator(), Qt::CaseSensitive))
       basepath += '/';
 #ifdef Q_WS_WIN
-    basepath += "photobooth-rewrite/";
+    basepath += "qtphotobox/";
 #else
-    basepath += ".photobooth-rewrite/";
+    basepath += ".qtphotobox/";
 #endif
     if(!QDir(basepath).exists())
         QDir().mkpath(basepath);

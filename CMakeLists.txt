@@ -1,5 +1,5 @@
-PROJECT(photobooth-rewrite)
-SET(NAME "photobooth-rewrite")
+PROJECT(QtPhotobox)
+SET(NAME "qtphotobox")
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1 FATAL_ERROR)
 
 CMAKE_POLICY(SET CMP0020 NEW)
@@ -48,7 +48,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
     )
 
 SET(${NAME}_SOURCES
-  photobooth-rewrite.cxx
+  qtphotobox.cxx
   settings/settings.cxx
   camera/pbcamera.cxx
   camera/camera_interface.cxx
@@ -86,7 +86,7 @@ SET(${NAME}_SOURCES
 )
 
 SET(${NAME}_HEADERS
-  photobooth-rewrite.h
+  qtphotobox.h
   settings/settings.h
   camera/pbcamera.h
   camera/camera_interface.h
@@ -129,7 +129,6 @@ SET(${NAME}_HEADERS_NO_MOC
 )
 
 SET(${NAME}_UI
-  #photobooth-rewrite.ui
   gui/initwidget.ui
   gui/settingswidget.ui
   gui/idlewidget.ui
@@ -147,7 +146,7 @@ SET(${NAME}_UI
 )
 
 SET(${NAME}_RES
-    photobooth-rewrite.qrc
+    qtphotobox.qrc
 )
 
 IF(WIN32)

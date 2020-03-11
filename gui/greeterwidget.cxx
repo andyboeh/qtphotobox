@@ -11,7 +11,7 @@ greeterWidget::greeterWidget(QFrame *parent) :
     ui->setupUi(this);
     pbSettings &pbs = pbSettings::getInstance();
 
-    int timeout = pbs.getInt("photobooth", "greeter_time");
+    int timeout = pbs.getInt("qtphotobox", "greeter_time");
 
     mTimer = new QTimer();
     mTimer->setInterval(timeout * 1000);

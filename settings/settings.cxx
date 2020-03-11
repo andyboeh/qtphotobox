@@ -80,7 +80,7 @@ void pbSettings::initDefaultConfg()
     QMap<QString, QVariant> cameraSettings;
     QMap<QString, QVariant> gpioSettings;
     QMap<QString, QVariant> printerSettings;
-    QMap<QString, QVariant> photoboothSettings;
+    QMap<QString, QVariant> qtPhotoboxSettings;
     QMap<QString, QVariant> pictureSettings;
     QMap<QString, QVariant> storageSettings;
     QMap<QString, QVariant> archiveSettings;
@@ -113,11 +113,11 @@ void pbSettings::initDefaultConfg()
     printerSettings.insert("backend", "selphy");
     printerSettings.insert("ip", "192.168.123.123");
 
-    photoboothSettings.insert("show_preview", true);
-    photoboothSettings.insert("greeter_time", 3);
-    photoboothSettings.insert("countdown_time", 8);
-    photoboothSettings.insert("display_time", 5);
-    photoboothSettings.insert("postprocess_time", 60);
+    qtPhotoboxSettings.insert("show_preview", true);
+    qtPhotoboxSettings.insert("greeter_time", 3);
+    qtPhotoboxSettings.insert("countdown_time", 8);
+    qtPhotoboxSettings.insert("display_time", 5);
+    qtPhotoboxSettings.insert("postprocess_time", 60);
 
     pictureSettings.insert("num_pictures", 4);
     pictureSettings.insert("filters_picture1", "scale:45,move:top=30:left=30");
@@ -129,7 +129,7 @@ void pbSettings::initDefaultConfg()
     pictureSettings.insert("background", "");
 
     storageSettings.insert("basedir", "%Y-%m-%d");
-    storageSettings.insert("basename", "photobooth");
+    storageSettings.insert("basename", "qtphotobox");
     storageSettings.insert("keep_pictures", false);
     storageSettings.insert("wait_removable", false);
     storageSettings.insert("ignore_removable", "/dev/mmcblk0p1,/dev/mmcblk0p2");
@@ -144,11 +144,11 @@ void pbSettings::initDefaultConfg()
     showSettings.insert("fullscreen", false);
     showSettings.insert("width", 1024);
     showSettings.insert("height", 600);
-    showSettings.insert("footertext", "photobooth-rewrite");
+    showSettings.insert("footertext", "QtPhotobox");
     showSettings.insert("full_images", false);
 
     mSettings.insert("gui", guiSettings);
-    mSettings.insert("photobooth", photoboothSettings);
+    mSettings.insert("qtphotobox", qtPhotoboxSettings);
     mSettings.insert("printer", printerSettings);
     mSettings.insert("camera", cameraSettings);
     mSettings.insert("gpio", gpioSettings);

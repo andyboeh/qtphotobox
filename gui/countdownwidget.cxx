@@ -19,7 +19,7 @@ countdownWidget::countdownWidget(pbCamera *cameraObject, QFrame *parent) :
     connect(this, SIGNAL(stopPreview()), mCameraObject, SLOT(stopPreview()));
     connect(mCameraObject, SIGNAL(previewImageCaptured(QPixmap)), this, SLOT(setPreviewImage(QPixmap)));
 
-    mCountdown = pbs.getInt("photobooth", "countdown_time") * fps;
+    mCountdown = pbs.getInt("qtphotobox", "countdown_time") * fps;
 
     ui->progressBar->setMaximum(mCountdown / fps);
     ui->progressBar->setMinimum(0);

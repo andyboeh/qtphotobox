@@ -17,16 +17,16 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabInterface">
       <attribute name="title">
        <string>Interface</string>
       </attribute>
      </widget>
-     <widget class="QWidget" name="tabPhotobooth">
+     <widget class="QWidget" name="tabQtPhotobox">
       <attribute name="title">
-       <string>Photobooth</string>
+       <string>QtPhotobox</string>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabCamera">

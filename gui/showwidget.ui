@@ -39,7 +39,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>photobooth</string>
+      <string>QtPhotobox</string>
      </property>
     </widget>
    </item>

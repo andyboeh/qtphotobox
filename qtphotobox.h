@@ -1,5 +1,5 @@
-#ifndef _PHOTOBOOTH_REWRITE_H
-#define _PHOTOBOOTH_REWRITE_H
+#ifndef _QTPHOTOBOX_H
+#define _QTPHOTOBOX_H
 
 #include <QMainWindow>
 #include <QPixmap>
@@ -77,4 +77,4 @@ private:
     void initThreads();
 };
 
-#endif //_PHOTOBOOTH_REWRITE_H
+#endif //_QTPHOTOBOX_H

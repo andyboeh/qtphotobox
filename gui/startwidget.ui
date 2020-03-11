@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="lblTitle">
      <property name="text">
-      <string>photobooth</string>
+      <string>QtPhotobox</string>
      </property>
     </widget>
    </item>
@@ -26,7 +26,7 @@
      <item>
       <widget class="QPushButton" name="btnStart">
        <property name="text">
-        <string>Start Photobooth</string>
+        <string>Start QtPhotobox</string>
        </property>
       </widget>
      </item>
@@ -56,7 +56,7 @@
    <item>
     <widget class="QLabel" name="lblUrl">
      <property name="text">
-      <string>https://github.com/andyboeh/photobooth</string>
+      <string>https://github.com/andyboeh/QtPhotobox</string>
      </property>
     </widget>
    </item>
