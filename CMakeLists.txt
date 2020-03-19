@@ -14,12 +14,14 @@ FIND_PACKAGE(Qt5Gui)
 FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(Qt5DBus)
 FIND_PACKAGE(Qt5Network)
-FIND_PACKAGE(Gphoto2)
-FIND_PACKAGE(Cups)
+FIND_PACKAGE(Gphoto2 REQUIRED)
+FIND_PACKAGE(Cups REQUIRED)
+FIND_PACKAGE(LibUSB REQUIRED)
 FIND_LIBRARY(PIGPIO_LIBRARY pigpiod_if2)
 
 include_directories(SYSTEM ${Gphoto2_INCLUDE_DIRS})
 include_directories(${CUPS_INCLUDE_DIRS})
+include_directories(${LIBUSB_INCLUDE_DIRS})
 add_definitions(${Gphoto2_DEFINITIONS})
 
 get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
@@ -58,6 +60,7 @@ SET(${NAME}_SOURCES
   printer/printer.cxx
   printer/printer_interface.cxx
   printer/printer_selphy.cxx
+  printer/printer_selphyusb.cxx
   printer/printer_cups.cxx
   printer/printJob.cxx
   statemachine/statemachine.cxx
@@ -97,6 +100,7 @@ SET(${NAME}_HEADERS
   printer/printer_interface.h
   printer/printer_cups.h
   printer/printer_selphy.h
+  printer/printer_selphyusb.h
   printer/printJob.h
   statemachine/statemachine.h
   gui/errorwidget.h
@@ -175,6 +179,7 @@ TARGET_LINK_LIBRARIES(${NAME}
   ${Gphoto2_LIBRARIES}
   ${CUPS_LIBRARIES}
   ${PIGPIO_LIBRARY}
+  ${LIBUSB_LIBRARIES}
 )
 
 IF(WIN32)

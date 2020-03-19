@@ -18,6 +18,7 @@ public:
     void setCopiesPrinted(int copies);
     QPixmap getImage();
     QString getFile();
+    QString getSpoolFile();
     int getWidth();
     int getHeight();
 private:
@@ -27,6 +28,7 @@ private:
     int mHeight;
     int mWidth;
     int mCopies;
+    QString mSpoolFile;
 };
 
 #endif //_PRINTJOB_H

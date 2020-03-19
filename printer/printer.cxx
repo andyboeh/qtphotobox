@@ -1,6 +1,7 @@
 #include "printer.h"
 #include "printer_selphy.h"
 #include "printer_cups.h"
+#include "printer_selphyusb.h"
 #include "printJob.h"
 #include "settings.h"
 #include <QThread>
@@ -37,6 +38,13 @@ void printerWorker::start()
         mPrinter = new printerSelphy();
     } else if(backend == "cups") {
         mPrinter = new printerCups();
+    } else if(backend == "selphyusb") {
+        mPrinter = new printerSelphyUsb();
+    } else {
+        mPrinter = nullptr;
+        emit printerError(tr("Printer backend not found or unknown."));
+        emit finished();
+        return;
     }
     connect(mPrinter, SIGNAL(printerError(QString,QString)), this, SLOT(printerErrorInternal(QString,QString)));
 

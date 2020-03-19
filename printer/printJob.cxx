@@ -1,4 +1,5 @@
 #include "printJob.h"
+#include <QTemporaryFile>
 
 printJob::printJob()
 {
@@ -24,7 +25,6 @@ printJob::printJob(QPixmap image, int copies)
     mImage = image;
     mCopies = copies;
     mCopiesPrinted = 0;
-
 }
 
 printJob::printJob(QString filename, int copies)
@@ -34,7 +34,6 @@ printJob::printJob(QString filename, int copies)
     mFilename = filename;
     mCopies = copies;
     mCopiesPrinted = 0;
-
 }
 
 printJob::~printJob()
@@ -74,6 +73,18 @@ QPixmap printJob::getImage() {
 QString printJob::getFile()
 {
     return mFilename;
+}
+
+QString printJob::getSpoolFile()
+{
+    if(!QFile(mSpoolFile).exists()) {
+        QTemporaryFile file;
+        file.open();
+        file.setAutoRemove(false);
+        mSpoolFile = file.fileName();
+        file.close();
+    }
+    return mSpoolFile;
 }
 
 int printJob::getWidth()

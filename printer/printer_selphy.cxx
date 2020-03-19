@@ -350,7 +350,7 @@ void printerSelphy::processPrintJob(bool tcp) {
             qDebug() << "Wait";
             quint32 err_code = qFromBigEndian<quint32>(mData.mid(16 + 12, 4));
             if(err_code > 0) {
-                emit printerError("media", "The printer is either out of paper or out of ribbon and needs your attention!");
+                emit printerError("media", tr("The printer is either out of paper or out of ribbon and needs your attention!"));
             }
             QTimer::singleShot(500, this, SLOT(pollTcpDelayed()));
             break;
