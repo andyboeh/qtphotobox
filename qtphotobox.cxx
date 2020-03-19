@@ -20,6 +20,7 @@
 #include "showWorker.h"
 #include "gpioWorker.h"
 #include "errorwidget.h"
+#include "waitremovablewidget.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -112,6 +113,13 @@ void MainWindow::changeState(QString name)
         delete mCurrentWidget;
         mCurrentWidget = new startWidget();
         setCentralWidget(mCurrentWidget);
+    } else if(name == "waitremovable") {
+        delete mCurrentWidget;
+        mCurrentWidget = new waitRemovableWidget();
+        setCentralWidget(mCurrentWidget);
+        storageManager &stm = storageManager::getInstance();
+        connect(&stm, SIGNAL(removableDeviceDetected(QString)), mCurrentWidget, SLOT(removableDeviceDetected(QString)));
+        stm.waitForRemovableDevice();
     } else if(name == "init") {
         delete mCurrentWidget;
         mCurrentWidget = new initWidget();
@@ -498,7 +506,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    QString startupState = "start";
+    if(pbs.getBool("gui", "direct_start")) {
+        startupState = "init";
+    }
+
     sm.addState("start");
+    sm.addState("waitremovable");
     sm.addState("init");
     sm.addState("settings");
     sm.addState("idle");
@@ -512,7 +526,15 @@ int main(int argc, char *argv[]) {
     sm.addState("error");
     sm.addState("teardown");
 
-    sm.addTargetState("start", "init");
+    if(pbs.getBool("storage", "wait_removable")) {
+        sm.addTargetState("start", "waitremovable");
+        sm.addTargetState("waitremovable", "init");
+        if(pbs.getBool("gui", "direct_start")) {
+            startupState = "waitremovable";
+        }
+    } else {
+        sm.addTargetState("start", "init");
+    }
     sm.addTargetState("init", "idle");
     sm.addTargetState("archive", "idle");
     sm.addTargetState("idle", "greeter");
@@ -523,11 +545,7 @@ int main(int argc, char *argv[]) {
     sm.addTargetState("review", "postprocess");
     sm.addTargetState("postprocess", "idle");
 
-    sm.triggerState("start");
-
-    // Temporary
-    storageManager &stm = storageManager::getInstance();
-    stm.waitForRemovableDevice();
+    sm.triggerState(startupState);
 
     w.loadSettingsToGui(true);
     //QMetaObject::invokeMethod(&w, "loadSettingsToGui", Qt::QueuedConnection, Q_ARG(bool, true));

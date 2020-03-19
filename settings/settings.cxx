@@ -118,7 +118,6 @@ void pbSettings::initDefaultConfg()
     qtPhotoboxSettings.insert("greeter_time", 3);
     qtPhotoboxSettings.insert("countdown_time", 8);
     qtPhotoboxSettings.insert("display_time", 5);
-    qtPhotoboxSettings.insert("postprocess_time", 60);
 
     pictureSettings.insert("num_pictures", 4);
     pictureSettings.insert("filters_picture1", "scale:45,move:top=30:left=30");

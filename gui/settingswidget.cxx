@@ -121,7 +121,6 @@ void settingsWidget::loadFromSettings()
     ui->spinCountdown->setValue(pbs.getInt("qtphotobox", "countdown_time"));
     ui->spinDisplay->setValue(pbs.getInt("qtphotobox", "display_time"));
     ui->spinGreeter->setValue(pbs.getInt("qtphotobox", "greeter_time"));
-    ui->spinPostprocessing->setValue(pbs.getInt("qtphotobox", "postprocess_time"));
     if(pbs.getBool("qtphotobox", "show_preview"))
         ui->chkPreview->setChecked(Qt::Checked);
     else
@@ -240,7 +239,6 @@ void settingsWidget::saveToSettings()
     pbs.setInt("qtphotobox", "countdown_time", ui->spinCountdown->value());
     pbs.setInt("qtphotobox", "display_time", ui->spinDisplay->value());
     pbs.setInt("qtphotobox", "greeter_time", ui->spinGreeter->value());
-    pbs.setInt("qtphotobox", "postprocess_time", ui->spinPostprocessing->value());
     pbs.setBool("qtphotobox", "show_preview", ui->chkPreview->isChecked());
 
     pbs.set("picture", "background", ui->editBackground->text());

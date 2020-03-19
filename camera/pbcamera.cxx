@@ -40,6 +40,7 @@ void pbCamera::start()
     } else {
         mLimitFps = false;
     }
+    int rotation = pbs.getInt("camera", "rotation");
 
     if(backend == "gphoto2") {
         if(mCamera)
@@ -76,6 +77,10 @@ void pbCamera::start()
                 } else {
                     mCamera->setIdle();
                     QPixmap testshot = mCamera->getCaptureImage();
+                    if(rotation != 0) {
+                        QTransform transform = QTransform().rotate(rotation);
+                        testshot = testshot.transformed(transform);
+                    }
                     if(testshot.isNull()) {
                         emit cameraError(tr("Error capturing image. Camera connected?"));
                     } else {
@@ -91,19 +96,29 @@ void pbCamera::start()
                     mLimitTimer->start();
                 }
                 QPixmap image = mCamera->getPreviewImage().transformed(QTransform().scale(-1, 1));
-                if(image.isNull())
+                if(image.isNull()) {
                     emit cameraError(tr("Error capturing image. Camera connected?"));
-                else
+                } else {
+                    if(rotation != 0) {
+                        QTransform transform = QTransform().rotate(rotation);
+                        image = image.transformed(transform);
+                    }
                     emit previewImageCaptured(image);
+                }
             } else {
                 mCamera->setActive();
                 // Check for stopPreview
                 while(!checkForNewCommand()) {
                     QPixmap image = mCamera->getPreviewImage().transformed(QTransform().scale(-1, 1));
-                    if(image.isNull())
+                    if(image.isNull()) {
                         emit cameraError(tr("Error capturing image. Camera connected?"));
-                    else
+                    } else {
+                        if(rotation != 0) {
+                            QTransform transform = QTransform().rotate(rotation);
+                            image = image.transformed(transform);
+                        }
                         emit previewImageCaptured(image);
+                    }
                 }
                 mCamera->setIdle();
             }
@@ -115,10 +130,15 @@ void pbCamera::start()
         } else if(command == "captureImage") {
             mCamera->setIdle();
             QPixmap image = mCamera->getCaptureImage();
-            if(image.isNull())
+            if(image.isNull()) {
                 emit cameraError(tr("Error capturing image. Camera connected?"));
-            else
+            } else {
+                if(rotation != 0) {
+                    QTransform transform = QTransform().rotate(rotation);
+                    image = image.transformed(transform);
+                }
                 emit imageCaptured(image);
+            }
         } else if(command == "stopThread") {
             mCamera->setIdle();
             running = false;

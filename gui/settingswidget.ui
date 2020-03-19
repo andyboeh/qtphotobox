@@ -163,10 +163,10 @@
        <string>QtPhotobox</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QSpinBox" name="spinDisplay"/>
+       <item row="0" column="0">
+        <widget class="QSpinBox" name="spinCountdown"/>
        </item>
-       <item row="5" column="1">
+       <item row="4" column="1">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -179,13 +179,30 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="0">
-        <widget class="QSpinBox" name="spinPostprocessing"/>
+       <item row="1" column="0">
+        <widget class="QSpinBox" name="spinDisplay"/>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Countdown Time</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Display Time</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QSpinBox" name="spinGreeter"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Greeter Time</string>
          </property>
         </widget>
        </item>
@@ -202,37 +219,10 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0">
-        <widget class="QSpinBox" name="spinGreeter"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QSpinBox" name="spinCountdown"/>
-       </item>
-       <item row="4" column="0">
+       <item row="3" column="0">
         <widget class="QCheckBox" name="chkPreview">
          <property name="text">
           <string>Show Preview</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Display Time</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Greeter Time</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Postprocessing Timeout</string>
          </property>
         </widget>
        </item>

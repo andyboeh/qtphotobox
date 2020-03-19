@@ -80,6 +80,7 @@ SET(${NAME}_SOURCES
   gui/picturedetailwidget.cxx
   gui/showwidget.cxx
   gui/errorwidget.cxx
+  gui/waitremovablewidget.cxx
   worker/pictureWorker.cxx
   worker/pictureTask.cxx
   worker/postprocessWorker.cxx
@@ -119,6 +120,7 @@ SET(${NAME}_HEADERS
   gui/iconlistmodel.h
   gui/picturedetailwidget.h
   gui/showwidget.h
+  gui/waitremovablewidget.h
   worker/worker.h
   worker/pictureWorker.h
   worker/pictureTask.h
@@ -147,6 +149,7 @@ SET(${NAME}_UI
   gui/picturedetailwidget.ui
   gui/showwidget.ui
   gui/errorwidget.ui
+  gui/waitremovablewidget.ui
 )
 
 SET(${NAME}_RES
