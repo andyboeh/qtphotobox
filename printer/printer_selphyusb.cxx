@@ -42,8 +42,7 @@ printerSelphyUsb::~printerSelphyUsb()
         libusb_exit(mCtx);
     }
     mTimer->stop();
-    delete mTimer;
-    mTimer = nullptr;
+    mTimer->deleteLater();
 }
 
 bool printerSelphyUsb::canPrintFiles()

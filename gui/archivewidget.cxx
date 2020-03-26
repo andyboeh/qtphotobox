@@ -35,8 +35,7 @@ archiveWidget::archiveWidget(QWidget *parent) :
 
 archiveWidget::~archiveWidget()
 {
-    delete mDetailWidget;
-    mDetailWidget = nullptr;
+    mDetailWidget->deleteLater();
     delete ui;
 }
 
@@ -57,7 +56,7 @@ void archiveWidget::on_listView_clicked(const QModelIndex &index)
     QString filename = data.value(Qt::DisplayRole).toString();
     QString fullname = mStoragepath + QDir::separator() + mBasename + filename;
     qDebug() << fullname;
-    delete mDetailWidget;
+    mDetailWidget->deleteLater();
     mDetailWidget = new picturedetailWidget(fullname, this);
     connect(mDetailWidget, SIGNAL(printArchivePicture(QString,int)), this, SLOT(printArchivePicture(QString,int)));
     mDetailWidget->show();

@@ -32,15 +32,11 @@ printerSelphy::~printerSelphy()
     if(mCurrentFile) {
         mCurrentFile->close();
     }
-    delete mCurrentFile;
-    mCurrentFile = nullptr;
-    delete mTcpSocket;
-    mTcpSocket = nullptr;
-    delete mUdpSocket;
-    mUdpSocket = nullptr;
+    mCurrentFile->deleteLater();
+    mTcpSocket->deleteLater();
+    mUdpSocket->deleteLater();
     mTimer->stop();
-    delete mTimer;
-    mTimer = nullptr;
+    mTimer->deleteLater();
 }
 
 bool printerSelphy::canPrintFiles()

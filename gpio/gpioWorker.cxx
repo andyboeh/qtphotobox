@@ -12,8 +12,7 @@ gpioWorker::gpioWorker()
 
 gpioWorker::~gpioWorker()
 {
-    delete mTimer;
-    mTimer = nullptr;
+    mTimer->deleteLater();
 }
 
 bool gpioWorker::setupGpio() {

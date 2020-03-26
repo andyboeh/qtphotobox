@@ -27,7 +27,7 @@ greeterWidget::greeterWidget(QFrame *parent) :
 greeterWidget::~greeterWidget()
 {
     mTimer->stop();
-    delete mTimer;
+    mTimer->deleteLater();
     delete ui;
 }
 

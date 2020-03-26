@@ -38,7 +38,7 @@ countdownWidget::~countdownWidget()
     emit stopPreview();
     mTimer->stop();
     delete ui;
-    delete mTimer;
+    mTimer->deleteLater();
 }
 
 void countdownWidget::setPreviewImage(QPixmap image)

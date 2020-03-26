@@ -20,10 +20,8 @@ printerWorker::~printerWorker()
 {
     if(mTimer)
         mTimer->stop();
-    delete mTimer;
-    mTimer = nullptr;
-    delete mPrinter;
-    mPrinter = nullptr;
+    mTimer->deleteLater();
+    mPrinter->deleteLater();
 }
 
 void printerWorker::printerErrorInternal(QString err_code, QString error) {

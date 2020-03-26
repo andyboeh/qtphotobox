@@ -17,7 +17,7 @@ showWorker::showWorker()
 
 showWorker::~showWorker()
 {
-    delete mWidget;
+    mWidget->deleteLater();
     mWidget = nullptr;
 }
 
@@ -130,10 +130,8 @@ void showWorker::start()
     }
 
     mTimer->stop();
-    delete mTimer;
-    mTimer = nullptr;
-    delete mWidget;
-    mWidget = nullptr;
+    mTimer->deleteLater();
+    mWidget->deleteLater();
     emit finished();
 }
 

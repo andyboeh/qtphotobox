@@ -182,10 +182,8 @@ storageManager::storageManager()
 storageManager::~storageManager()
 {
     mMountTimer->stop();
-    delete mMountTimer;
-    mMountTimer = nullptr;
-    delete mInterface;
-    mInterface = nullptr;
+    mMountTimer->deleteLater();
+    mInterface->deleteLater();
 }
 
 QString storageManager::getMountPath(QString device)

@@ -95,7 +95,7 @@ MainWindow::~MainWindow()
             mGpioThread->wait();
         }
     }
-    delete mCurrentWidget;
+    mCurrentWidget->deleteLater();
     mCurrentWidget = nullptr;
 }
 
@@ -106,22 +106,22 @@ void MainWindow::changeState(QString name)
     if(mErrorPresent)
         return;
     if(mOverlayWidget) {
-        delete mOverlayWidget;
+        mOverlayWidget->deleteLater();
         mOverlayWidget = nullptr;
     }
     if(name == "start") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new startWidget();
         setCentralWidget(mCurrentWidget);
     } else if(name == "waitremovable") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new waitRemovableWidget();
         setCentralWidget(mCurrentWidget);
         storageManager &stm = storageManager::getInstance();
         connect(&stm, SIGNAL(removableDeviceDetected(QString)), mCurrentWidget, SLOT(removableDeviceDetected(QString)));
         stm.waitForRemovableDevice();
     } else if(name == "init") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new initWidget();
         setCentralWidget(mCurrentWidget);
         initThreads();
@@ -129,31 +129,31 @@ void MainWindow::changeState(QString name)
         connect(this, SIGNAL(initializeCamera()), mCameraThreadObject, SLOT(initCamera()));
         emit initializeCamera();
     } else if(name == "settings") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new settingsWidget();
         setCentralWidget(mCurrentWidget);
     } else if(name == "idle") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new idleWidget();
         setCentralWidget(mCurrentWidget);
     } else if(name == "archive") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new archiveWidget();
         connect(mCurrentWidget, SIGNAL(printAssembledPicture(QString,int)), mPrinterThreadObject, SLOT(addFilePrintJob(QString,int)));
         setCentralWidget(mCurrentWidget);
     } else if(name == "greeter") {
         mImagesCaptured = 0;
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new greeterWidget();
         setCentralWidget(mCurrentWidget);
     } else if(name == "countdown") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new countdownWidget(mCameraThreadObject);
         setCentralWidget(mCurrentWidget);
     } else if(name == "capture") {
         mImageToPrint = "";
         mImageToReview = QPixmap();
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new captureWidget(mCameraThreadObject);
         setCentralWidget(mCurrentWidget);
     } else if(name == "assemble") {
@@ -161,13 +161,13 @@ void MainWindow::changeState(QString name)
             sm.triggerState("countdown");
         } else {
             emit finishTask();
-            delete mCurrentWidget;
+            mCurrentWidget->deleteLater();
             mCurrentWidget = new assembleWidget();
             setCentralWidget(mCurrentWidget);
             qDebug() << "All images captured, assembling...";
         }
     } else if(name == "review") {
-        delete mCurrentWidget;
+        mCurrentWidget->deleteLater();
         mCurrentWidget = new reviewWidget(mImageToReview);
         setCentralWidget(mCurrentWidget);
     } else if(name == "postprocess") {
@@ -331,7 +331,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 void MainWindow::errorOk()
 {
-    delete mOverlayWidget;
+    mOverlayWidget->deleteLater();
     mOverlayWidget = nullptr;
     mErrorPresent = false;
     StateMachine &sm = StateMachine::getInstance();
@@ -340,14 +340,14 @@ void MainWindow::errorOk()
 
 void MainWindow::errorQuit()
 {
-    delete mOverlayWidget;
+    mOverlayWidget->deleteLater();
     mOverlayWidget = nullptr;
     qApp->quit();
 }
 
 void MainWindow::errorRetry()
 {
-    delete mOverlayWidget;
+    mOverlayWidget->deleteLater();
     mOverlayWidget = nullptr;
     emit retryOperation();
     disconnect(this, SIGNAL(retryOperation()));
@@ -383,7 +383,7 @@ void MainWindow::pictureAssembled(QPixmap image)
 void MainWindow::printerError(QString error)
 {
     mErrorPresent = true;
-    delete mOverlayWidget;
+    mOverlayWidget->deleteLater();
     mOverlayWidget = new errorWidget(errorWidget::BTN_OK, error, this);
     mOverlayWidget->show();
     connect(mOverlayWidget, SIGNAL(errorOk()), this, SLOT(errorOk()));
@@ -392,7 +392,7 @@ void MainWindow::printerError(QString error)
 void MainWindow::cameraError(QString error)
 {
     mErrorPresent = true;
-    delete mOverlayWidget;
+    mOverlayWidget->deleteLater();
     mOverlayWidget = new errorWidget(errorWidget::BTN_RETRY_QUIT, error, this);
     mOverlayWidget->show();
     connect(mOverlayWidget, SIGNAL(errorRetry()), this, SLOT(errorRetry()));
@@ -403,7 +403,7 @@ void MainWindow::cameraError(QString error)
 void MainWindow::genericError(QString error)
 {
     mErrorPresent = true;
-    delete mOverlayWidget;
+    mOverlayWidget->deleteLater();
     mOverlayWidget = new errorWidget(errorWidget::BTN_OK_QUIT, error, this);
     mOverlayWidget->show();
     connect(mOverlayWidget, SIGNAL(errorOk()), this, SLOT(errorOk()));

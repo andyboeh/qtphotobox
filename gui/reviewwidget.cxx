@@ -28,7 +28,7 @@ reviewWidget::reviewWidget(QPixmap image, QFrame *parent) :
 reviewWidget::~reviewWidget()
 {
     delete ui;
-    delete mTimer;
+    mTimer->deleteLater();
 }
 
 void reviewWidget::timeout() {
