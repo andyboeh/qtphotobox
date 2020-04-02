@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QTextCodec>
 #include <QTextEncoder>
+#include <QTemporaryFile>
 
 printerSelphy::printerSelphy()
 {
@@ -75,6 +76,19 @@ bool printerSelphy::printImage(QPixmap image, int numcopies)
 {
     qDebug() << "printerSelphy::printImage";
 
+    QTemporaryFile file;
+    if(!file.open()) {
+        qDebug() << "Error opening temporary file.";
+        return false;
+    }
+    file.setAutoRemove(false);
+    QString filename = file.fileName();
+    if(!image.save(&file, "JPG")) {
+        qDebug() << "Error saving to temporary file.";
+        return false;
+    }
+    file.close();
+    printFile(filename, numcopies, true);
     return false;
 }
 
@@ -223,6 +237,11 @@ bool printerSelphy::initPrinter()
 
 
     return false;
+}
+
+bool printerSelphy::printFile(QString filename, int numcopies)
+{
+    return printFile(filename, numcopies, false);
 }
 
 QByteArray printerSelphy::makeFileHeader(quint32 offset, quint32 length) {
@@ -475,10 +494,11 @@ void printerSelphy::tcpConnected()
     mTcpSocket->write(data);
 }
 
-bool printerSelphy::printFile(QString filename, int numcopies)
+bool printerSelphy::printFile(QString filename, int numcopies, bool removeFile)
 {
     qDebug() << "printerSelphy::printFile";
     printJob job(filename, numcopies);
+    job.setRemoveFile(removeFile);
     mPrintJobs.append(job);
     return true;
 }

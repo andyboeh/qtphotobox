@@ -361,6 +361,8 @@ void MainWindow::imageCaptured(QPixmap image)
     pbSettings &pbs = pbSettings::getInstance();
     if(mImagesCaptured == 0) {
         emit initAssembleTask();
+        mImageToPrint = "";
+        mImageToReview = QPixmap();
     }
     emit addPicture(image);
     if(pbs.getBool("storage", "keep_pictures")) {

@@ -21,6 +21,8 @@ public:
     QString getSpoolFile();
     int getWidth();
     int getHeight();
+    bool getRemoveFile();
+    void setRemoveFile(bool remove);
 private:
     int mCopiesPrinted;
     QString mFilename;
@@ -29,6 +31,7 @@ private:
     int mWidth;
     int mCopies;
     QString mSpoolFile;
+    bool mRemoveFile;
 };
 
 #endif //_PRINTJOB_H

@@ -7,6 +7,7 @@ printJob::printJob()
     mCopiesPrinted = 0;
     mWidth = 0;
     mHeight = 0;
+    mSpoolFile = "";
 }
 
 printJob::printJob(QPixmap image)
@@ -16,6 +17,7 @@ printJob::printJob(QPixmap image)
     mCopies = 1;
     mCopiesPrinted = 0;
     mImage = image;
+    mSpoolFile = "";
 }
 
 printJob::printJob(QPixmap image, int copies)
@@ -25,6 +27,7 @@ printJob::printJob(QPixmap image, int copies)
     mImage = image;
     mCopies = copies;
     mCopiesPrinted = 0;
+    mSpoolFile = "";
 }
 
 printJob::printJob(QString filename, int copies)
@@ -34,11 +37,21 @@ printJob::printJob(QString filename, int copies)
     mFilename = filename;
     mCopies = copies;
     mCopiesPrinted = 0;
+    mSpoolFile = "";
 }
 
 printJob::~printJob()
 {
-
+    if(mRemoveFile) {
+        QFile file(mFilename);
+        if(file.exists())
+            file.remove();
+    }
+    if(!mSpoolFile.isEmpty()) {
+        QFile file(mSpoolFile);
+        if(file.exists())
+            file.remove();
+    }
 }
 
 bool printJob::isFileJob()
@@ -113,4 +126,14 @@ int printJob::getHeight()
         mHeight = QPixmap(mFilename).height();
         return mHeight;
     }
+}
+
+bool printJob::getRemoveFile()
+{
+    return mRemoveFile;
+}
+
+void printJob::setRemoveFile(bool remove)
+{
+    mRemoveFile = remove;
 }

@@ -78,6 +78,7 @@ private:
     selphyState getSelphyState();
     selphyJobState mJobState;
     bool connectTcp(bool reconnect);
+    bool printFile(QString filename, int numcopies, bool removeFile);
 
     QByteArray makeFileHeader(quint32 offset, quint32 length);
     QByteArray bs(QByteArray data);
