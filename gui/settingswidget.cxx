@@ -15,8 +15,10 @@ settingsWidget::settingsWidget(QFrame *parent) :
     ui->setupUi(this);
     mStyleMapping.insert("dark-1024x600", "Dark (1024x600)");
     mStyleMapping.insert("dark-800x600", "Dark (800x600)");
+    mStyleMapping.insert("dark-800x480", "Dark (800x480)");
     mStyleMapping.insert("pastel-1024x600", "Pastel (1024x600)");
     mStyleMapping.insert("pastel-800x600", "Pastel (800x600)");
+    mStyleMapping.insert("pastel-800x480", "Pastel (800x480)");
     mStyleMapping.insert("default", "Default (System)");
 
     mLanguageMapping.insert("english", "English");

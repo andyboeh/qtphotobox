@@ -30,7 +30,7 @@ QPushButton:pressed {
 /* Idle Screen */
 
 QFrame#idleWidget {
-    background-image: url(:/gui/styles/images/arrow-800x600.png);
+    background-image: url(:/gui/styles/images/arrow-800x480.png);
     background-repeat: no-repeat;
 }
 
@@ -105,7 +105,7 @@ QFrame#countdownWidget {
 /* Pose Screen */
 
 QFrame#captureWidget {
-    background-image: url(:/gui/styles/images/camera-800x600.png);
+    background-image: url(:/gui/styles/images/camera-800x480.png);
     background-repeat: no-repeat;
     padding: 280px 80px 80px 80px;
 }

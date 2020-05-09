@@ -73,12 +73,22 @@
          </item>
          <item>
           <property name="text">
+           <string>Dark (800x480)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Pastel (1024x600)</string>
           </property>
          </item>
          <item>
           <property name="text">
            <string>Pastel (800x600)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Pastel (800x480)</string>
           </property>
          </item>
          <item>

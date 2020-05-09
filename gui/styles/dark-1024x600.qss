@@ -46,6 +46,11 @@ QFrame#idleWidget QPushButton#btnArchive {
     text-align: center;
 }
 
+QFrame#idleWidget QPushButton#btnArchive:pressed {
+    background-color: rgba(255, 27, 0, 200);
+    color: #eeeeee;
+}
+
 QFrame#idleWidget QPushButton#btnTrigger {
     border: none;
     color: rgba(255, 27, 0, 200);
@@ -57,12 +62,6 @@ QFrame#idleWidget QPushButton#btnTrigger:pressed {
     background-color: rgba(255, 27, 0, 200);
     color: #eeeeee;
 }
-
-QFrame#idleWidget QPushButton#btnArchive:pressed {
-    background-color: rgba(255, 27, 0, 200);
-    color: #eeeeee;
-}
-
 
 /* Greeter Screen */
 

@@ -19,7 +19,7 @@
 
 include(LibFindMacros)
 
-SET(GPHOTO2_FIND_REQUIRED ${Gphoto2_FIND_REQUIRED})
+#SET(GPHOTO2_FIND_REQUIRED ${Gphoto2_FIND_REQUIRED})
 
 find_path(GPHOTO2_INCLUDE_DIR gphoto2/gphoto2.h)
 mark_as_advanced(GPHOTO2_INCLUDE_DIR)
@@ -43,8 +43,8 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GPHOTO2 DEFAULT_MSG GPHOTO2_LIBRARY GPHOTO2_INCLUDE_DIR)
 
 IF(GPHOTO2_FOUND)
-  SET(Gphoto2_LIBRARIES ${GPHOTO2_LIBRARY} ${GPHOTO2_PORT_LIBRARY})
-  SET(Gphoto2_INCLUDE_DIRS ${GPHOTO2_INCLUDE_DIR})
+  SET(GPHOTO2_LIBRARIES ${GPHOTO2_LIBRARY} ${GPHOTO2_PORT_LIBRARY})
+  SET(GPHOTO2_INCLUDE_DIRS ${GPHOTO2_INCLUDE_DIR})
 
   # libgphoto2 dynamically loads and unloads usb library
   # without calling any cleanup functions (since they are absent from libusb-0.1).
@@ -56,7 +56,7 @@ IF(GPHOTO2_FOUND)
     find_library(USB_LIBRARY NAMES usb-1.0 libusb-1.0)
     mark_as_advanced(USB_LIBRARY)
     IF(USB_LIBRARY)
-      SET(Gphoto2_LIBRARIES ${Gphoto2_LIBRARIES} ${USB_LIBRARY})
+      SET(GPHOTO2_LIBRARIES ${GPHOTO2_LIBRARIES} ${USB_LIBRARY})
     ENDIF(USB_LIBRARY)
   ENDIF(APPLE)
 

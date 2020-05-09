@@ -14,15 +14,15 @@ FIND_PACKAGE(Qt5Gui)
 FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(Qt5DBus)
 FIND_PACKAGE(Qt5Network)
-FIND_PACKAGE(Gphoto2 REQUIRED)
+FIND_PACKAGE(GPHOTO2 REQUIRED)
 FIND_PACKAGE(Cups REQUIRED)
 FIND_PACKAGE(LibUSB REQUIRED)
 FIND_LIBRARY(PIGPIO_LIBRARY pigpiod_if2)
 
-include_directories(SYSTEM ${Gphoto2_INCLUDE_DIRS})
+include_directories(SYSTEM ${GPHOTO2_INCLUDE_DIRS})
 include_directories(${CUPS_INCLUDE_DIRS})
 include_directories(${LIBUSB_INCLUDE_DIRS})
-add_definitions(${Gphoto2_DEFINITIONS})
+add_definitions(${GPHOTO2_DEFINITIONS})
 
 get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
 get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
@@ -179,7 +179,7 @@ ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
 
 TARGET_LINK_LIBRARIES(${NAME}
   ${QT_LIBRARIES}
-  ${Gphoto2_LIBRARIES}
+  ${GPHOTO2_LIBRARIES}
   ${CUPS_LIBRARIES}
   ${PIGPIO_LIBRARY}
   ${LIBUSB_LIBRARIES}
