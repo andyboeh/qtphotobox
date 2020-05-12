@@ -18,6 +18,7 @@ FIND_PACKAGE(GPHOTO2 REQUIRED)
 FIND_PACKAGE(Cups REQUIRED)
 FIND_PACKAGE(LibUSB REQUIRED)
 FIND_LIBRARY(PIGPIO_LIBRARY pigpiod_if2)
+find_package(Qt5LinguistTools)
 
 include_directories(SYSTEM ${GPHOTO2_INCLUDE_DIRS})
 include_directories(${CUPS_INCLUDE_DIRS})
@@ -156,16 +157,44 @@ SET(${NAME}_RES
     qtphotobox.qrc
 )
 
+SET(${NAME}_TRANSLATIONS
+    translations/english.ts
+    translations/german.ts
+    )
+
 IF(WIN32)
     SET(WIN32_DEFINE "WIN32")
 ELSE(WIN32)
     SET(WIN32_DEFINE)
 ENDIF(WIN32)
 
+SET(${NAME}_TRANSLATIONS_SRC
+    ${${NAME}_SOURCES}
+    ${${NAME}_UI}
+    )
+
 QT5_WRAP_CPP(${NAME}_HEADERS_MOC ${${NAME}_HEADERS})
 QT5_WRAP_UI(${NAME}_HEADERS_UI ${${NAME}_UI})
 QT5_ADD_RESOURCES(${NAME}_RES_RCC ${${NAME}_RES})
 QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
+QT5_CREATE_TRANSLATION(${NAME}_TRANSLATIONS_BIN ${${NAME}_TRANSLATIONS_SRC} ${${NAME}_TRANSLATIONS})
+add_custom_target(translations DEPENDS ${${NAME}_TRANSLATIONS_BIN})
+
+
+if(NOT QT_TRANSLATIONS_DIR)
+    # If this directory is missing, we are in a Qt5 environment.
+    # Extract the qmake executable location
+    get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
+    # Ask Qt5 where to put the translations
+    execute_process( COMMAND ${QT5_QMAKE_EXECUTABLE} -query QT_INSTALL_TRANSLATIONS
+    OUTPUT_VARIABLE qt_translations_dir OUTPUT_STRIP_TRAILING_WHITESPACE )
+    # make sure we have / and not \ as qmake gives on windows
+    file( TO_CMAKE_PATH "${qt_translations_dir}" qt_translations_dir)
+    set( QT_TRANSLATIONS_DIR ${qt_translations_dir} CACHE PATH
+    "The location of the Qt translations" FORCE)
+endif()
+
+install(FILES ${${NAME}_TRANSLATIONS_BIN} DESTINATION ${QT_TRANSLATIONS_DIR})
 
 ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
   ${${NAME}_HEADERS}
@@ -175,6 +204,7 @@ ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
   ${${NAME}_HEADERS_UI}
   ${${NAME}_RES_RCC}
   ${${NAME}_DBUS_INTERFACE_OM}
+  ${${NAME}_TRANSLATIONS_BIN}
 )
 
 TARGET_LINK_LIBRARIES(${NAME}
@@ -183,7 +213,7 @@ TARGET_LINK_LIBRARIES(${NAME}
   ${CUPS_LIBRARIES}
   ${PIGPIO_LIBRARY}
   ${LIBUSB_LIBRARIES}
-)
+  )
 
 IF(WIN32)
     add_custom_command(TARGET ${NAME}
