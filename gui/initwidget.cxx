@@ -44,3 +44,12 @@ void initWidget::timeout()
     }
     ui->progressBar->setValue(val + mIncrement);
 }
+
+void initWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

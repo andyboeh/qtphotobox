@@ -24,6 +24,8 @@ private slots:
 
     void on_btnQuit_clicked();
 
+    void changeEvent(QEvent *event);
+
 private:
     Ui::startWidget *ui;
 };

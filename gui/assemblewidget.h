@@ -14,6 +14,8 @@ class assembleWidget : public QFrame
 public:
     explicit assembleWidget(QWidget *parent = nullptr);
     ~assembleWidget();
+private slots:
+    void changeEvent(QEvent *event);
 private:
     Ui::assembleWidget *ui;
 };

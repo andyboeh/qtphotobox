@@ -25,3 +25,12 @@ void waitRemovableWidget::on_btnQuit_clicked()
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerState("teardown");
 }
+
+void waitRemovableWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

@@ -36,3 +36,12 @@ void startWidget::on_btnQuit_clicked()
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerState("teardown");
 }
+
+void startWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

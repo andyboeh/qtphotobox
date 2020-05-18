@@ -21,6 +21,7 @@ public slots:
     void timeout(void);
 private slots:
     void paintEvent(QPaintEvent *event);
+    void changeEvent(QEvent *event);
 private:
     Ui::reviewWidget *ui;
     QTimer *mTimer;

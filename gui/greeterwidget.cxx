@@ -37,3 +37,12 @@ void greeterWidget::on_btnStartCountdown_clicked()
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerNextState();
 }
+
+void greeterWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

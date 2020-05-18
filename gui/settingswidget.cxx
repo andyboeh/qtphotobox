@@ -79,8 +79,6 @@ void settingsWidget::loadFromSettings()
     ui->spinWidth->setValue(pbs.getInt("gui", "width"));
 
     QString style = pbs.get("gui", "style");
-    qDebug() << style;
-    qDebug() << mStyleMapping.value(style);
     ui->cmbStyle->setCurrentText(mStyleMapping.value(style));
 
     QString language = pbs.get("gui", "language");
@@ -285,7 +283,7 @@ void settingsWidget::on_btnSave_clicked()
 {
     saveToSettings();
     StateMachine &sm = StateMachine::getInstance();
-    sm.triggerState("init");
+    sm.triggerState("restart");
 }
 
 void settingsWidget::on_btnCancel_clicked()
@@ -462,4 +460,13 @@ void settingsWidget::on_spinNumPictures_valueChanged(int arg1)
     QSpacerItem *newSpacer2 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
     lay->addItem(newSpacer, lay->rowCount(), 1);
     lay->addItem(newSpacer2, 1, lay->columnCount());
+}
+
+void settingsWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
 }

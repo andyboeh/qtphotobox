@@ -23,6 +23,7 @@ private slots:
     void printArchivePicture(QString filename, int copies);
     void on_listView_clicked(const QModelIndex &index);
 
+    void changeEvent(QEvent *event);
 private:
     Ui::archiveWidget *ui;
     QString mBasepath;

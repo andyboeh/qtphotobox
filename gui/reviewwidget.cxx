@@ -44,7 +44,13 @@ void reviewWidget::paintEvent(QPaintEvent *event)
         mHeight = ui->lblReviewImage->size().height();
         ui->lblReviewImage->setPixmap(mScaledImage);
     }
+}
 
+void reviewWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
 
-
+    QFrame::changeEvent(event);
 }

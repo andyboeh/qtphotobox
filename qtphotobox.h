@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPixmap>
+#include <QTranslator>
 
 class QThread;
 class pbCamera;
@@ -63,6 +64,7 @@ private:
     QThread *mPrinterThread;
     QThread *mShowThread;
     QThread *mGpioThread;
+    QTranslator mTranslator;
     showWorker *mShowThreadObject;
     pbCamera *mCameraThreadObject;
     pictureWorker *mPictureWorkerThreadObject;

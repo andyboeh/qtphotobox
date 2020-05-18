@@ -58,3 +58,12 @@ void errorWidget::on_btnOk_clicked()
 {
     emit errorOk();
 }
+
+void errorWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

@@ -20,6 +20,7 @@ public:
 private slots:
     void on_btnStartCountdown_clicked();
 
+    void changeEvent(QEvent *event);
 private:
     Ui::greeterWidget *ui;
     QTimer *mTimer;

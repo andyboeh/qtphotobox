@@ -51,6 +51,7 @@ private slots:
 
     void on_spinNumPictures_valueChanged(int arg1);
 
+    void changeEvent(QEvent *event);
 private:
     Ui::settingsWidget *ui;
     QMap<QString, QString> mStyleMapping;

@@ -32,3 +32,12 @@ void idleWidget::on_btnArchive_clicked()
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerState("archive");
 }
+
+void idleWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

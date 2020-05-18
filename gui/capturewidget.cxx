@@ -26,3 +26,12 @@ void captureWidget::imageCaptured(QPixmap image)
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerNextState();
 }
+
+void captureWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

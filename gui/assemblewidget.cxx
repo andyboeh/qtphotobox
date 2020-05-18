@@ -22,3 +22,11 @@ assembleWidget::~assembleWidget()
     delete ui;
 }
 
+void assembleWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

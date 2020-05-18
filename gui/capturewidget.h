@@ -21,6 +21,8 @@ public slots:
     void imageCaptured(QPixmap image);
 signals:
     void captureImage(void);
+private slots:
+    void changeEvent(QEvent *event);
 private:
     Ui::captureWidget *ui;
     pbCamera *mCameraObject;

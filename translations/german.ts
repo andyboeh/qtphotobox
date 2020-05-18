@@ -399,7 +399,7 @@
     <message>
         <location filename="../gui/settingswidget.ui" line="152"/>
         <source>English</source>
-        <translation>Englisch</translation>
+        <translation type="unfinished">English</translation>
     </message>
     <message>
         <location filename="../gui/settingswidget.ui" line="157"/>
@@ -722,17 +722,17 @@
         <translation>Standardwerte Laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="397"/>
+        <location filename="../gui/settingswidget.cxx" line="396"/>
         <source>Open Background image</source>
         <translation>Hintergrundbild laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="398"/>
+        <location filename="../gui/settingswidget.cxx" line="397"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG Bilder (*.jpg)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="440"/>
+        <location filename="../gui/settingswidget.cxx" line="439"/>
         <source>Filters for Picture %1</source>
         <translation>Filter für Bild %1</translation>
     </message>

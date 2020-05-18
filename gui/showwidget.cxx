@@ -19,3 +19,12 @@ void showWidget::showPicture(QPixmap image)
 {
     ui->lblPicture->setPixmap(image.scaled(ui->lblPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
+
+void showWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

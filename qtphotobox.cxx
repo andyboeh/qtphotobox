@@ -29,6 +29,7 @@
 #include <QWindow>
 #include <QScreen>
 #include <QKeyEvent>
+#include <QProcess>
 
 MainWindow::MainWindow()
 {
@@ -114,6 +115,9 @@ void MainWindow::changeState(QString name)
         delete mCurrentWidget;
         mCurrentWidget = new startWidget();
         setCentralWidget(mCurrentWidget);
+    } else if(name == "restart") {
+        qApp->quit();
+        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
     } else if(name == "waitremovable") {
         delete mCurrentWidget;
         mCurrentWidget = new waitRemovableWidget();
@@ -322,6 +326,14 @@ void MainWindow::loadSettingsToGui(bool showWindow)
     if(pbs.getBool("gui", "hide_cursor")) {
         qApp->setOverrideCursor(Qt::BlankCursor);
     }
+
+    QString language = pbs.get("gui", "language");
+    language.append(".qm");
+    if(mTranslator.load(language)) {
+        qApp->installTranslator(&mTranslator);
+    } else {
+        qDebug() << "error loading translation.";
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -529,6 +541,7 @@ int main(int argc, char *argv[]) {
     sm.addState("postprocess");
     sm.addState("error");
     sm.addState("teardown");
+    sm.addState("restart");
 
     if(pbs.getBool("storage", "wait_removable")) {
         sm.addTargetState("start", "waitremovable");

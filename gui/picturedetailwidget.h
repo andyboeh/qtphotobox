@@ -24,6 +24,7 @@ private slots:
     void on_btnClose_clicked();
 
     void on_sliderCopies_valueChanged(int value);
+    void changeEvent(QEvent *event);
 signals:
     void printArchivePicture(QString filename, int copies);
 private:

@@ -20,6 +20,7 @@ public slots:
     void cameraInitialized(bool ret);
 private slots:
     void timeout(void);
+    void changeEvent(QEvent *event);
 private:
     Ui::initWidget *ui;
     QTimer *mTimer;

@@ -61,3 +61,12 @@ void archiveWidget::on_listView_clicked(const QModelIndex &index)
     connect(mDetailWidget, SIGNAL(printArchivePicture(QString,int)), this, SLOT(printArchivePicture(QString,int)));
     mDetailWidget->show();
 }
+
+void archiveWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

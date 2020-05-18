@@ -22,6 +22,7 @@ private slots:
     void on_btnStartOver_clicked();
     void on_sliderNumCopies_valueChanged(int value);
 
+    void changeEvent(QEvent *event);
 private:
     Ui::postprocessWidget *ui;
 };

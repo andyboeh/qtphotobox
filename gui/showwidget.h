@@ -16,6 +16,8 @@ public:
     ~showWidget();
 public slots:
     void showPicture(QPixmap image);
+private slots:
+    void changeEvent(QEvent *event);
 private:
     Ui::showWidget *ui;
 };

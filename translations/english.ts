@@ -722,17 +722,17 @@
         <translation>Restore Defaults</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="397"/>
+        <location filename="../gui/settingswidget.cxx" line="396"/>
         <source>Open Background image</source>
         <translation>Open Background image</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="398"/>
+        <location filename="../gui/settingswidget.cxx" line="397"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG Images (*.jpg)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="440"/>
+        <location filename="../gui/settingswidget.cxx" line="439"/>
         <source>Filters for Picture %1</source>
         <translation>Filter for Picture %1</translation>
     </message>

@@ -60,3 +60,12 @@ void postprocessWidget::on_sliderNumCopies_valueChanged(int value)
 {
     ui->lblNumCopies->setText(tr("Print %1 copies.").arg(value));
 }
+
+void postprocessWidget::changeEvent(QEvent *event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+
+    QFrame::changeEvent(event);
+}

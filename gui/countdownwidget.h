@@ -25,6 +25,7 @@ public slots:
 private slots:
     void handleTimeout(void);
 
+    void changeEvent(QEvent *event);
 signals:
     void startPreview();
     void stopPreview();

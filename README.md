@@ -41,14 +41,22 @@ The software runs on Linux only due to the availability of some libraries.
 Installation
 ------------
 
-WiP
+You need to compile from source, thus you need development libraries and a build
+system for:
+
+  * CMake
+  * Qt5
+  * Gphoto2
+  * libusb
+  * CUPS
+  * pigpio
+
+Then you can compile from the command line.
 
 Configuration
 -------------
 
-The GUI settings screen is still WiP. You can customize the settings by modifying
-the file ~/.qtphotobox/settings.ini with your favorite text editor. Not all
-settings have an effect yet.
+QtPhotobox can be entirely configured using the GUI. 
 
 License
 -------

@@ -37,6 +37,7 @@ private slots:
 
     void on_btnOk_clicked();
 
+    void changeEvent(QEvent *event);
 private:
     Ui::errorWidget *ui;
 };
