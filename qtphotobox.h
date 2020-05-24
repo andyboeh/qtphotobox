@@ -54,6 +54,7 @@ signals:
     void waitForRemovableDevice();
 private slots:
     void keyPressEvent(QKeyEvent *event);
+    void resizeEvent(QResizeEvent *event);
     void errorOk();
     void errorQuit();
     void errorRetry();

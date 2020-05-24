@@ -345,6 +345,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    if(mOverlayWidget) {
+        mOverlayWidget->resize(event->size().width(), event->size().height());
+    }
+}
+
 void MainWindow::errorOk()
 {
     delete mOverlayWidget;

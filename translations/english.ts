@@ -162,15 +162,15 @@
 <context>
     <name>pbCamera</name>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="78"/>
+        <location filename="../camera/pbcamera.cxx" line="77"/>
         <source>Error initializing camera. Check connection.</source>
         <translation>Error initialising camera. Check connection.</translation>
     </message>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="87"/>
-        <location filename="../camera/pbcamera.cxx" line="102"/>
-        <location filename="../camera/pbcamera.cxx" line="116"/>
-        <location filename="../camera/pbcamera.cxx" line="136"/>
+        <location filename="../camera/pbcamera.cxx" line="86"/>
+        <location filename="../camera/pbcamera.cxx" line="101"/>
+        <location filename="../camera/pbcamera.cxx" line="115"/>
+        <location filename="../camera/pbcamera.cxx" line="135"/>
         <source>Error capturing image. Camera connected?</source>
         <translation>Error capturing image. Camera connected?</translation>
     </message>
