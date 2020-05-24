@@ -31,6 +31,7 @@ public slots:
     void thumbnailScaled(QString path, QString filename);
     void fullImageSaved(QString path, QString filename, bool ret);
     void assembledImageSaved(QString path, QString filename, bool ret);
+    void removableDeviceDetected(QString path);
 signals:
     void stopCameraThread();
     void stopPictureWorkerThread();

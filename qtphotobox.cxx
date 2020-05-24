@@ -124,6 +124,7 @@ void MainWindow::changeState(QString name)
         setCentralWidget(mCurrentWidget);
         storageManager &stm = storageManager::getInstance();
         connect(&stm, SIGNAL(removableDeviceDetected(QString)), mCurrentWidget, SLOT(removableDeviceDetected(QString)));
+        connect(&stm, SIGNAL(removableDeviceDetected(QString)), this, SLOT(removableDeviceDetected(QString)));
         stm.waitForRemovableDevice();
     } else if(name == "init") {
         delete mCurrentWidget;
@@ -325,11 +326,14 @@ void MainWindow::loadSettingsToGui(bool showWindow)
     }
     if(pbs.getBool("gui", "hide_cursor")) {
         qApp->setOverrideCursor(Qt::BlankCursor);
+    } else {
+        qApp->setOverrideCursor(Qt::ArrowCursor);
     }
 
     QString language = pbs.get("gui", "language");
     language.append(".qm");
     if(mTranslator.load(language)) {
+        qApp->removeTranslator(&mTranslator);
         qApp->installTranslator(&mTranslator);
     } else {
         qDebug() << "error loading translation.";
@@ -452,6 +456,16 @@ void MainWindow::assembledImageSaved(QString path, QString filename, bool ret)
     mImageToPrint = path + QDir::separator() + filename;
     if(ret)
         emit saveThumbnail(filename);
+}
+
+void MainWindow::removableDeviceDetected(QString path)
+{
+    QFile cfgFile(path + QDir::separator() + "qtphotobox.ini");
+    if(cfgFile.exists()) {
+        pbSettings &settings = pbSettings::getInstance();
+        settings.mergeConfigFile(cfgFile.fileName());
+        loadSettingsToGui(true);
+    }
 }
 
 int main(int argc, char *argv[]) {

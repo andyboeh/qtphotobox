@@ -722,17 +722,17 @@
         <translation>Standardwerte Laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="396"/>
+        <location filename="../gui/settingswidget.cxx" line="395"/>
         <source>Open Background image</source>
         <translation>Hintergrundbild laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="397"/>
+        <location filename="../gui/settingswidget.cxx" line="396"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG Bilder (*.jpg)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="439"/>
+        <location filename="../gui/settingswidget.cxx" line="438"/>
         <source>Filters for Picture %1</source>
         <translation>Filter für Bild %1</translation>
     </message>
