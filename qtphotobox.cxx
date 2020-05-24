@@ -460,10 +460,20 @@ void MainWindow::assembledImageSaved(QString path, QString filename, bool ret)
 
 void MainWindow::removableDeviceDetected(QString path)
 {
+    bool reload = false;
+    pbSettings &settings = pbSettings::getInstance();
+
     QFile cfgFile(path + QDir::separator() + "qtphotobox.ini");
     if(cfgFile.exists()) {
-        pbSettings &settings = pbSettings::getInstance();
+        reload = true;
         settings.mergeConfigFile(cfgFile.fileName());
+    }
+    QFile bgFile(path + QDir::separator() + "background.jpg");
+    if(bgFile.exists()) {
+        reload = true;
+        settings.set("picture", "background", bgFile.fileName());
+    }
+    if(reload) {
         loadSettingsToGui(true);
     }
 }
