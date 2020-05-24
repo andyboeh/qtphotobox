@@ -14,8 +14,6 @@ class waitRemovableWidget : public QFrame
 public:
     explicit waitRemovableWidget(QWidget *parent = nullptr);
     ~waitRemovableWidget();
-public slots:
-    void removableDeviceDetected(QString path);
 private slots:
     void on_btnQuit_clicked();
 

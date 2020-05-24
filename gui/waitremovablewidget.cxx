@@ -14,12 +14,6 @@ waitRemovableWidget::~waitRemovableWidget()
     delete ui;
 }
 
-void waitRemovableWidget::removableDeviceDetected(QString path)
-{
-    StateMachine &sm = StateMachine::getInstance();
-    sm.triggerNextState();
-}
-
 void waitRemovableWidget::on_btnQuit_clicked()
 {
     StateMachine &sm = StateMachine::getInstance();

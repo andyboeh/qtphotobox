@@ -123,7 +123,6 @@ void MainWindow::changeState(QString name)
         mCurrentWidget = new waitRemovableWidget();
         setCentralWidget(mCurrentWidget);
         storageManager &stm = storageManager::getInstance();
-        connect(&stm, SIGNAL(removableDeviceDetected(QString)), mCurrentWidget, SLOT(removableDeviceDetected(QString)));
         connect(&stm, SIGNAL(removableDeviceDetected(QString)), this, SLOT(removableDeviceDetected(QString)));
         stm.waitForRemovableDevice();
     } else if(name == "init") {
@@ -476,6 +475,8 @@ void MainWindow::removableDeviceDetected(QString path)
     if(reload) {
         loadSettingsToGui(true);
     }
+    StateMachine &sm = StateMachine::getInstance();
+    sm.triggerNextState();
 }
 
 int main(int argc, char *argv[]) {
