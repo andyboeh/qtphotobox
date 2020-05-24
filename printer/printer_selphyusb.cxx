@@ -180,6 +180,7 @@ done:
     if(list)
         libusb_free_device_list(list, 1);
     libusb_exit(mCtx);
+    mCtx = NULL;
     return false;
 
 }

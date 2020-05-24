@@ -162,15 +162,15 @@
 <context>
     <name>pbCamera</name>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="75"/>
+        <location filename="../camera/pbcamera.cxx" line="78"/>
         <source>Error initializing camera. Check connection.</source>
         <translation>Error initialising camera. Check connection.</translation>
     </message>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="84"/>
-        <location filename="../camera/pbcamera.cxx" line="99"/>
-        <location filename="../camera/pbcamera.cxx" line="113"/>
-        <location filename="../camera/pbcamera.cxx" line="133"/>
+        <location filename="../camera/pbcamera.cxx" line="87"/>
+        <location filename="../camera/pbcamera.cxx" line="102"/>
+        <location filename="../camera/pbcamera.cxx" line="116"/>
+        <location filename="../camera/pbcamera.cxx" line="136"/>
         <source>Error capturing image. Camera connected?</source>
         <translation>Error capturing image. Camera connected?</translation>
     </message>
@@ -281,14 +281,14 @@
 <context>
     <name>printerSelphyUsb</name>
     <message>
-        <location filename="../printer/printer_selphyusb.cxx" line="197"/>
-        <location filename="../printer/printer_selphyusb.cxx" line="221"/>
-        <location filename="../printer/printer_selphyusb.cxx" line="271"/>
+        <location filename="../printer/printer_selphyusb.cxx" line="198"/>
+        <location filename="../printer/printer_selphyusb.cxx" line="222"/>
+        <location filename="../printer/printer_selphyusb.cxx" line="272"/>
         <source>The printer is either out of paper or out of ribbon and needs your attention!</source>
         <translation>The printer is either out of paper or out of ribbon and needs your attention!</translation>
     </message>
     <message>
-        <location filename="../printer/printer_selphyusb.cxx" line="246"/>
+        <location filename="../printer/printer_selphyusb.cxx" line="247"/>
         <source>Error communicating with the printer</source>
         <translation>Error communicating with the printer</translation>
     </message>
@@ -296,12 +296,12 @@
 <context>
     <name>printerWorker</name>
     <message>
-        <location filename="../printer/printer.cxx" line="43"/>
+        <location filename="../printer/printer.cxx" line="48"/>
         <source>Printer backend not found or unknown.</source>
         <translation>Priner backend not found or unknown.</translation>
     </message>
     <message>
-        <location filename="../printer/printer.cxx" line="75"/>
+        <location filename="../printer/printer.cxx" line="80"/>
         <source>Error initializing printer. Is it turned on?</source>
         <translation>Error initialising printer. Is it turned on?</translation>
     </message>

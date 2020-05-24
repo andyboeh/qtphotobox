@@ -3,7 +3,6 @@
 #include "waitingspinnerwidget.h"
 #include "settings.h"
 #include "statemachine.h"
-#include <QTimer>
 #include <QVBoxLayout>
 
 assembleWidget::assembleWidget(QWidget *parent) :

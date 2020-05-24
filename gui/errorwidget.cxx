@@ -36,7 +36,8 @@ errorWidget::errorWidget(errorWidgetButtons buttons, QString message, QWidget *p
     case BTN_OK_RETRY_QUIT:
         break;
     }
-    ui->lblErrorMessage->setText(message);
+    mErrorMessage = message;
+    ui->lblErrorMessage->setText(mErrorMessage);
 }
 
 errorWidget::~errorWidget()
@@ -63,6 +64,7 @@ void errorWidget::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
+        ui->lblErrorMessage->setText(mErrorMessage);
     }
 
     QFrame::changeEvent(event);

@@ -40,6 +40,7 @@ private slots:
     void changeEvent(QEvent *event);
 private:
     Ui::errorWidget *ui;
+    QString mErrorMessage;
 };
 
 #endif // ERRORWIDGET_H

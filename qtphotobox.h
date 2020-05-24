@@ -51,6 +51,7 @@ signals:
     void retryOperation();
     void addPictureToShow(QString path);
     void initializeCamera();
+    void waitForRemovableDevice();
 private slots:
     void keyPressEvent(QKeyEvent *event);
     void errorOk();

@@ -17,7 +17,9 @@ pbCamera::pbCamera() {
 pbCamera::~pbCamera() {
     delete mCamera;
     mCamera = nullptr;
-    mLimitTimer->deleteLater();
+    if(mLimitTimer) {
+        mLimitTimer->deleteLater();
+    }
 }
 
 void pbCamera::initCamera()

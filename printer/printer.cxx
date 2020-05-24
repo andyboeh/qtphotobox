@@ -18,10 +18,15 @@ printerWorker::printerWorker()
 
 printerWorker::~printerWorker()
 {
-    if(mTimer)
+    if(mTimer) {
         mTimer->stop();
-    mTimer->deleteLater();
-    mPrinter->deleteLater();
+        mTimer->deleteLater();
+        mTimer = nullptr;
+    }
+    if(mPrinter) {
+        delete mPrinter;
+        mPrinter = nullptr;
+    }
 }
 
 void printerWorker::printerErrorInternal(QString err_code, QString error) {
@@ -90,7 +95,7 @@ void printerWorker::start()
     }
 
     mTimer->stop();
-    delete mTimer;
+    mTimer->deleteLater();
     mTimer = nullptr;
     delete mPrinter;
     mPrinter = nullptr;

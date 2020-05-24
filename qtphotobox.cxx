@@ -124,7 +124,8 @@ void MainWindow::changeState(QString name)
         setCentralWidget(mCurrentWidget);
         storageManager &stm = storageManager::getInstance();
         connect(&stm, SIGNAL(removableDeviceDetected(QString)), this, SLOT(removableDeviceDetected(QString)));
-        stm.waitForRemovableDevice();
+        connect(this, SIGNAL(waitForRemovableDevice()), &stm, SLOT(waitForRemovableDevice()));
+        emit waitForRemovableDevice();
     } else if(name == "init") {
         delete mCurrentWidget;
         mCurrentWidget = new initWidget();
@@ -311,7 +312,6 @@ void MainWindow::loadSettingsToGui(bool showWindow)
     bool fs = pbs.getBool("gui", "fullscreen");
     if(fs) {
         if(isVisible() || showWindow) {
-            hide();
             showFullScreen();
         }
     } else {
@@ -319,7 +319,6 @@ void MainWindow::loadSettingsToGui(bool showWindow)
         int height = pbs.getInt("gui", "height");
         setFixedSize(width, height);
         if(isVisible() || showWindow) {
-            hide();
             show();
         }
     }
@@ -459,6 +458,7 @@ void MainWindow::assembledImageSaved(QString path, QString filename, bool ret)
 
 void MainWindow::removableDeviceDetected(QString path)
 {
+    qDebug() << "removableDeviceDetected";
     bool reload = false;
     pbSettings &settings = pbSettings::getInstance();
 
