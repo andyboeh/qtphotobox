@@ -85,6 +85,7 @@ void pbSettings::initDefaultConfg()
     QMap<QString, QVariant> storageSettings;
     QMap<QString, QVariant> archiveSettings;
     QMap<QString, QVariant> showSettings;
+    QMap<QString, QVariant> screensaverSettings;
 
     guiSettings.insert("fullscreen", false);
     guiSettings.insert("width", 1024);
@@ -93,6 +94,12 @@ void pbSettings::initDefaultConfg()
     guiSettings.insert("style", "default");
     guiSettings.insert("direct_start", false);
     guiSettings.insert("language", "english");
+
+    screensaverSettings.insert("enable", true);
+    screensaverSettings.insert("timeout", 60);
+    screensaverSettings.insert("text1", "QtPhotobox");
+    screensaverSettings.insert("text2", "by Andreas Böhler");
+    screensaverSettings.insert("text3", "www.aboehler.at");
 
     cameraSettings.insert("backend", "gphoto2");
     cameraSettings.insert("rotation", 0);
@@ -156,6 +163,7 @@ void pbSettings::initDefaultConfg()
     mSettings.insert("storage", storageSettings);
     mSettings.insert("archive", archiveSettings);
     mSettings.insert("show", showSettings);
+    mSettings.insert("screensaver", screensaverSettings);
 }
 
 QString pbSettings::get(QString section, QString key)

@@ -12,6 +12,7 @@ class postprocessWorker;
 class printerWorker;
 class showWorker;
 class gpioWorker;
+class screenSaver;
 
 class MainWindow : public QMainWindow
 {
@@ -74,6 +75,7 @@ private:
     postprocessWorker *mPostprocessWorkerThreadObject;
     printerWorker *mPrinterThreadObject;
     gpioWorker *mGpioThreadObject;
+    screenSaver *mScreenSaver;
     int mImagesCaptured;
     int mImagesToCapture;
     QPixmap mImageToReview;

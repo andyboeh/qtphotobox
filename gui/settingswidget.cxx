@@ -202,6 +202,16 @@ void settingsWidget::loadFromSettings()
         ui->chkWaitRemovable->setChecked(Qt::Unchecked);
         on_chkWaitRemovable_stateChanged(Qt::Unchecked);
     }
+
+    if(pbs.getBool("screensaver", "enable")) {
+        ui->chkEnableScreensaver->setChecked(Qt::Checked);
+    } else {
+        ui->chkEnableScreensaver->setChecked(Qt::Unchecked);
+    }
+    ui->spinScreensaverTimeout->setValue(pbs.getInt("screensaver", "timeout"));
+    ui->editScreensaver1->setText(pbs.get("screensaver", "text1"));
+    ui->editScreensaver2->setText(pbs.get("screensaver", "text2"));
+    ui->editScreensaver3->setText(pbs.get("screensaver", "text3"));
 }
 
 void settingsWidget::saveToSettings()
@@ -273,6 +283,12 @@ void settingsWidget::saveToSettings()
     pbs.set("storage", "ignore_removable", ui->editIgnoreRemovable->text());
     pbs.setBool("storage", "keep_pictures", ui->chkKeep->isChecked());
     pbs.setBool("storage", "wait_removable", ui->chkWaitRemovable->isChecked());
+
+    pbs.setBool("screensaver", "enable", ui->chkEnableScreensaver->isChecked());
+    pbs.setInt("screensaver", "timeout", ui->spinScreensaverTimeout->value());
+    pbs.set("screensaver", "text1", ui->editScreensaver1->text());
+    pbs.set("screensaver", "text2", ui->editScreensaver2->text());
+    pbs.set("screensaver", "text3", ui->editScreensaver3->text());
 
     QString path = pbs.getConfigPath();
     path += "settings.ini";
@@ -469,4 +485,19 @@ void settingsWidget::changeEvent(QEvent *event)
     }
 
     QFrame::changeEvent(event);
+}
+
+void settingsWidget::on_chkEnableScreensaver_stateChanged(int arg1)
+{
+    bool enabled;
+    if(arg1 == Qt::Checked) {
+        enabled = true;
+    } else {
+        enabled = false;
+    }
+
+    ui->editScreensaver1->setEnabled(enabled);
+    ui->editScreensaver2->setEnabled(enabled);
+    ui->editScreensaver3->setEnabled(enabled);
+    ui->spinScreensaverTimeout->setEnabled(enabled);
 }

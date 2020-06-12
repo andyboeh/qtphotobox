@@ -82,6 +82,8 @@ SET(${NAME}_SOURCES
   gui/showwidget.cxx
   gui/errorwidget.cxx
   gui/waitremovablewidget.cxx
+  gui/screensaver.cxx
+  gui/screensaverwidget.cxx
   worker/pictureWorker.cxx
   worker/pictureTask.cxx
   worker/postprocessWorker.cxx
@@ -122,6 +124,8 @@ SET(${NAME}_HEADERS
   gui/picturedetailwidget.h
   gui/showwidget.h
   gui/waitremovablewidget.h
+  gui/screensaver.h
+  gui/screensaverwidget.h
   worker/worker.h
   worker/pictureWorker.h
   worker/pictureTask.h
@@ -151,6 +155,7 @@ SET(${NAME}_UI
   gui/showwidget.ui
   gui/errorwidget.ui
   gui/waitremovablewidget.ui
+  gui/screensaverwidget.ui
 )
 
 SET(${NAME}_RES

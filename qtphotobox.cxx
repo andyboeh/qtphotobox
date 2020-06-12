@@ -21,6 +21,8 @@
 #include "gpioWorker.h"
 #include "errorwidget.h"
 #include "waitremovablewidget.h"
+#include "screensaver.h"
+#include "screensaverwidget.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -47,6 +49,7 @@ MainWindow::MainWindow()
     mCameraThreadObject = nullptr;
     mGpioThread = nullptr;
     mGpioThreadObject = nullptr;
+    mScreenSaver = nullptr;
     mImagesCaptured = 0;
     mImagesToCapture = 0;
     mErrorPresent = false;
@@ -54,6 +57,10 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    if(mScreenSaver) {
+        delete mScreenSaver;
+        mScreenSaver = nullptr;
+    }
     if(mCameraThread) {
         if(mCameraThread->isRunning()) {
             emit stopCameraThread();
@@ -141,6 +148,10 @@ void MainWindow::changeState(QString name)
     } else if(name == "idle") {
         delete mCurrentWidget;
         mCurrentWidget = new idleWidget();
+        setCentralWidget(mCurrentWidget);
+    } else if(name == "screensaver") {
+        delete mCurrentWidget;
+        mCurrentWidget = new screensaverWidget();
         setCentralWidget(mCurrentWidget);
     } else if(name == "archive") {
         delete mCurrentWidget;
@@ -306,6 +317,21 @@ void MainWindow::loadSettingsToGui(bool showWindow)
             } else {
                 setGeometry(screens.first()->geometry());
             }
+        }
+    }
+
+    if(pbs.getBool("screensaver", "enable")) {
+        if(!mScreenSaver) {
+            mScreenSaver = new screenSaver();
+        }
+        mScreenSaver->setTimeout(pbs.getInt("screensaver", "timeout"));
+        mScreenSaver->setTargetState("idle");
+        mScreenSaver->enableScreenSaver();
+        StateMachine &stm = StateMachine::getInstance();
+        connect(&stm, SIGNAL(performStateChange(QString)), mScreenSaver, SLOT(changeState(QString)));
+    } else {
+        if(mScreenSaver) {
+            mScreenSaver->disableScreenSaver();
         }
     }
 
@@ -574,6 +600,7 @@ int main(int argc, char *argv[]) {
     sm.addState("error");
     sm.addState("teardown");
     sm.addState("restart");
+    sm.addState("screensaver");
 
     if(pbs.getBool("storage", "wait_removable")) {
         sm.addTargetState("start", "waitremovable");
@@ -593,6 +620,7 @@ int main(int argc, char *argv[]) {
     sm.addTargetState("assemble", "review");
     sm.addTargetState("review", "postprocess");
     sm.addTargetState("postprocess", "idle");
+    sm.addTargetState("screensaver", "idle");
 
     sm.triggerState(startupState);
 
