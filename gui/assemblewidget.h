@@ -2,6 +2,7 @@
 #define ASSEMBLEWIDGET_H
 
 #include <QFrame>
+class WaitingSpinnerWidget;
 
 namespace Ui {
 class assembleWidget;
@@ -16,8 +17,10 @@ public:
     ~assembleWidget();
 private slots:
     void changeEvent(QEvent *event);
+    void paintEvent(QPaintEvent *event);
 private:
     Ui::assembleWidget *ui;
+    WaitingSpinnerWidget *mSpinner;
 };
 
 #endif // ASSEMBLEWIDGET_H

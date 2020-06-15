@@ -120,7 +120,7 @@ QFrame#captureWidget QLabel {
 /* Wait Screen */
 
 QFrame#assembleWidget {
-    padding: 350px 80px 80px 80px;
+    padding: 300px 80px 40px 80px;
 }
 
 QFrame#assembleWidget QLabel {

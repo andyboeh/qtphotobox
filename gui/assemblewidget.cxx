@@ -4,21 +4,31 @@
 #include "settings.h"
 #include "statemachine.h"
 #include <QVBoxLayout>
+#include <QDebug>
 
 assembleWidget::assembleWidget(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::assembleWidget)
 {
     ui->setupUi(this);
-
-    WaitingSpinnerWidget *spinner = new WaitingSpinnerWidget();
-    spinner->start();
-    layout()->addWidget(spinner);
+    mSpinner = new WaitingSpinnerWidget();
+    mSpinner->setInnerRadius(20);
+    mSpinner->setLineWidth(4);
+    mSpinner->setLineLength(15);
+    mSpinner->start();
+    layout()->addWidget(mSpinner);
 }
 
 assembleWidget::~assembleWidget()
 {
     delete ui;
+}
+
+void assembleWidget::paintEvent(QPaintEvent *event) {
+    QColor fg = ui->label->palette().color(QPalette::Foreground);
+    if(mSpinner->color() != fg) {
+        mSpinner->setColor(fg);
+    }
 }
 
 void assembleWidget::changeEvent(QEvent *event)
