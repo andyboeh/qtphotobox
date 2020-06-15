@@ -21,7 +21,7 @@ Features
 --------
 
   * Interface to Cameras via gphoto2
-  * Interface to printers via CUPS or an internal Canon Selphy backend (WiFi only)
+  * Interface to printers via CUPS or an internal Canon Selphy backend (WiFi or USB)
   * GPIO-based LED control (PWM only)
   * Review and reprinting of stored images
   * Possibility to wait for a USB drive and save all files there
@@ -29,12 +29,14 @@ Features
   * Flexible positioning/arranging of images on the final print (move, rotate, scale)
   * Custom background for final print
   * Theming support
+  * Screensaver during idle time (for advertisements etc.)
+  * ...
   
 Requirements
 ------------
 
-The software was developed on a standard x86 computer and then tested on a
-Raspberry Pi 4 using Raspbian buster. Quite a number of packages need to be installed,
+The software was developed on a standard x86-64 computer and then tested on
+Raspberry Pi 3 and 4 running Raspbian buster. Quite a number of packages need to be installed,
 since the software has to be compiled from scratch. 
 The software runs on Linux only due to the availability of some libraries.
 
@@ -53,10 +55,33 @@ system for:
 
 Then you can compile from the command line.
 
+Step-by-step:
+
+```
+sudo apt-get install build-essential libgphoto2-dev libpigpio-dev cmake libusb-1.0-0-dev qttools5-dev
+git clone https://github.com/andyboeh/qtphotobox
+mkdir qtphotobox-build
+cd qtphotobox-build
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../qtphotobox
+make
+sudo gpasswd -a pi lp
+```
+
+The last step is necessary for the integrated Canon Selphy USB backend. It may be skipped
+if no Canon printer is attached via USB or you don't want to use the internal Canon
+printer driver.
+
+After a successful build, you can run QtPhotobox by typing:
+
+```
+~/qtphotobox-build/qtphotobox
+```
+
 Configuration
 -------------
 
-QtPhotobox can be entirely configured using the GUI. 
+QtPhotobox can be entirely configured using the GUI. All settings are stored
+in a configuration file at `~/.qtphotobox/settings.ini`.
 
 License
 -------
