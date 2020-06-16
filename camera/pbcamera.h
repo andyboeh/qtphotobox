@@ -31,6 +31,7 @@ private:
     CameraInterface* mCamera;
     bool mLimitFps;
     QTimer *mLimitTimer;
+    bool mInitialized;
 };
 
 #endif //_PBCAMERA_H

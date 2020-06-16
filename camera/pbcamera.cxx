@@ -12,6 +12,7 @@ pbCamera::pbCamera() {
     mCamera = nullptr;
     mLimitFps = false;
     mLimitTimer = nullptr;
+    mInitialized = false;
 }
 
 pbCamera::~pbCamera() {
@@ -71,7 +72,7 @@ void pbCamera::start()
             continue;
         QString command = mCommandList.takeFirst();
         if(command == "initCamera" || command == "retryOperation") {
-            if(mCamera) {
+            if(mCamera && !mInitialized) {
                 bool ret = mCamera->initCamera();
                 if(!ret) {
                     emit cameraError(tr("Error initializing camera. Check connection."));
@@ -87,6 +88,7 @@ void pbCamera::start()
                     } else {
                         emit testshotCaptured(testshot);
                     }
+                    mInitialized = true;
                 }
                 emit cameraInitialized(ret);
             }
