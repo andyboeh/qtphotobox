@@ -22,7 +22,7 @@
         <translation>Arbeite...</translation>
     </message>
     <message>
-        <location filename="../gui/assemblewidget.ui" line="20"/>
+        <location filename="../gui/assemblewidget.ui" line="33"/>
         <source>Assembling picture...</source>
         <translation>Füge Bilder zusammen...</translation>
     </message>
@@ -48,12 +48,12 @@
         <translation>Countdown</translation>
     </message>
     <message>
-        <location filename="../gui/countdownwidget.ui" line="20"/>
+        <location filename="../gui/countdownwidget.ui" line="26"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/countdownwidget.ui" line="39"/>
+        <location filename="../gui/countdownwidget.ui" line="45"/>
         <source>%vs</source>
         <translation>%vs</translation>
     </message>
@@ -89,10 +89,8 @@
 <context>
     <name>gpioWorker</name>
     <message>
-        <location filename="../gpio/gpioWorker.cxx" line="102"/>
-        <location filename="../gpio/gpioWorker.cxx" line="134"/>
         <source>Error initializing GPIO.</source>
-        <translation>Fehler beim Initialisieren des GPIO Moduls.</translation>
+        <translation type="vanished">Fehler beim Initialisieren des GPIO Moduls.</translation>
     </message>
 </context>
 <context>
@@ -162,15 +160,15 @@
 <context>
     <name>pbCamera</name>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="77"/>
+        <location filename="../camera/pbcamera.cxx" line="84"/>
         <source>Error initializing camera. Check connection.</source>
         <translation>Fehler beim Initialisieren der Kamera. Verbindung überprüfen.</translation>
     </message>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="86"/>
-        <location filename="../camera/pbcamera.cxx" line="101"/>
-        <location filename="../camera/pbcamera.cxx" line="115"/>
-        <location filename="../camera/pbcamera.cxx" line="135"/>
+        <location filename="../camera/pbcamera.cxx" line="93"/>
+        <location filename="../camera/pbcamera.cxx" line="109"/>
+        <location filename="../camera/pbcamera.cxx" line="123"/>
+        <location filename="../camera/pbcamera.cxx" line="142"/>
         <source>Error capturing image. Camera connected?</source>
         <translation>Fehler beim Aufnehmen des Bildes. Ist die Kamera angeschlossen?</translation>
     </message>
@@ -296,12 +294,12 @@
 <context>
     <name>printerWorker</name>
     <message>
-        <location filename="../printer/printer.cxx" line="48"/>
+        <location filename="../printer/printer.cxx" line="62"/>
         <source>Printer backend not found or unknown.</source>
         <translation>Druckermodul nicht gefunden oder unbekannt.</translation>
     </message>
     <message>
-        <location filename="../printer/printer.cxx" line="80"/>
+        <location filename="../printer/printer.cxx" line="94"/>
         <source>Error initializing printer. Is it turned on?</source>
         <translation>Fehler beim Initialisieren des Druckers. Ist er eingeschaltet?</translation>
     </message>
@@ -314,9 +312,30 @@
         <translation>Review</translation>
     </message>
     <message>
-        <location filename="../gui/reviewwidget.ui" line="20"/>
+        <location filename="../gui/reviewwidget.ui" line="26"/>
         <source>TextLabel</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>screensaverWidget</name>
+    <message>
+        <location filename="../gui/screensaverwidget.ui" line="14"/>
+        <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/screensaverwidget.ui" line="20"/>
+        <location filename="../gui/screensaverwidget.ui" line="27"/>
+        <location filename="../gui/screensaverwidget.ui" line="34"/>
+        <location filename="../gui/screensaverwidget.ui" line="41"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/screensaverwidget.cxx" line="15"/>
+        <source>Touch to continue...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -707,32 +726,62 @@
         <translation>Text in der Fußzeile</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="887"/>
+        <location filename="../gui/settingswidget.ui" line="882"/>
+        <source>Screensaver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="907"/>
+        <source>Text Line 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="914"/>
+        <source>Text Line 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="928"/>
+        <source>Text Line 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="938"/>
+        <source>Screensaver Timeout [seconds]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="945"/>
+        <source>Enable Screensaver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="971"/>
         <source>Save and Restart</source>
         <translation>Speichern und Neu starten</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="894"/>
+        <location filename="../gui/settingswidget.ui" line="978"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="901"/>
+        <location filename="../gui/settingswidget.ui" line="985"/>
         <source>Restore Defaults</source>
         <translation>Standardwerte Laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="395"/>
+        <location filename="../gui/settingswidget.cxx" line="411"/>
         <source>Open Background image</source>
         <translation>Hintergrundbild laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="396"/>
+        <location filename="../gui/settingswidget.cxx" line="412"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG Bilder (*.jpg)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="438"/>
+        <location filename="../gui/settingswidget.cxx" line="454"/>
         <source>Filters for Picture %1</source>
         <translation>Filter für Bild %1</translation>
     </message>

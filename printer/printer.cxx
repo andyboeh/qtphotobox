@@ -1,7 +1,13 @@
 #include "printer.h"
+#ifdef BUILD_SELPHY_WIFI
 #include "printer_selphy.h"
+#endif
+#ifdef BUILD_CUPS
 #include "printer_cups.h"
+#endif
+#ifdef BUILD_SELPHY_USB
 #include "printer_selphyusb.h"
+#endif
 #include "printJob.h"
 #include "settings.h"
 #include <QThread>
@@ -37,14 +43,22 @@ void printerWorker::start()
 {
     pbSettings &pbs = pbSettings::getInstance();
     QString backend = pbs.get("printer", "backend");
+#ifdef BUILD_SELPHY_WIFI
     if(backend == "selphy") {
         mPrinter = new printerSelphy();
-    } else if(backend == "cups") {
+    }
+#endif
+#ifdef BUILD_CUPS
+    if(backend == "cups") {
         mPrinter = new printerCups();
-    } else if(backend == "selphyusb") {
+    }
+#endif
+#ifdef BUILD_SELPHY_USB
+    if(backend == "selphyusb") {
         mPrinter = new printerSelphyUsb();
-    } else {
-        mPrinter = nullptr;
+    }
+#endif
+    if(!mPrinter) {
         emit printerError(tr("Printer backend not found or unknown."));
         emit finished();
         return;

@@ -3,7 +3,7 @@
 QWidget {
     background-color: transparent;
     color: #eeeeee;
-    font-family: AmaticSC, sans-serif;
+    font-family: Amatic SC, sans-serif;
     font-size: 50px;
 }
 

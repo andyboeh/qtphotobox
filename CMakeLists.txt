@@ -9,27 +9,125 @@ ENDIF(CMP0028)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 
-FIND_PACKAGE(Qt5Core)
-FIND_PACKAGE(Qt5Gui)
-FIND_PACKAGE(Qt5Widgets)
+FIND_PACKAGE(Qt5Core REQUIRED)
+FIND_PACKAGE(Qt5Gui REQUIRED)
+FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5DBus)
 FIND_PACKAGE(Qt5Network)
-FIND_PACKAGE(GPHOTO2 REQUIRED)
-FIND_PACKAGE(Cups REQUIRED)
-FIND_PACKAGE(LibUSB REQUIRED)
+FIND_PACKAGE(GPHOTO2)
+FIND_PACKAGE(Cups)
+FIND_PACKAGE(LibUSB)
 FIND_LIBRARY(PIGPIO_LIBRARY pigpiod_if2)
-find_package(Qt5LinguistTools)
+find_package(Qt5LinguistTools REQUIRED)
 
-include_directories(SYSTEM ${GPHOTO2_INCLUDE_DIRS})
-include_directories(${CUPS_INCLUDE_DIRS})
-include_directories(${LIBUSB_INCLUDE_DIRS})
-add_definitions(${GPHOTO2_DEFINITIONS})
+SET(TL_LIBRARIES
+    ${Qt5Core_LIBRARIES}
+    ${Qt5Gui_LIBRARIES}
+    ${Qt5Widgets_LIBRARIES}
+)
 
-get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
-get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
+INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${Qt5Gui_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
 
-SET(OWRT_INSTALL_RUNTIME_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${NAME}")
+IF(NOT Qt5Network_FOUND)
+	MESSAGE(STATUS "Not building Canon Selphy WiFi driver: Qt5Network not found.")
+	SET(BUILD_SELPHY_WIFI FALSE)
+ELSE()
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${Qt5Network_LIBRARIES}
+    )
+	add_definitions("-DBUILD_SELPHY_WIFI")
+	SET(BUILD_SELPHY_WIFI TRUE)
+ENDIF()
+
+IF(NOT Qt5Dbus_FOUND)
+    MESSAGE(STATUS "Not building support for waiting for removal device: Qt5DBus not found.")
+	SET(BUILD_WAIT_USB FALSE)
+ELSE()
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${Qt5Dbus_LIBRARIES}
+    )
+	SET(BUILD_WAIT_USB TRUE)
+	add_definitions("-DBUILD_WAIT_USB")
+ENDIF()
+
+IF(NOT GPHOTO2_FOUND)
+	MESSAGE(STATUS "Not building support for DSLR cameras: Gphoto2 not found.")
+	SET(BUILD_GPHOTO2 FALSE)
+ELSE()
+	SET(BUILD_GPHOTO2 TRUE)
+	add_definitions("-DBUILD_GPHOTO2")
+	SET(TL_LIBRARIES
+		${TL_LIBRARIES}
+		${GPHOTO2_LIBRARIES}
+	)
+ENDIF()
+
+IF(NOT Cups_FOUND)
+	MESSAGE(STATUS "Not building support for CUPS: CUPS not found.")
+	SET(BUILD_CUPS FALSE)
+ELSE()
+	SET(BUILD_CUPS TRUE)
+	add_definitions("-DBUILD_CUPS")
+	SET(TL_LIBRARIES
+		${TL_LIBRARIRES}
+		${CUPS_LIBRARIES}
+	)
+ENDIF()
+
+IF(NOT LIBUSB_FOUND)
+	MESSAGE(STATUS "Not building support for Canon Selphy USB driver: LibUSB not found.")
+	SET(BUILD_SELPHY_USB FALSE)
+ELSE()
+	SET(BUILD_SELPHY_USB TRUE)
+	add_definitions("-DBUILD_SELPHY_USB")
+	SET(TL_LIBRARIES
+		${TL_LIBRARIES}
+		${LIBUSB_LIBRARIES}
+	)
+ENDIF()
+
+IF(PIGPIO_LIBRARY STREQUAL "PIGPIO_LIBRARY-NOTFOUND")
+	MESSAGE(STATUS "Not building support for GPIO: pigpio not found.")
+	SET(BUILD_PIGPIO FALSE)
+ELSE()
+	SET(BUILD_PIGPIO TRUE)
+	add_definitions("-DBUILD_PIGPIO")
+	SET(TL_LIBRARIES
+		${TL_LIBRARIES}
+		${PIGPIO_LIBRARY}
+	)
+ENDIF()
+
+IF(BUILD_GPHOTO2)
+	include_directories(SYSTEM ${GPHOTO2_INCLUDE_DIRS})
+	add_definitions(${GPHOTO2_DEFINITIONS})
+ENDIF()
+
+IF(BUILD_CUPS)
+	include_directories(${CUPS_INCLUDE_DIRS})
+ENDIF()
+
+IF(BUILD_SELPHY_USB)
+	include_directories(${LIBUSB_INCLUDE_DIRS})
+ENDIF()
+
+IF(BUILD_SELPHY_WIFI)
+    INCLUDE_DIRECTORIES(${Qt5Network_INCLUDE_DIRS})
+ENDIF()
+
+IF(BUILD_WAIT_USB)
+    INCLUDE_DIRECTORIES(${Qt5Dbus_INCLUDE_DIRS})
+ENDIF()
+
+#get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
+#get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+#find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
+
+#SET(OWRT_INSTALL_RUNTIME_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${NAME}")
 
 INCLUDE_DIRECTORIES(${QT5_DIR})
 SET(QT_LIBRARIES
@@ -55,14 +153,9 @@ SET(${NAME}_SOURCES
   settings/settings.cxx
   camera/pbcamera.cxx
   camera/camera_interface.cxx
-  camera/camera_gphoto2.cxx
   camera/camera_dummy.cxx
-  gpio/gpioWorker.cxx
   printer/printer.cxx
   printer/printer_interface.cxx
-  printer/printer_selphy.cxx
-  printer/printer_selphyusb.cxx
-  printer/printer_cups.cxx
   printer/printJob.cxx
   statemachine/statemachine.cxx
   gui/initwidget.cxx
@@ -97,14 +190,9 @@ SET(${NAME}_HEADERS
   settings/settings.h
   camera/pbcamera.h
   camera/camera_interface.h
-  camera/camera_gphoto2.h
   camera/camera_dummy.h
-  gpio/gpioWorker.h
   printer/printer.h
   printer/printer_interface.h
-  printer/printer_cups.h
-  printer/printer_selphy.h
-  printer/printer_selphyusb.h
   printer/printJob.h
   statemachine/statemachine.h
   gui/errorwidget.h
@@ -167,6 +255,66 @@ SET(${NAME}_TRANSLATIONS
     translations/german.ts
     )
 
+IF(BUILD_SELPHY_USB)
+    SET(${NAME}_SOURCES
+        ${${NAME}_SOURCES}
+        printer/printer_selphyusb.cxx
+    )
+
+    SET(${NAME}_HEADERS
+        ${${NAME}_HEADERS}
+        printer/printer_selphyusb.h
+    )
+ENDIF()
+
+IF(BUILD_SELPHY_WIFI)
+    SET(${NAME}_SOURCES
+        ${${NAME}_SOURCES}
+        printer/printer_selphy.cxx
+    )
+
+    SET(${NAME}_HEADERS
+        ${${NAME}_HEADERS}
+        printer/printer_selphy.h
+    )
+ENDIF()
+
+IF(BUILD_GPHOTO2)
+    SET(${NAME}_SOURCES
+        ${${NAME}_SOURCES}
+        camera/camera_gphoto2.cxx
+    )
+
+    SET(${NAME}_HEADERS
+        ${${NAME}_HEADERS}
+        camera/camera_gphoto2.h
+    )
+ENDIF()
+
+IF(BUILD_PIGPIO)
+    SET(${NAME}_SOURCES
+        ${${NAME}_SOURCES}
+        gpio/gpioWorker.cxx
+    )
+
+    SET(${NAME}_HEADERS
+        ${${NAME}_HEADERS}
+        gpio/gpioWorker.h
+    )
+ENDIF()
+
+IF(BUILD_CUPS)
+    SET(${NAME}_SOURCES
+        ${${NAME}_SOURCES}
+        printer/printer_cups.cxx
+    )
+
+    SET(${NAME}_HEADERS
+        ${${NAME}_HEADERS}
+        printer/printer_cups.h
+    )
+ENDIF()
+
 IF(WIN32)
     SET(WIN32_DEFINE "WIN32")
 ELSE(WIN32)
@@ -181,7 +329,9 @@ SET(${NAME}_TRANSLATIONS_SRC
 QT5_WRAP_CPP(${NAME}_HEADERS_MOC ${${NAME}_HEADERS})
 QT5_WRAP_UI(${NAME}_HEADERS_UI ${${NAME}_UI})
 QT5_ADD_RESOURCES(${NAME}_RES_RCC ${${NAME}_RES})
-QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
+IF(BUILD_WAIT_USB)
+	QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
+ENDIF()
 QT5_CREATE_TRANSLATION(${NAME}_TRANSLATIONS_BIN ${${NAME}_TRANSLATIONS_SRC} ${${NAME}_TRANSLATIONS})
 add_custom_target(translations DEPENDS ${${NAME}_TRANSLATIONS_BIN})
 
@@ -213,13 +363,10 @@ ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
 )
 
 TARGET_LINK_LIBRARIES(${NAME}
-  ${QT_LIBRARIES}
-  ${GPHOTO2_LIBRARIES}
-  ${CUPS_LIBRARIES}
-  ${PIGPIO_LIBRARY}
-  ${LIBUSB_LIBRARIES}
+	${TL_LIBRARIES}
   )
 
+IF(FALSE)
 IF(WIN32)
     add_custom_command(TARGET ${NAME}
         POST_BUILD
@@ -267,3 +414,4 @@ IF(WIN32)
     #    )
     #endif(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
 ENDIF(WIN32)
+ENDIF()

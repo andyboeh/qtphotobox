@@ -1,5 +1,4 @@
 #include "pbcamera.h"
-#include "camera_gphoto2.h"
 #include "camera_dummy.h"
 #include "settings.h"
 #include "camera_interface.h"
@@ -7,6 +6,10 @@
 #include <QEventLoop>
 #include <QDebug>
 #include <QThread>
+
+#ifdef BUILD_GPHOTO2
+#include "camera_gphoto2.h"
+#endif
 
 pbCamera::pbCamera() {
     mCamera = nullptr;
@@ -44,11 +47,14 @@ void pbCamera::start()
     }
     int rotation = pbs.getInt("camera", "rotation");
 
+#ifdef BUILD_GPHOTO2
     if(backend == "gphoto2") {
         if(mCamera)
             delete mCamera;
         mCamera = new CameraGphoto2();
-    } else if(backend == "dummy") {
+    }
+#endif
+    if(backend == "dummy") {
         if(mCamera)
             delete mCamera;
         mCamera = new CameraDummy();
@@ -126,8 +132,7 @@ void pbCamera::start()
                 mCamera->setIdle();
             }
         } else if(command == "stopPreview") {
-            if(mLimitFps && mLimitTimer->isActive()) {
-                mLimitTimer->stop();
+            if(mLimitFps) {
                 mCamera->setIdle();
             }
         } else if(command == "captureImage") {
@@ -168,6 +173,9 @@ void pbCamera::startPreview()
 void pbCamera::stopPreview()
 {
     qDebug() << "stopPreview";
+    if(mLimitFps) {
+        mLimitTimer->stop();
+    }
     mCommandList.append("stopPreview");
 }
 

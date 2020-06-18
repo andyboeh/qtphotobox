@@ -281,6 +281,7 @@ void MainWindow::initThreads()
             mShowThread->start();
         }
     }
+#ifdef BUILD_PIGPIO
     if(pbs.getBool("gpio", "enable")) {
         if(!mGpioThread) {
             StateMachine &sm = StateMachine::getInstance();
@@ -297,6 +298,7 @@ void MainWindow::initThreads()
             mGpioThread->start();
         }
     }
+#endif
 }
 
 void MainWindow::loadSettingsToGui(bool showWindow)
@@ -575,7 +577,7 @@ int main(int argc, char *argv[]) {
         QFile fontFile(font);
         if(fontFile.exists()) {
             fontFile.open(QIODevice::ReadOnly);
-            db.addApplicationFontFromData(fontFile.readAll());
+            int id = db.addApplicationFontFromData(fontFile.readAll());
             fontFile.close();
         }
     }
@@ -602,6 +604,7 @@ int main(int argc, char *argv[]) {
     sm.addState("restart");
     sm.addState("screensaver");
 
+#ifdef BUILD_WAIT_USB
     if(pbs.getBool("storage", "wait_removable")) {
         sm.addTargetState("start", "waitremovable");
         sm.addTargetState("waitremovable", "init");
@@ -611,6 +614,9 @@ int main(int argc, char *argv[]) {
     } else {
         sm.addTargetState("start", "init");
     }
+#else
+    sm.addTargetState("start", "init");
+#endif
     sm.addTargetState("init", "idle");
     sm.addTargetState("archive", "idle");
     sm.addTargetState("idle", "greeter");

@@ -35,7 +35,17 @@ protected:
             return;
         }
         while(mCommandList.isEmpty()) {
+#ifndef Q_OS_WIN
             dispatcher->processEvents(QEventLoop::WaitForMoreEvents);
+#else
+            // This is a workaround as QEventLoop::WaitForMoreEvents doesn't
+            // seem to work on Windows
+            // Instead, we process all events and sleep for 1ms to keep CPU
+            // usage low.
+
+            dispatcher->processEvents(QEventLoop::AllEvents);
+            QThread::msleep(1);
+#endif
         }
     }
 

@@ -4,7 +4,9 @@
 #include <QObject>
 
 class QTimer;
+#ifdef BUILD_WAIT_USB
 class OrgFreedesktopDBusObjectManagerInterface;
+#endif
 
 class storageManager : public QObject
 {
@@ -20,18 +22,24 @@ public:
     QString getNextFilename(QString path, fileType type);
     QString getThumbnailStoragePath();
 public slots:
+#ifdef BUILD_WAIT_USB
     bool waitForRemovableDevice();
+#endif
 signals:
+#ifdef BUILD_WAIT_USB
     void removableDeviceDetected(QString path);
+#endif
 private:
     storageManager();
     ~storageManager();
+#ifdef BUILD_WAIT_USB
     QString getMountPath(QString device);
     QString mountDevice(QString device);
+    OrgFreedesktopDBusObjectManagerInterface *mInterface;
+#endif
     QString mMountPath;
     QString mStoragePath;
     QTimer *mMountTimer;
-    OrgFreedesktopDBusObjectManagerInterface *mInterface;
     QString getBaseDir();
     bool mUseRemovable;
     QStringList mIgnoreRemovable;

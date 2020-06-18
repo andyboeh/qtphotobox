@@ -1,12 +1,17 @@
 #include "storageManager.h"
 #include "settings.h"
+#ifdef BUILD_WAIT_USB
 #include "objectManager.h"
 #include <QtDBus/QtDBus>
+#endif
 #include <QTimer>
 #include <QStandardPaths>
 #include <QFileInfo>
 #include <QDateTime>
+#include <QDir>
+#include <QDebug>
 
+#ifdef BUILD_WAIT_USB
 // Custom type for unmarhsalling byte arrays
 typedef QList<unsigned char> dbus_ay;
 QString dbus_ay_toString(const dbus_ay &data) {
@@ -16,6 +21,7 @@ QString dbus_ay_toString(const dbus_ay &data) {
     return output;
 }
 Q_DECLARE_METATYPE(dbus_ay)
+#endif
 
 storageManager &storageManager::getInstance()
 {
@@ -23,6 +29,7 @@ storageManager &storageManager::getInstance()
     return instance;
 }
 
+#ifdef BUILD_WAIT_USB
 bool storageManager::waitForRemovableDevice()
 {
     QStringList devices;
@@ -85,7 +92,7 @@ bool storageManager::waitForRemovableDevice()
     }
     return false;
 }
-
+#endif
 QString storageManager::getPictureStoragePath()
 {
     return mStoragePath;
@@ -145,6 +152,7 @@ QString storageManager::getNextFilename(QString path, storageManager::fileType t
 
 storageManager::storageManager()
 {
+#ifdef BUILD_WAIT_USB
     qDBusRegisterMetaType<QMap<QString, QVariantMap>>();
     qDBusRegisterMetaType<QList<QPair<QString, QVariantMap>>>();
     qDBusRegisterMetaType<QByteArrayList>();
@@ -154,6 +162,7 @@ storageManager::storageManager()
     QMetaType::registerDebugStreamOperator<QList<QPair<QString, QVariantMap>>>();
     mInterface = new OrgFreedesktopDBusObjectManagerInterface("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2", QDBusConnection::systemBus());
     // If requested, poll every tsecond for new removable devices.
+#endif
     mMountTimer = new QTimer();
     mMountTimer->setSingleShot(false);
     mMountTimer->setInterval(1000);
@@ -183,9 +192,12 @@ storageManager::~storageManager()
 {
     mMountTimer->stop();
     mMountTimer->deleteLater();
+#ifdef BUILD_WAIT_USB
     mInterface->deleteLater();
+#endif
 }
 
+#ifdef BUILD_WAIT_USB
 QString storageManager::getMountPath(QString device)
 {
     QString ret;
@@ -224,5 +236,4 @@ QString storageManager::mountDevice(QString device)
         ret = reply.arguments().first().toString();
     return ret;
 }
-
-
+#endif
