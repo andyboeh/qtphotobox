@@ -20,7 +20,8 @@ it in a language I'm currently more fluent.
 Features
 --------
 
-  * Interface to Cameras via gphoto2
+  * Interface to Cameras via gphoto2 (Canon/Nikon DSLR)
+  * Interface to Cameras via QtMultimedia (Generic Webcams etc.)
   * Interface to printers via CUPS or an internal Canon Selphy backend (WiFi or USB)
   * GPIO-based LED control (PWM only)
   * Review and reprinting of stored images
@@ -48,11 +49,12 @@ Tested Configurations
   - Desktop Computer + Canon EOS 500D
   - Desktop Computer + Canon EOS 600D
   - Desktop Computer + Nikon D5100 (short testing only)
+  - Desktop Computer + Logitech HD UVC Camera (short testing only)
 
 TODO
 ----
 
- * Support Raspberry Pi Camera Module
+ * Support Raspberry Pi Camera Module (should work with the generic module if configured correctly)
  * Support Hardware Trigger Button (GPIO)
  * Auto-Upload to web service
 

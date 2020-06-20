@@ -14,6 +14,7 @@ FIND_PACKAGE(Qt5Gui REQUIRED)
 FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5DBus)
 FIND_PACKAGE(Qt5Network)
+FIND_PACKAGE(Qt5Multimedia)
 FIND_PACKAGE(GPHOTO2)
 FIND_PACKAGE(Cups)
 FIND_PACKAGE(LibUSB)
@@ -29,6 +30,19 @@ SET(TL_LIBRARIES
 #INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
 #INCLUDE_DIRECTORIES(${Qt5Gui_INCLUDE_DIRS})
 #INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
+
+IF(NOT Qt5Multimedia_FOUND)
+    MESSAGE(STATUS "Not building support for generic cameras: Qt5Multimedia not found.")
+    SET(BUILD_GENERIC_CAMERA FALSE)
+ELSE()
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${Qt5Multimedia_LIBRARIES}
+    )
+    add_definitions("-DBUILD_GENERIC_CAMERA")
+    #INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
+    SET(BUILD_GENERIC_CAMERA TRUE)
+ENDIF()
 
 IF(NOT Qt5Network_FOUND)
     MESSAGE(STATUS "Not building Canon Selphy WiFi driver: Qt5Network not found.")
@@ -244,6 +258,19 @@ IF(BUILD_SELPHY_USB)
     SET(${NAME}_HEADERS
         ${${NAME}_HEADERS}
         printer/printer_selphyusb.h
+    )
+ENDIF()
+
+IF(BUILD_GENERIC_CAMERA)
+    SET(${NAME}_SOURCES
+        ${${NAME}_SOURCES}
+        camera/camera_generic.cxx
+        camera/camera_generic_surface.cxx
+    )
+    SET(${NAME}_HEADERS
+        ${${NAME}_HEADERS}
+        camera/camera_generic.h
+        camera/camera_generic_surface.h
     )
 ENDIF()
 

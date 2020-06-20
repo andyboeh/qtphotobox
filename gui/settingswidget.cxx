@@ -31,6 +31,7 @@ settingsWidget::settingsWidget(QFrame *parent) :
 
     mCameraBackendMapping.insert("gphoto2", "Gphoto2");
     mCameraBackendMapping.insert("dummy", "Dummy");
+    mCameraBackendMapping.insert("generic", "Generic");
 
     mPrinterBackendMapping.insert("selphy", "Selphy (WiFi)");
     mPrinterBackendMapping.insert("selphyusb", "Selphy (USB)");

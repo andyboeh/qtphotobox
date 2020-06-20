@@ -11,6 +11,10 @@
 #include "camera_gphoto2.h"
 #endif
 
+#ifdef BUILD_GENERIC_CAMERA
+#include "camera_generic.h"
+#endif
+
 pbCamera::pbCamera() {
     mCamera = nullptr;
     mLimitFps = false;
@@ -52,6 +56,13 @@ void pbCamera::start()
         if(mCamera)
             delete mCamera;
         mCamera = new CameraGphoto2();
+    }
+#endif
+#ifdef BUILD_GENERIC_CAMERA
+    if(backend == "generic") {
+        if(mCamera)
+            delete mCamera;
+        mCamera = new CameraGeneric();
     }
 #endif
     if(backend == "dummy") {

@@ -102,6 +102,7 @@ void pbSettings::initDefaultConfg()
     screensaverSettings.insert("text3", "www.aboehler.at");
 
     cameraSettings.insert("backend", "gphoto2");
+    cameraSettings.insert("name", "UVC Camera");
     cameraSettings.insert("rotation", 0);
     cameraSettings.insert("fps", 0);
 

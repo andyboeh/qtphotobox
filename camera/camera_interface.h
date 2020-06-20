@@ -2,8 +2,10 @@
 #define _CAMERA_INTERFACE_H
 
 #include <QPixmap>
+#include <QObject>
 
-class CameraInterface {
+class CameraInterface : public QObject{
+    Q_OBJECT
 public:
     CameraInterface();
     virtual ~CameraInterface();
