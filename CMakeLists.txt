@@ -26,101 +26,87 @@ SET(TL_LIBRARIES
     ${Qt5Widgets_LIBRARIES}
 )
 
-INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${Qt5Gui_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
+#INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
+#INCLUDE_DIRECTORIES(${Qt5Gui_INCLUDE_DIRS})
+#INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
 
 IF(NOT Qt5Network_FOUND)
-	MESSAGE(STATUS "Not building Canon Selphy WiFi driver: Qt5Network not found.")
-	SET(BUILD_SELPHY_WIFI FALSE)
+    MESSAGE(STATUS "Not building Canon Selphy WiFi driver: Qt5Network not found.")
+    SET(BUILD_SELPHY_WIFI FALSE)
 ELSE()
     SET(TL_LIBRARIES
         ${TL_LIBRARIES}
         ${Qt5Network_LIBRARIES}
     )
-	add_definitions("-DBUILD_SELPHY_WIFI")
-	SET(BUILD_SELPHY_WIFI TRUE)
+    add_definitions("-DBUILD_SELPHY_WIFI")
+    #INCLUDE_DIRECTORIES(${Qt5Network_INCLUDE_DIRS})
+    SET(BUILD_SELPHY_WIFI TRUE)
 ENDIF()
 
-IF(NOT Qt5Dbus_FOUND)
+IF(NOT Qt5DBus_FOUND)
     MESSAGE(STATUS "Not building support for waiting for removal device: Qt5DBus not found.")
-	SET(BUILD_WAIT_USB FALSE)
+    SET(BUILD_WAIT_USB FALSE)
 ELSE()
     SET(TL_LIBRARIES
-        ${TL_LIBRARIES}
-        ${Qt5Dbus_LIBRARIES}
+       ${TL_LIBRARIES}
+       ${Qt5DBus_LIBRARIES}
     )
-	SET(BUILD_WAIT_USB TRUE)
-	add_definitions("-DBUILD_WAIT_USB")
+    MESSAGE(STATUS ${TL_LIBRARIES})
+    SET(BUILD_WAIT_USB TRUE)
+    add_definitions("-DBUILD_WAIT_USB")
+    #INCLUDE_DIRECTORIES(${Qt5DBus_INCLUDE_DIRS})
 ENDIF()
 
 IF(NOT GPHOTO2_FOUND)
-	MESSAGE(STATUS "Not building support for DSLR cameras: Gphoto2 not found.")
-	SET(BUILD_GPHOTO2 FALSE)
+    MESSAGE(STATUS "Not building support for DSLR cameras: Gphoto2 not found.")
+    SET(BUILD_GPHOTO2 FALSE)
 ELSE()
-	SET(BUILD_GPHOTO2 TRUE)
-	add_definitions("-DBUILD_GPHOTO2")
-	SET(TL_LIBRARIES
-		${TL_LIBRARIES}
-		${GPHOTO2_LIBRARIES}
-	)
+    SET(BUILD_GPHOTO2 TRUE)
+    add_definitions("-DBUILD_GPHOTO2")
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${GPHOTO2_LIBRARIES}
+    )
+    include_directories(SYSTEM ${GPHOTO2_INCLUDE_DIRS})
+    add_definitions(${GPHOTO2_DEFINITIONS})
 ENDIF()
 
 IF(NOT Cups_FOUND)
-	MESSAGE(STATUS "Not building support for CUPS: CUPS not found.")
-	SET(BUILD_CUPS FALSE)
+    MESSAGE(STATUS "Not building support for CUPS: CUPS not found.")
+    SET(BUILD_CUPS FALSE)
 ELSE()
-	SET(BUILD_CUPS TRUE)
-	add_definitions("-DBUILD_CUPS")
-	SET(TL_LIBRARIES
-		${TL_LIBRARIRES}
-		${CUPS_LIBRARIES}
-	)
+    SET(BUILD_CUPS TRUE)
+    include_directories(${CUPS_INCLUDE_DIRS})
+    add_definitions("-DBUILD_CUPS")
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${CUPS_LIBRARIES}
+    )
 ENDIF()
 
 IF(NOT LIBUSB_FOUND)
-	MESSAGE(STATUS "Not building support for Canon Selphy USB driver: LibUSB not found.")
-	SET(BUILD_SELPHY_USB FALSE)
+    MESSAGE(STATUS "Not building support for Canon Selphy USB driver: LibUSB not found.")
+    SET(BUILD_SELPHY_USB FALSE)
 ELSE()
-	SET(BUILD_SELPHY_USB TRUE)
-	add_definitions("-DBUILD_SELPHY_USB")
-	SET(TL_LIBRARIES
-		${TL_LIBRARIES}
-		${LIBUSB_LIBRARIES}
-	)
+    SET(BUILD_SELPHY_USB TRUE)
+    add_definitions("-DBUILD_SELPHY_USB")
+    include_directories(${LIBUSB_INCLUDE_DIRS})
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${LIBUSB_LIBRARIES}
+    )
 ENDIF()
 
 IF(PIGPIO_LIBRARY STREQUAL "PIGPIO_LIBRARY-NOTFOUND")
-	MESSAGE(STATUS "Not building support for GPIO: pigpio not found.")
-	SET(BUILD_PIGPIO FALSE)
+    MESSAGE(STATUS "Not building support for GPIO: pigpio not found.")
+    SET(BUILD_PIGPIO FALSE)
 ELSE()
-	SET(BUILD_PIGPIO TRUE)
-	add_definitions("-DBUILD_PIGPIO")
-	SET(TL_LIBRARIES
-		${TL_LIBRARIES}
-		${PIGPIO_LIBRARY}
-	)
-ENDIF()
-
-IF(BUILD_GPHOTO2)
-	include_directories(SYSTEM ${GPHOTO2_INCLUDE_DIRS})
-	add_definitions(${GPHOTO2_DEFINITIONS})
-ENDIF()
-
-IF(BUILD_CUPS)
-	include_directories(${CUPS_INCLUDE_DIRS})
-ENDIF()
-
-IF(BUILD_SELPHY_USB)
-	include_directories(${LIBUSB_INCLUDE_DIRS})
-ENDIF()
-
-IF(BUILD_SELPHY_WIFI)
-    INCLUDE_DIRECTORIES(${Qt5Network_INCLUDE_DIRS})
-ENDIF()
-
-IF(BUILD_WAIT_USB)
-    INCLUDE_DIRECTORIES(${Qt5Dbus_INCLUDE_DIRS})
+    SET(BUILD_PIGPIO TRUE)
+    add_definitions("-DBUILD_PIGPIO")
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${PIGPIO_LIBRARY}
+    )
 ENDIF()
 
 #get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
@@ -129,13 +115,7 @@ ENDIF()
 
 #SET(OWRT_INSTALL_RUNTIME_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${NAME}")
 
-INCLUDE_DIRECTORIES(${QT5_DIR})
-SET(QT_LIBRARIES
-  ${Qt5Gui_LIBRARIES}
-  ${Qt5Widgets_LIBRARIES}
-  ${Qt5Network_LIBRARIES}
-  ${Qt5DBus_LIBRARIES}
-)
+#INCLUDE_DIRECTORIES(${QT5_DIR})
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
     camera
@@ -330,7 +310,7 @@ QT5_WRAP_CPP(${NAME}_HEADERS_MOC ${${NAME}_HEADERS})
 QT5_WRAP_UI(${NAME}_HEADERS_UI ${${NAME}_UI})
 QT5_ADD_RESOURCES(${NAME}_RES_RCC ${${NAME}_RES})
 IF(BUILD_WAIT_USB)
-	QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
+    QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
 ENDIF()
 QT5_CREATE_TRANSLATION(${NAME}_TRANSLATIONS_BIN ${${NAME}_TRANSLATIONS_SRC} ${${NAME}_TRANSLATIONS})
 add_custom_target(translations DEPENDS ${${NAME}_TRANSLATIONS_BIN})
@@ -362,9 +342,11 @@ ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
   ${${NAME}_TRANSLATIONS_BIN}
 )
 
+MESSAGE(STATUS ${TL_LIBRARIES})
+
 TARGET_LINK_LIBRARIES(${NAME}
-	${TL_LIBRARIES}
-  )
+    ${TL_LIBRARIES}
+)
 
 IF(FALSE)
 IF(WIN32)

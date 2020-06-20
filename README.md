@@ -40,6 +40,22 @@ Raspberry Pi 3 and 4 running Raspbian buster. Quite a number of packages need to
 since the software has to be compiled from scratch. 
 The software runs on Linux only due to the availability of some libraries.
 
+Tested Configurations
+---------------------
+
+  - Raspberry Pi 3B + Canon EOS 450D + External Flash + 800x480 Official Touchscreen
+  - Raspberry Pi 4 (2GB) + Canon EOS 1100D + External Flash + 1024x600 Touchscreen + PWM LEDs
+  - Desktop Computer + Canon EOS 500D
+  - Desktop Computer + Canon EOS 600D
+  - Desktop Computer + Nikon D5100 (short testing only)
+
+TODO
+----
+
+ * Support Raspberry Pi Camera Module
+ * Support Hardware Trigger Button (GPIO)
+ * Auto-Upload to web service
+
 Installation
 ------------
 
