@@ -125,6 +125,7 @@ void MainWindow::changeState(QString name)
     } else if(name == "restart") {
         qApp->quit();
         QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+#ifdef BUILD_WAIT_USB
     } else if(name == "waitremovable") {
         delete mCurrentWidget;
         mCurrentWidget = new waitRemovableWidget();
@@ -133,6 +134,7 @@ void MainWindow::changeState(QString name)
         connect(&stm, SIGNAL(removableDeviceDetected(QString)), this, SLOT(removableDeviceDetected(QString)));
         connect(this, SIGNAL(waitForRemovableDevice()), &stm, SLOT(waitForRemovableDevice()));
         emit waitForRemovableDevice();
+#endif
     } else if(name == "init") {
         delete mCurrentWidget;
         mCurrentWidget = new initWidget();
@@ -588,7 +590,9 @@ int main(int argc, char *argv[]) {
     }
 
     sm.addState("start");
+#ifdef BUILD_WAIT_USB
     sm.addState("waitremovable");
+#endif
     sm.addState("init");
     sm.addState("settings");
     sm.addState("idle");

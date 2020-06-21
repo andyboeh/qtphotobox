@@ -80,12 +80,14 @@ QPixmap CameraGeneric::getPreviewImage()
 
 QPixmap CameraGeneric::getCaptureImage()
 {
+    qDebug() << "getCaptureImage";
     mCamera->setCaptureMode(QCamera::CaptureStillImage);
     mCamera->start();
     QEventLoop loop;
     QTimer timeout;
     timeout.setSingleShot(true);
     timeout.setInterval(10000);
+    timeout.start();
     connect(this, SIGNAL(newImageCaptured()), &loop, SLOT(quit()));
     connect(&timeout, SIGNAL(timeout()), &loop, SLOT(quit()));
     loop.exec();
@@ -94,6 +96,7 @@ QPixmap CameraGeneric::getCaptureImage()
 }
 
 void CameraGeneric::readyForCaptureChanged(bool state) {
+    qDebug() << "readyForCaptureChanged";
     if(state) {
         mCamera->searchAndLock();
         mCapture->capture();

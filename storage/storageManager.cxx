@@ -93,6 +93,7 @@ bool storageManager::waitForRemovableDevice()
     return false;
 }
 #endif
+
 QString storageManager::getPictureStoragePath()
 {
     return mStoragePath;

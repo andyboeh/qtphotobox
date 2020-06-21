@@ -21,12 +21,12 @@ public:
     QString getRemovableStoragePath();
     QString getNextFilename(QString path, fileType type);
     QString getThumbnailStoragePath();
-public slots:
 #ifdef BUILD_WAIT_USB
+public slots:
     bool waitForRemovableDevice();
 #endif
-signals:
 #ifdef BUILD_WAIT_USB
+signals:
     void removableDeviceDetected(QString path);
 #endif
 private:
