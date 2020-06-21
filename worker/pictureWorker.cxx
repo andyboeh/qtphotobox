@@ -175,6 +175,34 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                     qDebug() << "Applying rotation: " << angle;
                     QTransform transform = QTransform().rotate(angle);
                     imageToDraw = imageToDraw.transformed(transform);
+                } else if(op == "crop") {
+                    qDebug() << "Applying crop";
+                    int x = 0;
+                    int y = 0;
+                    int w = imageToDraw.width();
+                    int h = imageToDraw.height();
+                    for(int i=1; i<filterArgs.size(); i++) {
+                        QStringList opArgs = filterArgs.at(i).split("=");
+                        int param = opArgs.at(1).toInt();
+                        if(opArgs.at(0) == "x") {
+                            x = param;
+                        } else if(opArgs.at(0) == "y") {
+                            y = param;
+                        } else if(opArgs.at(0) == "w") {
+                            w = param;
+                        } else if(opArgs.at(0) == "h") {
+                            h = param;
+                        }
+                    }
+                    if(x > imageToDraw.width())
+                        x = imageToDraw.width();
+                    if(y > imageToDraw.height())
+                        y = imageToDraw.height();
+                    if(w > x + imageToDraw.width())
+                        w = imageToDraw.width() - x;
+                    if(h > y + imageToDraw.height())
+                        h = imageToDraw.height() - y;
+                    imageToDraw = imageToDraw.copy(x, y, w, h);
                 }
             }
             if(dx < 0)

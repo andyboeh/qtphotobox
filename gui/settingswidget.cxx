@@ -7,6 +7,9 @@
 #include <QSpacerItem>
 #include <QFileDialog>
 #include <QDebug>
+#ifdef BUILD_GENERIC_CAMERA
+#include "camera_generic.h"
+#endif
 
 settingsWidget::settingsWidget(QFrame *parent) :
     QFrame(parent),
@@ -29,13 +32,23 @@ settingsWidget::settingsWidget(QFrame *parent) :
     mRotationMapping.insert(180, "180º");
     mRotationMapping.insert(270, "270º");
 
+#ifdef BUILD_GPHOTO2
     mCameraBackendMapping.insert("gphoto2", "Gphoto2");
+#endif
     mCameraBackendMapping.insert("dummy", "Dummy");
+#ifdef BUILD_GENERIC_CAMERA
     mCameraBackendMapping.insert("generic", "Generic");
+#endif
 
+#ifdef BUILD_SELPHY_WIFI
     mPrinterBackendMapping.insert("selphy", "Selphy (WiFi)");
+#endif
+#ifdef BUILD_SELPHY_USB
     mPrinterBackendMapping.insert("selphyusb", "Selphy (USB)");
+#endif
+#ifdef BUILD_CUPS
     mPrinterBackendMapping.insert("cups", "CUPS");
+#endif
 
     loadFromSettings();
 }
@@ -82,6 +95,8 @@ void settingsWidget::loadFromSettings()
     QString style = pbs.get("gui", "style");
     ui->cmbStyle->setCurrentText(mStyleMapping.value(style));
 
+    ui->cmbLanguage->clear();
+    ui->cmbLanguage->addItems(mLanguageMapping.values());
     QString language = pbs.get("gui", "language");
     ui->cmbLanguage->setCurrentText(mLanguageMapping.value(language));
 
@@ -98,11 +113,22 @@ void settingsWidget::loadFromSettings()
     else
         ui->chkAllowReprint->setChecked(Qt::Unchecked);
 
+    ui->cmbBackend->clear();
+    ui->cmbBackend->addItems(mCameraBackendMapping.values());
     QString camBackend = pbs.get("camera", "backend");
     ui->cmbBackend->setCurrentText(mCameraBackendMapping.value(camBackend));
     ui->spinFps->setValue(pbs.getInt("camera", "fps"));
     int rot = pbs.getInt("camera", "rotation");
     ui->cmbRotation->setCurrentText(mRotationMapping.value(rot));
+#ifdef BUILD_GENERIC_CAMERA
+    QString camName = pbs.get("camera", "name");
+    QStringList camNames = CameraGeneric::getCameraNames();
+    ui->cmbCameraDevice->clear();
+    ui->cmbCameraDevice->addItems(camNames);
+    if(camNames.contains(camName)) {
+        ui->cmbCameraDevice->setCurrentText(camName);
+    }
+#endif
 
     if(pbs.getBool("gpio", "enable")) {
         ui->chkEnableGPIO->setChecked(Qt::Checked);
@@ -148,6 +174,8 @@ void settingsWidget::loadFromSettings()
     ui->spinPaperWidth->setValue(pbs.getInt("printer", "width"));
     ui->spinPaperHeight->setValue(pbs.getInt("printer", "height"));
     ui->spinMaxCopies->setValue(pbs.getInt("printer", "max_copies"));
+    ui->cmbPrinterBackend->clear();
+    ui->cmbPrinterBackend->addItems(mPrinterBackendMapping.values());
     QString printBackend = pbs.get("printer", "backend");
     ui->cmbPrinterBackend->setCurrentText(mPrinterBackendMapping.value(printBackend));
     ui->editPrinterIP->setText(pbs.get("printer", "ip"));
@@ -234,6 +262,9 @@ void settingsWidget::saveToSettings()
     pbs.setBool("archive", "allow_reprint", ui->chkAllowReprint->isChecked());
 
     pbs.set("camera", "backend", mCameraBackendMapping.key(ui->cmbBackend->currentText()));
+#ifdef BUILD_GENERIC_CAMERA
+    pbs.set("camera", "name", ui->cmbCameraDevice->currentText());
+#endif
 
     pbs.setInt("camera", "fps", ui->spinFps->value());
     pbs.setInt("camera", "rotation", mRotationMapping.key(ui->cmbRotation->currentText()));
@@ -501,4 +532,13 @@ void settingsWidget::on_chkEnableScreensaver_stateChanged(int arg1)
     ui->editScreensaver2->setEnabled(enabled);
     ui->editScreensaver3->setEnabled(enabled);
     ui->spinScreensaverTimeout->setEnabled(enabled);
+}
+
+void settingsWidget::on_cmbBackend_currentIndexChanged(const QString &arg1)
+{
+    if(mCameraBackendMapping.key(arg1) == "generic") {
+        ui->cmbCameraDevice->setEnabled(true);
+    } else {
+        ui->cmbCameraDevice->setEnabled(false);
+    }
 }

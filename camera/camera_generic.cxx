@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QCameraImageCapture>
 #include <QEventLoop>
+#include <QTimer>
 
 CameraGeneric::CameraGeneric()
 {
@@ -82,7 +83,11 @@ QPixmap CameraGeneric::getCaptureImage()
     mCamera->setCaptureMode(QCamera::CaptureStillImage);
     mCamera->start();
     QEventLoop loop;
+    QTimer timeout;
+    timeout.setSingleShot(true);
+    timeout.setInterval(10000);
     connect(this, SIGNAL(newImageCaptured()), &loop, SLOT(quit()));
+    connect(&timeout, SIGNAL(timeout()), &loop, SLOT(quit()));
     loop.exec();
     mCamera->stop();
     return mLastImage;
@@ -110,4 +115,14 @@ void CameraGeneric::setActive()
 {
     mCamera->setCaptureMode(QCamera::CaptureViewfinder);
     mCamera->start();
+}
+
+QStringList CameraGeneric::getCameraNames()
+{
+    QStringList ret;
+    QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
+    for(int i=0; i<cameras.length(); i++) {
+        ret.append(cameras.at(i).description());
+    }
+    return ret;
 }

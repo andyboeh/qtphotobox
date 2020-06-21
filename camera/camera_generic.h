@@ -19,6 +19,7 @@ public:
     QPixmap getCaptureImage();
     void setIdle();
     void setActive();
+    static QStringList getCameraNames();
 private:
     QCamera* mCamera;
     QCameraImageCapture *mCapture;

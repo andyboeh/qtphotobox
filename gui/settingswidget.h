@@ -54,6 +54,8 @@ private slots:
     void changeEvent(QEvent *event);
     void on_chkEnableScreensaver_stateChanged(int arg1);
 
+    void on_cmbBackend_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::settingsWidget *ui;
     QMap<QString, QString> mStyleMapping;
