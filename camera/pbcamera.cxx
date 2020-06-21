@@ -49,6 +49,8 @@ void pbCamera::start()
     pbSettings &pbs = pbSettings::getInstance();
     QString captureBackend = pbs.get("camera", "capturebackend");
     QString previewBackend = pbs.get("camera", "previewbackend");
+    QString previewName = pbs.get("camera", "previewname");
+    QString captureName = pbs.get("camera", "capturename");
 
     bool flipPreview = pbs.getBool("camera", "previewflip");
     bool flipCapture = pbs.getBool("camera", "captureflip");
@@ -74,6 +76,7 @@ void pbCamera::start()
         if(mPreviewCamera)
             delete mPreviewCamera;
         mPreviewCamera = new CameraGeneric();
+        mPreviewCamera->setCameraName(previewName);
     }
 #endif
     if(previewBackend == "dummy") {
@@ -82,7 +85,20 @@ void pbCamera::start()
         mPreviewCamera = new CameraDummy();
     }
 
+#ifdef BUILD_GENERIC_CAMERA
+    if(captureBackend == "generic" && previewBackend == "generic") {
+        if(mCaptureCamera)
+            delete mCaptureCamera;
+        if(captureName != previewName) {
+            mCaptureCamera = new CameraGeneric();
+            mCaptureCamera->setCameraName(captureName);
+        } else {
+            mCaptureCamera = mPreviewCamera;
+        }
+    } else if(captureBackend == previewBackend) {
+#else
     if(captureBackend == previewBackend) {
+#endif
         if(mCaptureCamera)
             delete mCaptureCamera;
         mCaptureCamera = mPreviewCamera;
@@ -99,6 +115,7 @@ void pbCamera::start()
             if(mCaptureCamera)
                 delete mCaptureCamera;
             mCaptureCamera = new CameraGeneric();
+            mCaptureCamera->setCameraName(captureName);
         }
 #endif
         if(captureBackend == "dummy") {

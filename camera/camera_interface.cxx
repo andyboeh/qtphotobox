@@ -34,3 +34,8 @@ void CameraInterface::setIdle()
 {
 
 }
+
+void CameraInterface::setCameraName(QString name)
+{
+    mCameraName = name;
+}

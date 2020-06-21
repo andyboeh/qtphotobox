@@ -14,6 +14,9 @@ public:
     virtual QPixmap getCaptureImage();
     virtual void setActive();
     virtual void setIdle();
+    virtual void setCameraName(QString name);
+protected:
+    QString mCameraName;
 };
 
 #endif //_CAMERA_INTERFACE_H

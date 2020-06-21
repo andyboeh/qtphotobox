@@ -32,8 +32,6 @@ CameraGeneric::~CameraGeneric()
 
 bool CameraGeneric::initCamera()
 {
-    pbSettings &settings = pbSettings::getInstance();
-    QString name = settings.get("camera", "name");
     QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
     int camid = 0;
 
@@ -41,9 +39,9 @@ bool CameraGeneric::initCamera()
         return false;
     }
 
-    if(!name.isEmpty()) {
+    if(!mCameraName.isEmpty()) {
         for(int i=0; i<cameras.length(); i++) {
-            if(cameras.at(i).description().contains(name)) {
+            if(cameras.at(i).description().contains(mCameraName)) {
                 qDebug() << "Found camera: " << cameras.at(i).description();
                 camid = i;
                 break;
@@ -119,7 +117,7 @@ bool CameraGeneric::waitForActiveState() {
         return true;
 
     QEventLoop loop;
-    connect(mCamera, SIGNAL(statusChanged(QCamera::Status)), &loop, SLOT(quit));
+    connect(mCamera, SIGNAL(statusChanged(QCamera::Status)), &loop, SLOT(quit()));
     loop.exec();
     status = mCamera->status();
     if(status == QCamera::ActiveStatus)
@@ -139,7 +137,6 @@ void CameraGeneric::setActive()
     mCamera->setCaptureMode(QCamera::CaptureViewfinder);
     mCamera->start();
     waitForActiveState();
-    qDebug() << "now active";
 }
 
 QStringList CameraGeneric::getCameraNames()
