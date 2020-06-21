@@ -54,7 +54,9 @@ private slots:
     void changeEvent(QEvent *event);
     void on_chkEnableScreensaver_stateChanged(int arg1);
 
-    void on_cmbBackend_currentIndexChanged(const QString &arg1);
+    void on_cmbCaptureBackend_currentIndexChanged(const QString &arg1);
+
+    void on_cmbPreviewBackend_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::settingsWidget *ui;

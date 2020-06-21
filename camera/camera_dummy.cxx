@@ -2,7 +2,7 @@
 
 CameraDummy::CameraDummy()
 {
-
+    mHue = 0;
 }
 
 CameraDummy::~CameraDummy()

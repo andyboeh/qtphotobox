@@ -113,20 +113,41 @@ void settingsWidget::loadFromSettings()
     else
         ui->chkAllowReprint->setChecked(Qt::Unchecked);
 
-    ui->cmbBackend->clear();
-    ui->cmbBackend->addItems(mCameraBackendMapping.values());
-    QString camBackend = pbs.get("camera", "backend");
-    ui->cmbBackend->setCurrentText(mCameraBackendMapping.value(camBackend));
+    ui->cmbCaptureBackend->clear();
+    ui->cmbCaptureBackend->addItems(mCameraBackendMapping.values());
+    QString camBackend = pbs.get("camera", "capturebackend");
+    ui->cmbCaptureBackend->setCurrentText(mCameraBackendMapping.value(camBackend));
+    QString previewBackend = pbs.get("camera", "previewbackend");
+    ui->cmbPreviewBackend->clear();
+    ui->cmbPreviewBackend->addItems(mCameraBackendMapping.values());
+    ui->cmbPreviewBackend->setCurrentText(mCameraBackendMapping.value(previewBackend));
     ui->spinFps->setValue(pbs.getInt("camera", "fps"));
-    int rot = pbs.getInt("camera", "rotation");
-    ui->cmbRotation->setCurrentText(mRotationMapping.value(rot));
+    int capturerot = pbs.getInt("camera", "capturerotation");
+    int previewrot = pbs.getInt("camera", "previewrotation");
+    ui->cmbCaptureRotation->setCurrentText(mRotationMapping.value(capturerot));
+    ui->cmbPreviewRotation->setCurrentText(mRotationMapping.value(previewrot));
+    if(pbs.getBool("camera", "captureflip"))
+        ui->chkFlipCapture->setChecked(Qt::Checked);
+    else
+        ui->chkFlipCapture->setChecked(Qt::Unchecked);
+    if(pbs.getBool("camera", "previewflip"))
+        ui->chkFlipPreview->setChecked(Qt::Checked);
+    else
+        ui->chkFlipPreview->setChecked(Qt::Unchecked);
+
 #ifdef BUILD_GENERIC_CAMERA
-    QString camName = pbs.get("camera", "name");
+    QString camName = pbs.get("camera", "capturename");
     QStringList camNames = CameraGeneric::getCameraNames();
-    ui->cmbCameraDevice->clear();
-    ui->cmbCameraDevice->addItems(camNames);
+    ui->cmbCaptureCamera->clear();
+    ui->cmbCaptureCamera->addItems(camNames);
     if(camNames.contains(camName)) {
-        ui->cmbCameraDevice->setCurrentText(camName);
+        ui->cmbCaptureCamera->setCurrentText(camName);
+    }
+    QString previewName = pbs.get("camera", "previewname");
+    ui->cmbPreviewCamera->clear();
+    ui->cmbPreviewCamera->addItems(camNames);
+    if(camNames.contains(previewName)) {
+        ui->cmbPreviewCamera->setCurrentText(previewName);
     }
 #endif
 
@@ -261,13 +282,20 @@ void settingsWidget::saveToSettings()
     pbs.setBool("archive", "enable", ui->chkEnableArchive->isChecked());
     pbs.setBool("archive", "allow_reprint", ui->chkAllowReprint->isChecked());
 
-    pbs.set("camera", "backend", mCameraBackendMapping.key(ui->cmbBackend->currentText()));
+    pbs.set("camera", "capturebackend", mCameraBackendMapping.key(ui->cmbCaptureBackend->currentText()));
 #ifdef BUILD_GENERIC_CAMERA
-    pbs.set("camera", "name", ui->cmbCameraDevice->currentText());
+    pbs.set("camera", "capturename", ui->cmbCaptureCamera->currentText());
+#endif
+    pbs.set("camera", "previewbackend", mCameraBackendMapping.key(ui->cmbPreviewBackend->currentText()));
+#ifdef BUILD_GENERIC_CAMERA
+    pbs.set("camera", "previewname", ui->cmbPreviewCamera->currentText());
 #endif
 
     pbs.setInt("camera", "fps", ui->spinFps->value());
-    pbs.setInt("camera", "rotation", mRotationMapping.key(ui->cmbRotation->currentText()));
+    pbs.setInt("camera", "capturerotation", mRotationMapping.key(ui->cmbCaptureRotation->currentText()));
+    pbs.setInt("camera", "previewrotation", mRotationMapping.key(ui->cmbPreviewRotation->currentText()));
+    pbs.setBool("camera", "captureflip", ui->chkFlipCapture->isChecked());
+    pbs.setBool("camera", "previewflip", ui->chkFlipPreview->isChecked());
 
     pbs.setBool("gpio", "enable", ui->chkEnableGPIO->isChecked());
 
@@ -534,11 +562,20 @@ void settingsWidget::on_chkEnableScreensaver_stateChanged(int arg1)
     ui->spinScreensaverTimeout->setEnabled(enabled);
 }
 
-void settingsWidget::on_cmbBackend_currentIndexChanged(const QString &arg1)
+void settingsWidget::on_cmbCaptureBackend_currentIndexChanged(const QString &arg1)
 {
     if(mCameraBackendMapping.key(arg1) == "generic") {
-        ui->cmbCameraDevice->setEnabled(true);
+        ui->cmbCaptureCamera->setEnabled(true);
     } else {
-        ui->cmbCameraDevice->setEnabled(false);
+        ui->cmbCaptureCamera->setEnabled(false);
+    }
+}
+
+void settingsWidget::on_cmbPreviewBackend_currentIndexChanged(const QString &arg1)
+{
+    if(mCameraBackendMapping.key(arg1) == "generic") {
+        ui->cmbPreviewCamera->setEnabled(true);
+    } else {
+        ui->cmbPreviewCamera->setEnabled(false);
     }
 }

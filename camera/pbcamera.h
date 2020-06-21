@@ -28,7 +28,8 @@ signals:
     void cameraError(QString message);
     void testshotCaptured(QPixmap image);
 private:
-    CameraInterface* mCamera;
+    CameraInterface* mCaptureCamera;
+    CameraInterface* mPreviewCamera;
     bool mLimitFps;
     QTimer *mLimitTimer;
     bool mInitialized;

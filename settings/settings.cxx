@@ -101,9 +101,14 @@ void pbSettings::initDefaultConfg()
     screensaverSettings.insert("text2", "by Andreas Böhler");
     screensaverSettings.insert("text3", "www.aboehler.at");
 
-    cameraSettings.insert("backend", "gphoto2");
-    cameraSettings.insert("name", "UVC Camera");
-    cameraSettings.insert("rotation", 0);
+    cameraSettings.insert("capturebackend", "gphoto2");
+    cameraSettings.insert("capturename", "UVC Camera");
+    cameraSettings.insert("capturerotation", 0);
+    cameraSettings.insert("captureflip", false);
+    cameraSettings.insert("previewbackend", "gphoto2");
+    cameraSettings.insert("previewname", "UVC Camera");
+    cameraSettings.insert("previewrotation", 0);
+    cameraSettings.insert("previewflip", true);
     cameraSettings.insert("fps", 0);
 
     gpioSettings.insert("enable", true);

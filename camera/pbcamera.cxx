@@ -16,15 +16,20 @@
 #endif
 
 pbCamera::pbCamera() {
-    mCamera = nullptr;
+    mCaptureCamera = nullptr;
+    mPreviewCamera = nullptr;
     mLimitFps = false;
     mLimitTimer = nullptr;
     mInitialized = false;
 }
 
 pbCamera::~pbCamera() {
-    delete mCamera;
-    mCamera = nullptr;
+    if(mCaptureCamera != mPreviewCamera) {
+        delete mPreviewCamera;
+    }
+    mPreviewCamera = nullptr;
+    delete mCaptureCamera;
+    mCaptureCamera = nullptr;
     if(mLimitTimer) {
         mLimitTimer->deleteLater();
     }
@@ -42,33 +47,65 @@ void pbCamera::start()
     qDebug() << "Thread start.";
 
     pbSettings &pbs = pbSettings::getInstance();
-    QString backend = pbs.get("camera", "backend");
+    QString captureBackend = pbs.get("camera", "capturebackend");
+    QString previewBackend = pbs.get("camera", "previewbackend");
+
+    bool flipPreview = pbs.getBool("camera", "previewflip");
+    bool flipCapture = pbs.getBool("camera", "captureflip");
+
     int fps = pbs.getInt("camera", "fps");
     if(fps > 0) {
         mLimitFps = true;
     } else {
         mLimitFps = false;
     }
-    int rotation = pbs.getInt("camera", "rotation");
+    int previewRotation = pbs.getInt("camera", "previewrotation");
+    int captureRotation = pbs.getInt("camera", "capturerotation");
 
 #ifdef BUILD_GPHOTO2
-    if(backend == "gphoto2") {
-        if(mCamera)
-            delete mCamera;
-        mCamera = new CameraGphoto2();
+    if(previewBackend == "gphoto2") {
+        if(mPreviewCamera)
+            delete mPreviewCamera;
+        mPreviewCamera = new CameraGphoto2();
     }
 #endif
 #ifdef BUILD_GENERIC_CAMERA
-    if(backend == "generic") {
-        if(mCamera)
-            delete mCamera;
-        mCamera = new CameraGeneric();
+    if(previewBackend == "generic") {
+        if(mPreviewCamera)
+            delete mPreviewCamera;
+        mPreviewCamera = new CameraGeneric();
     }
 #endif
-    if(backend == "dummy") {
-        if(mCamera)
-            delete mCamera;
-        mCamera = new CameraDummy();
+    if(previewBackend == "dummy") {
+        if(mPreviewCamera)
+            delete mPreviewCamera;
+        mPreviewCamera = new CameraDummy();
+    }
+
+    if(captureBackend == previewBackend) {
+        if(mCaptureCamera)
+            delete mCaptureCamera;
+        mCaptureCamera = mPreviewCamera;
+    } else {
+#ifdef BUILD_GPHOTO2
+        if(captureBackend == "gphoto2") {
+            if(mCaptureCamera)
+                delete mCaptureCamera;
+            mCaptureCamera = new CameraGphoto2();
+        }
+#endif
+#ifdef BUILD_GENERIC_CAMERA
+        if(captureBackend == "generic") {
+            if(mCaptureCamera)
+                delete mCaptureCamera;
+            mCaptureCamera = new CameraGeneric();
+        }
+#endif
+        if(captureBackend == "dummy") {
+            if(mCaptureCamera)
+               delete mCaptureCamera;
+            mCaptureCamera = new CameraDummy();
+        }
     }
 
     QEventLoop loop;
@@ -89,15 +126,24 @@ void pbCamera::start()
             continue;
         QString command = mCommandList.takeFirst();
         if(command == "initCamera" || command == "retryOperation") {
-            if(mCamera && !mInitialized) {
-                bool ret = mCamera->initCamera();
+            if(mPreviewCamera && !mInitialized) {
+                if(mPreviewCamera != mCaptureCamera) {
+                    bool ret = mPreviewCamera->initCamera();
+                    if(!ret) {
+                        emit cameraError(tr("Error initializing preview camera. Check connection. "));
+                        continue;
+                    }
+                }
+            }
+            if(mCaptureCamera && !mInitialized) {
+                bool ret = mCaptureCamera->initCamera();
                 if(!ret) {
-                    emit cameraError(tr("Error initializing camera. Check connection."));
+                    emit cameraError(tr("Error initializing capture camera. Check connection."));
                 } else {
-                    mCamera->setIdle();
-                    QPixmap testshot = mCamera->getCaptureImage();
-                    if(rotation != 0) {
-                        QTransform transform = QTransform().rotate(rotation);
+                    mCaptureCamera->setIdle();
+                    QPixmap testshot = mCaptureCamera->getCaptureImage();
+                    if(captureRotation != 0) {
+                        QTransform transform = QTransform().rotate(captureRotation);
                         testshot = testshot.transformed(transform);
                     }
                     if(testshot.isNull()) {
@@ -112,60 +158,72 @@ void pbCamera::start()
         } else if(command == "startPreview") {
             if(mLimitFps) {
                 if(!mLimitTimer->isActive()) {
-                    mCamera->setActive();
+                    mPreviewCamera->setActive();
                     mLimitTimer->start();
                 }
-                QPixmap image = mCamera->getPreviewImage().transformed(QTransform().scale(-1, 1));
+                QPixmap image = mPreviewCamera->getPreviewImage();
                 if(image.isNull()) {
                     emit cameraError(tr("Error capturing image. Camera connected?"));
                 } else {
-                    if(rotation != 0) {
-                        QTransform transform = QTransform().rotate(rotation);
+                    if(flipPreview)
+                        image = image.transformed(QTransform().scale(-1, 1));
+                    if(previewRotation != 0) {
+                        QTransform transform = QTransform().rotate(previewRotation);
                         image = image.transformed(transform);
                     }
                     emit previewImageCaptured(image);
                 }
             } else {
-                mCamera->setActive();
+                mPreviewCamera->setActive();
                 // Check for stopPreview
                 while(!checkForNewCommand()) {
-                    QPixmap image = mCamera->getPreviewImage().transformed(QTransform().scale(-1, 1));
+                    QPixmap image = mPreviewCamera->getPreviewImage();
                     if(image.isNull()) {
                         emit cameraError(tr("Error capturing image. Camera connected?"));
                     } else {
-                        if(rotation != 0) {
-                            QTransform transform = QTransform().rotate(rotation);
+                        if(flipPreview)
+                            image = image.transformed(QTransform().scale(-1, 1));
+                        if(previewRotation != 0) {
+                            QTransform transform = QTransform().rotate(previewRotation);
                             image = image.transformed(transform);
                         }
                         emit previewImageCaptured(image);
                     }
                 }
-                mCamera->setIdle();
+                mPreviewCamera->setIdle();
             }
         } else if(command == "stopPreview") {
             if(mLimitFps) {
-                mCamera->setIdle();
+                mPreviewCamera->setIdle();
             }
         } else if(command == "captureImage") {
-            mCamera->setIdle();
-            QPixmap image = mCamera->getCaptureImage();
+            mCaptureCamera->setIdle();
+            QPixmap image = mCaptureCamera->getCaptureImage();
             if(image.isNull()) {
                 emit cameraError(tr("Error capturing image. Camera connected?"));
             } else {
-                if(rotation != 0) {
-                    QTransform transform = QTransform().rotate(rotation);
+                if(flipCapture)
+                    image = image.transformed(QTransform().scale(-1, 1));
+                if(captureRotation != 0) {
+                    QTransform transform = QTransform().rotate(captureRotation);
                     image = image.transformed(transform);
                 }
                 emit imageCaptured(image);
             }
         } else if(command == "stopThread") {
-            mCamera->setIdle();
+            mCaptureCamera->setIdle();
+            if(mPreviewCamera != mCaptureCamera)
+                mPreviewCamera->setIdle();
             running = false;
         }
     }
 
-    delete mCamera;
-    mCamera = nullptr;
+    if(mPreviewCamera != mCaptureCamera) {
+        delete mPreviewCamera;
+    }
+    mPreviewCamera = nullptr;
+    delete mCaptureCamera;
+    mCaptureCamera = nullptr;
     emit finished();
 }
 

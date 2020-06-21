@@ -21,6 +21,8 @@ public:
     void setActive();
     static QStringList getCameraNames();
 private:
+    bool waitForActiveState();
+
     QCamera* mCamera;
     QCameraImageCapture *mCapture;
     CameraGenericSurface *mSurface;

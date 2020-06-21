@@ -83,6 +83,8 @@ QPixmap CameraGeneric::getCaptureImage()
     qDebug() << "getCaptureImage";
     mCamera->setCaptureMode(QCamera::CaptureStillImage);
     mCamera->start();
+    waitForActiveState();
+    qDebug() << "done";
     QEventLoop loop;
     QTimer timeout;
     timeout.setSingleShot(true);
@@ -98,6 +100,7 @@ QPixmap CameraGeneric::getCaptureImage()
 void CameraGeneric::readyForCaptureChanged(bool state) {
     qDebug() << "readyForCaptureChanged";
     if(state) {
+        qDebug() << "true";
         mCamera->searchAndLock();
         mCapture->capture();
         mCamera->unlock();
@@ -109,6 +112,23 @@ void CameraGeneric::imageCaptured(int id, QImage img) {
     emit newImageCaptured();
 }
 
+bool CameraGeneric::waitForActiveState() {
+    qDebug() << "waitForActiveState";
+    QCamera::Status status = mCamera->status();
+    if(status == QCamera::ActiveStatus)
+        return true;
+
+    QEventLoop loop;
+    connect(mCamera, SIGNAL(statusChanged(QCamera::Status)), &loop, SLOT(quit));
+    loop.exec();
+    status = mCamera->status();
+    if(status == QCamera::ActiveStatus)
+        return true;
+    if(status == QCamera::StartingStatus)
+        return waitForActiveState();
+    return false;
+}
+
 void CameraGeneric::setIdle()
 {
     mCamera->stop();
@@ -118,6 +138,8 @@ void CameraGeneric::setActive()
 {
     mCamera->setCaptureMode(QCamera::CaptureViewfinder);
     mCamera->start();
+    waitForActiveState();
+    qDebug() << "now active";
 }
 
 QStringList CameraGeneric::getCameraNames()
