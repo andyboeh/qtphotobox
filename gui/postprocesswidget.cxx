@@ -14,7 +14,7 @@ postprocessWidget::postprocessWidget(QWidget *parent) :
         setGeometry(parentRect);
     }
     pbSettings &pbs = pbSettings::getInstance();
-    if(pbs.getBool("printer", "enable") && pbs.getBool("printer", "confirmation")) {
+    if(pbs.getBool("printer", "enable") && pbs.getBool("printer", "allowprinting")) {
         ui->btnPrint->setVisible(true);
         int maxcopies = pbs.getInt("printer", "max_copies");
         if(maxcopies > 1) {
@@ -33,7 +33,7 @@ postprocessWidget::postprocessWidget(QWidget *parent) :
         ui->sliderNumCopies->setVisible(false);
         ui->lblNumCopies->setVisible(false);
     }
-    if(pbs.getBool("printer", "enable") && !pbs.getBool("printer", "confirmation")) {
+    if(pbs.getBool("printer", "enable") && pbs.getBool("printer", "autoprint")) {
         emit startPrintJob(1);
     }
 }

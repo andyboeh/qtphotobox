@@ -1,6 +1,7 @@
 #include "picturedetailwidget.h"
 #include "ui_picturedetailwidget.h"
 #include "settings.h"
+#include <QDebug>
 
 picturedetailWidget::picturedetailWidget(QString filename, QWidget *parent) :
     QFrame(parent),
@@ -44,10 +45,10 @@ picturedetailWidget::~picturedetailWidget()
 void picturedetailWidget::on_btnPrint_clicked()
 {
     int copies = ui->sliderCopies->value();
-    emit printArchivePicture(mFilename, copies);
     ui->btnPrint->setEnabled(false);
     ui->sliderCopies->setEnabled(false);
     ui->lblCopies->setEnabled(false);
+    emit printArchivePicture(mFilename, copies);
 }
 
 void picturedetailWidget::on_btnClose_clicked()
@@ -62,10 +63,13 @@ void picturedetailWidget::on_sliderCopies_valueChanged(int value)
 
 void picturedetailWidget::paintEvent(QPaintEvent *event)
 {
+    qDebug() << "paintEvent";
     if(ui->lblPicture->size().width() != mWidth || ui->lblPicture->size().height() != mHeight) {
+        qDebug() << "not resized.";
         QPixmap image(mFilename);
         if(image.isNull())
             return;
+        qDebug() << "pixmap not null";
         mScaledImage = image.scaled(ui->lblPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         mWidth = ui->lblPicture->size().width();
         mHeight = ui->lblPicture->size().height();

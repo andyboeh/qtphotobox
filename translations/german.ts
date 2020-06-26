@@ -89,8 +89,10 @@
 <context>
     <name>gpioWorker</name>
     <message>
+        <location filename="../gpio/gpioWorker.cxx" line="102"/>
+        <location filename="../gpio/gpioWorker.cxx" line="134"/>
         <source>Error initializing GPIO.</source>
-        <translation type="vanished">Fehler beim Initialisieren des GPIO Moduls.</translation>
+        <translation>Fehler beim Initialisieren des GPIO Moduls.</translation>
     </message>
 </context>
 <context>
@@ -158,17 +160,84 @@
     </message>
 </context>
 <context>
-    <name>pbCamera</name>
+    <name>passwordWidget</name>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="84"/>
-        <source>Error initializing camera. Check connection.</source>
-        <translation>Fehler beim Initialisieren der Kamera. Verbindung überprüfen.</translation>
+        <location filename="../gui/passwordwidget.ui" line="14"/>
+        <source>Frame</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="93"/>
-        <location filename="../camera/pbcamera.cxx" line="109"/>
-        <location filename="../camera/pbcamera.cxx" line="123"/>
-        <location filename="../camera/pbcamera.cxx" line="142"/>
+        <source>3</source>
+        <translation type="obsolete">270º {3?}</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="obsolete">270º {0?}</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="obsolete">270º {1?}</translation>
+    </message>
+    <message>
+        <source>9</source>
+        <translation type="obsolete">270º {9?}</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation type="obsolete">270º {2?}</translation>
+    </message>
+    <message>
+        <source>6</source>
+        <translation type="obsolete">270º {6?}</translation>
+    </message>
+    <message>
+        <location filename="../gui/passwordwidget.ui" line="62"/>
+        <source>Enter Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/passwordwidget.ui" line="69"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Abbrechen</translation>
+    </message>
+    <message>
+        <source>8</source>
+        <translation type="obsolete">270º {8?}</translation>
+    </message>
+    <message>
+        <source>7</source>
+        <translation type="obsolete">270º {7?}</translation>
+    </message>
+    <message>
+        <source>4</source>
+        <translation type="obsolete">270º {4?}</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation type="obsolete">270º {5?}</translation>
+    </message>
+</context>
+<context>
+    <name>pbCamera</name>
+    <message>
+        <source>Error initializing camera. Check connection.</source>
+        <translation type="vanished">Fehler beim Initialisieren der Kamera. Verbindung überprüfen.</translation>
+    </message>
+    <message>
+        <location filename="../camera/pbcamera.cxx" line="150"/>
+        <source>Error initializing preview camera. Check connection. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../camera/pbcamera.cxx" line="158"/>
+        <source>Error initializing capture camera. Check connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../camera/pbcamera.cxx" line="167"/>
+        <location filename="../camera/pbcamera.cxx" line="183"/>
+        <location filename="../camera/pbcamera.cxx" line="199"/>
+        <location filename="../camera/pbcamera.cxx" line="220"/>
         <source>Error capturing image. Camera connected?</source>
         <translation>Fehler beim Aufnehmen des Bildes. Ist die Kamera angeschlossen?</translation>
     </message>
@@ -210,8 +279,8 @@
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../gui/picturedetailwidget.cxx" line="29"/>
-        <location filename="../gui/picturedetailwidget.cxx" line="60"/>
+        <location filename="../gui/picturedetailwidget.cxx" line="30"/>
+        <location filename="../gui/picturedetailwidget.cxx" line="61"/>
         <source>Print %1 copies.</source>
         <translation>Drucke %1 Kopien.</translation>
     </message>
@@ -416,372 +485,411 @@
         <translation>Fensterhöhe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="152"/>
         <source>English</source>
-        <translation type="unfinished">English</translation>
+        <translation type="obsolete">English</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="157"/>
         <source>Deutsch</source>
-        <translation>Deutsch</translation>
+        <translation type="vanished">Deutsch</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="165"/>
+        <location filename="../gui/settingswidget.ui" line="154"/>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="173"/>
+        <location filename="../gui/settingswidget.ui" line="162"/>
         <source>QtPhotobox</source>
         <translation>QtPhotobox</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="198"/>
+        <location filename="../gui/settingswidget.ui" line="187"/>
         <source>Countdown Time</source>
         <translation>Countdown Zeit</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="205"/>
+        <location filename="../gui/settingswidget.ui" line="194"/>
         <source>Display Time</source>
         <translation>Anzeige-Zeit</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="215"/>
+        <location filename="../gui/settingswidget.ui" line="204"/>
         <source>Greeter Time</source>
         <translation>Begrüßungszeit</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="235"/>
+        <location filename="../gui/settingswidget.ui" line="224"/>
         <source>Show Preview</source>
         <translation>Vorschau anzeigen</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="243"/>
+        <location filename="../gui/settingswidget.ui" line="232"/>
         <source>Camera</source>
         <translation>Kamera</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="249"/>
         <source>Backend</source>
-        <translation>Modul</translation>
+        <translation type="vanished">Modul</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="270"/>
-        <source>Gphoto2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../gui/settingswidget.ui" line="275"/>
-        <source>Dummy</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../gui/settingswidget.ui" line="299"/>
+        <location filename="../gui/settingswidget.ui" line="264"/>
         <source>Limit FPS (0=no limit)</source>
         <translation>Bildrate limitieren (0=kein Limit)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="306"/>
         <source>Rotation</source>
-        <translation>Rotation</translation>
+        <translation type="vanished">Rotation</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="314"/>
+        <location filename="../gui/settingswidget.ui" line="238"/>
+        <source>Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="244"/>
+        <source>Preview Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="274"/>
+        <source>Preview Rotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="284"/>
+        <source>Preview Backend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="292"/>
+        <location filename="../gui/settingswidget.ui" line="355"/>
         <source>0º</source>
         <translation>0º</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="319"/>
+        <location filename="../gui/settingswidget.ui" line="297"/>
+        <location filename="../gui/settingswidget.ui" line="360"/>
         <source>90º</source>
         <translation>90º</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="324"/>
+        <location filename="../gui/settingswidget.ui" line="302"/>
+        <location filename="../gui/settingswidget.ui" line="365"/>
         <source>180º</source>
         <translation>180º</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="329"/>
+        <location filename="../gui/settingswidget.ui" line="307"/>
+        <location filename="../gui/settingswidget.ui" line="370"/>
         <source>270º</source>
         <translation>270º</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="338"/>
+        <location filename="../gui/settingswidget.ui" line="318"/>
+        <source>Flip Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="328"/>
+        <source>Capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="334"/>
+        <source>Capture Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="344"/>
+        <source>Picture Rotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="378"/>
+        <source>Capture Backend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="398"/>
+        <source>Flip Capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="422"/>
         <source>Picture</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="344"/>
+        <location filename="../gui/settingswidget.ui" line="428"/>
         <source>Picture Size Y</source>
         <translation>Bildgröße Y</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="358"/>
+        <location filename="../gui/settingswidget.ui" line="442"/>
         <source>Browse...</source>
         <translation>Auswählen...</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="381"/>
+        <location filename="../gui/settingswidget.ui" line="465"/>
         <source>Number of Pictures</source>
         <translation>Anzahl Bilder</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="391"/>
+        <location filename="../gui/settingswidget.ui" line="475"/>
         <source>Picture Size X</source>
         <translation>Bildgröße X</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="405"/>
+        <location filename="../gui/settingswidget.ui" line="489"/>
         <source>Background Image</source>
         <translation>Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="413"/>
+        <location filename="../gui/settingswidget.ui" line="497"/>
         <source>Printer</source>
         <translation>Drucker</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="419"/>
+        <location filename="../gui/settingswidget.ui" line="553"/>
         <source>Printing Backend</source>
         <translation>Druckermodul</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="426"/>
+        <location filename="../gui/settingswidget.ui" line="506"/>
         <source>Enable Printing Support</source>
         <translation>Druckunterstützung aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="450"/>
+        <location filename="../gui/settingswidget.ui" line="560"/>
         <source>Maximum Copies</source>
         <translation>Max. Anzahl Kopien</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="457"/>
         <source>Confirm Printing</source>
-        <translation>Drucken bestätigen</translation>
+        <translation type="vanished">Drucken bestätigen</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="477"/>
+        <location filename="../gui/settingswidget.ui" line="594"/>
         <source>Paper Height [mm]</source>
         <translation>Papierhöhe [mm]</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="485"/>
-        <source>CUPS</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../gui/settingswidget.ui" line="490"/>
-        <source>Selphy (WiFi)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../gui/settingswidget.ui" line="495"/>
-        <source>Selphy (USB)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../gui/settingswidget.ui" line="516"/>
+        <location filename="../gui/settingswidget.ui" line="546"/>
         <source>Paper Width [mm]</source>
         <translation>Papierbreite [mm]</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="523"/>
+        <location filename="../gui/settingswidget.ui" line="520"/>
+        <source>Print automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="587"/>
         <source>Printer IP</source>
         <translation>Drucker IP</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="534"/>
+        <location filename="../gui/settingswidget.ui" line="601"/>
+        <source>Allow printing after assembling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="609"/>
         <source>Storage</source>
         <translation>Speicher</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="540"/>
+        <location filename="../gui/settingswidget.ui" line="615"/>
         <source>Ignore Removable Devices (separate by Comma)</source>
         <translation>Wechsellaufwerke ignorieren (durch Beistrich getrennt)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="547"/>
+        <location filename="../gui/settingswidget.ui" line="622"/>
         <source>Wait for Removable Device on Startup</source>
         <translation>Auf Wechsellaufwerk beim Starten warten</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="554"/>
+        <location filename="../gui/settingswidget.ui" line="629"/>
         <source>Keep individual pictures</source>
         <translation>Speichere einzelne Bilder</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="561"/>
+        <location filename="../gui/settingswidget.ui" line="636"/>
         <source>Picture Base Name</source>
         <translation>Basis des Bildnamens</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="577"/>
+        <location filename="../gui/settingswidget.ui" line="652"/>
         <source>Base Directory Name</source>
         <translation>Basisverzeichnis</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="611"/>
+        <location filename="../gui/settingswidget.ui" line="686"/>
         <source>GPIO</source>
         <translation>GPIO</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="623"/>
+        <location filename="../gui/settingswidget.ui" line="698"/>
         <source>Idle Lamp Pin</source>
         <translation>Pin der Idle-Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="636"/>
+        <location filename="../gui/settingswidget.ui" line="711"/>
         <source>Exit Pin</source>
         <translation>Pin des Exit-Knopfes</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="656"/>
+        <location filename="../gui/settingswidget.ui" line="731"/>
         <source>Enable GPIO Support</source>
         <translation>GPIO Unterstützung aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="663"/>
+        <location filename="../gui/settingswidget.ui" line="738"/>
         <source>AF Lamp Pin</source>
         <translation>Pin der Autofokus Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="670"/>
+        <location filename="../gui/settingswidget.ui" line="745"/>
         <source>Idel Lamp PWM Value</source>
         <translation>PWM-Wert der Idle-Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="677"/>
+        <location filename="../gui/settingswidget.ui" line="752"/>
         <source>Trigger Pin</source>
         <translation>Pin des Auslösers</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="684"/>
+        <location filename="../gui/settingswidget.ui" line="759"/>
         <source>AF Lamp PWM Value</source>
         <translation>PWM-Wert der Autofokus-Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="719"/>
+        <location filename="../gui/settingswidget.ui" line="794"/>
         <source>Archive</source>
         <translation>Archiv</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="725"/>
+        <location filename="../gui/settingswidget.ui" line="833"/>
+        <source>Password-protect printing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="840"/>
         <source>Enable Archive</source>
         <translation>Archiv aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="745"/>
+        <location filename="../gui/settingswidget.ui" line="861"/>
         <source>Allow Reprinting</source>
         <translation>Erneutes Drucken erlauben</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="766"/>
+        <location filename="../gui/settingswidget.ui" line="876"/>
         <source>Show</source>
         <translation>Show</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="785"/>
+        <location filename="../gui/settingswidget.ui" line="895"/>
         <source>Enable Show</source>
         <translation>Show aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="792"/>
+        <location filename="../gui/settingswidget.ui" line="902"/>
         <source>Show Full Screen</source>
         <translation>Show in Vollbildmodus</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="822"/>
+        <location filename="../gui/settingswidget.ui" line="932"/>
         <source>Swap Screens (QtPhotobox and Show)</source>
         <translation>Bildschirme vertauschen (QtPhotobox und Show)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="829"/>
+        <location filename="../gui/settingswidget.ui" line="939"/>
         <source>Show full images</source>
         <translation>Zeige vollständige Bilder</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="839"/>
+        <location filename="../gui/settingswidget.ui" line="949"/>
         <source>Show images randomly</source>
         <translation>Zeige Bilder in zufälliger Reihenfolge</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="853"/>
+        <location filename="../gui/settingswidget.ui" line="963"/>
         <source>Display Time [s]</source>
         <translation>Anzeigezeit [s]</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="860"/>
+        <location filename="../gui/settingswidget.ui" line="970"/>
         <source>Width</source>
         <translation>Breite</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="867"/>
+        <location filename="../gui/settingswidget.ui" line="977"/>
         <source>Height</source>
         <translation>Höhe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="874"/>
+        <location filename="../gui/settingswidget.ui" line="984"/>
         <source>Footer Text</source>
         <translation>Text in der Fußzeile</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="882"/>
+        <location filename="../gui/settingswidget.ui" line="992"/>
         <source>Screensaver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="907"/>
+        <location filename="../gui/settingswidget.ui" line="1017"/>
         <source>Text Line 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="914"/>
+        <location filename="../gui/settingswidget.ui" line="1024"/>
         <source>Text Line 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="928"/>
+        <location filename="../gui/settingswidget.ui" line="1038"/>
         <source>Text Line 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="938"/>
+        <location filename="../gui/settingswidget.ui" line="1048"/>
         <source>Screensaver Timeout [seconds]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="945"/>
+        <location filename="../gui/settingswidget.ui" line="1055"/>
         <source>Enable Screensaver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="971"/>
+        <location filename="../gui/settingswidget.ui" line="1081"/>
         <source>Save and Restart</source>
         <translation>Speichern und Neu starten</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="978"/>
+        <location filename="../gui/settingswidget.ui" line="1088"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="985"/>
+        <location filename="../gui/settingswidget.ui" line="1095"/>
         <source>Restore Defaults</source>
         <translation>Standardwerte Laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="411"/>
+        <location filename="../gui/settingswidget.cxx" line="521"/>
         <source>Open Background image</source>
         <translation>Hintergrundbild laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="412"/>
+        <location filename="../gui/settingswidget.cxx" line="522"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG Bilder (*.jpg)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="454"/>
+        <location filename="../gui/settingswidget.cxx" line="564"/>
         <source>Filters for Picture %1</source>
         <translation>Filter für Bild %1</translation>
     </message>

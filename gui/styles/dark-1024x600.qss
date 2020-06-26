@@ -213,6 +213,40 @@ QFrame#picturedetailWidget QPushButton:disabled {
     border-color: #33eeeeee;
 }
 
+QFrame#passwordWidget {
+    background-color: #ffeeeeee;
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 30px;
+    border-color: #eeeeee;
+    color: #333333;
+    padding: 40px;
+}
+
+QFrame#passwordWidget QLabel {
+    color: #333333;
+    font-size: 50px;
+    qproperty-alignment: AlignCenter;
+}
+
+QFrame#passwordWidget QPushButton {
+    font-size: 40px;
+    color: #333333;true
+    border-color: #333333;
+    margin: 10px;
+}
+
+QFrame#passwordWidget QPushButton:pressed {
+    background-color: rgba(255, 27, 0, 200);
+}
+
+QFrame#passwordWidget QPushButton:disabled {
+    background-color: #66eeeeee;
+    color: #33eeeeee;
+    border-color: #33eeeeee;
+}
+
+
 /* Show Widget */
 
 QFrame#showWidget {

@@ -5,6 +5,7 @@
 #include "settings.h"
 #include "statemachine.h"
 #include "picturedetailwidget.h"
+#include "passwordwidget.h"
 #include <QDebug>
 #include <QDir>
 
@@ -35,7 +36,7 @@ archiveWidget::archiveWidget(QWidget *parent) :
 
 archiveWidget::~archiveWidget()
 {
-    mDetailWidget->deleteLater();
+    delete mDetailWidget;
     delete ui;
 }
 
@@ -47,7 +48,26 @@ void archiveWidget::on_btnClose_clicked()
 
 void archiveWidget::printArchivePicture(QString filename, int copies)
 {
+    pbSettings &pbs = pbSettings::getInstance();
+    if(pbs.getBool("archive", "printingpassword")) {
+        mPasswordWidget = new passwordWidget(filename, copies, this);
+        connect(mPasswordWidget, SIGNAL(printArchivePicture(QString,int)), this, SLOT(printFromPasswordDialog(QString,int)));
+        connect(mPasswordWidget, SIGNAL(cancelled()), this, SLOT(passwordDialogClosed()));
+        mPasswordWidget->show();
+    } else {
+        emit printAssembledPicture(filename, copies);
+    }
+}
+
+void archiveWidget::printFromPasswordDialog(QString filename, int copies)
+{
     emit printAssembledPicture(filename, copies);
+    passwordDialogClosed();
+}
+
+void archiveWidget::passwordDialogClosed()
+{
+    delete mPasswordWidget;
 }
 
 void archiveWidget::on_listView_clicked(const QModelIndex &index)
@@ -56,7 +76,7 @@ void archiveWidget::on_listView_clicked(const QModelIndex &index)
     QString filename = data.value(Qt::DisplayRole).toString();
     QString fullname = mStoragepath + QDir::separator() + mBasename + filename;
     qDebug() << fullname;
-    mDetailWidget->deleteLater();
+    delete mDetailWidget;
     mDetailWidget = new picturedetailWidget(fullname, this);
     connect(mDetailWidget, SIGNAL(printArchivePicture(QString,int)), this, SLOT(printArchivePicture(QString,int)));
     mDetailWidget->show();

@@ -27,6 +27,9 @@ SET(TL_LIBRARIES
     ${Qt5Widgets_LIBRARIES}
 )
 
+OPTION(BUILD_STANDALONE_SETTINGS_EDITOR "Build standalone settings editor" OFF)
+OPTION(BUILD_QTPHOTOBOX "Build QtPhotobox application" ON)
+
 #INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
 #INCLUDE_DIRECTORIES(${Qt5Gui_INCLUDE_DIRS})
 #INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
@@ -130,15 +133,34 @@ ENDIF()
 
 #INCLUDE_DIRECTORIES(${QT5_DIR})
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
-    camera
-    gpio
-    gui
-    settings
-    printer
-    statemachine
-    worker
-    storage
+SET(${NAME}_settings_SOURCES
+    settingseditor.cxx
+    settings/settings.cxx
+    gui/settingswidget.cxx
+    )
+
+SET(${NAME}_settings_HEADERS
+    settingseditor.h
+    gui/settingswidget.h
+    settings/settings.h
+    )
+
+SET(${NAME}_settings_HEADERS_NO_MOC
+
+    )
+
+SET(${NAME}_settings_UI
+    gui/settingswidget.ui
+    )
+
+SET(${NAME}_settings_TRANSLATIONS
+    translations/settings_english.ts
+    translations/settings_german.ts
+    )
+
+SET(${NAME}_settings_TRANSLATIONS_SRC
+    ${${NAME}_settings_SOURCES}
+    ${${NAME}_settings_UI}
     )
 
 SET(${NAME}_SOURCES
@@ -170,6 +192,7 @@ SET(${NAME}_SOURCES
   gui/waitremovablewidget.cxx
   gui/screensaver.cxx
   gui/screensaverwidget.cxx
+  gui/passwordwidget.cxx
   worker/pictureWorker.cxx
   worker/pictureTask.cxx
   worker/postprocessWorker.cxx
@@ -207,6 +230,7 @@ SET(${NAME}_HEADERS
   gui/waitremovablewidget.h
   gui/screensaver.h
   gui/screensaverwidget.h
+  gui/passwordwidget.h
   worker/worker.h
   worker/pictureWorker.h
   worker/pictureTask.h
@@ -232,6 +256,7 @@ SET(${NAME}_UI
   gui/reviewwidget.ui
   gui/postprocesswidget.ui
   gui/archivewidget.ui
+  gui/passwordwidget.ui
   gui/picturedetailwidget.ui
   gui/showwidget.ui
   gui/errorwidget.ui
@@ -332,45 +357,113 @@ SET(${NAME}_TRANSLATIONS_SRC
     ${${NAME}_UI}
     )
 
-QT5_WRAP_CPP(${NAME}_HEADERS_MOC ${${NAME}_HEADERS})
-QT5_WRAP_UI(${NAME}_HEADERS_UI ${${NAME}_UI})
-QT5_ADD_RESOURCES(${NAME}_RES_RCC ${${NAME}_RES})
-IF(BUILD_WAIT_USB)
-    QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
+IF(BUILD_QTPHOTOBOX)
+    QT5_WRAP_CPP(${NAME}_HEADERS_MOC ${${NAME}_HEADERS})
+    QT5_WRAP_UI(${NAME}_HEADERS_UI ${${NAME}_UI})
+    QT5_ADD_RESOURCES(${NAME}_RES_RCC ${${NAME}_RES})
+    IF(BUILD_WAIT_USB)
+        QT5_ADD_DBUS_INTERFACE(${NAME}_DBUS_INTERFACE_OM storage/org.freedesktop.UDisks2.ObjectManager.xml objectManager)
+    ENDIF()
+    QT5_CREATE_TRANSLATION(${NAME}_TRANSLATIONS_BIN ${${NAME}_TRANSLATIONS_SRC} ${${NAME}_TRANSLATIONS})
+    add_custom_target(translations DEPENDS ${${NAME}_TRANSLATIONS_BIN})
+
+
+    if(NOT QT_TRANSLATIONS_DIR)
+        # If this directory is missing, we are in a Qt5 environment.
+        # Extract the qmake executable location
+        get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
+        # Ask Qt5 where to put the translations
+        execute_process( COMMAND ${QT5_QMAKE_EXECUTABLE} -query QT_INSTALL_TRANSLATIONS
+        OUTPUT_VARIABLE qt_translations_dir OUTPUT_STRIP_TRAILING_WHITESPACE )
+        # make sure we have / and not \ as qmake gives on windows
+        file( TO_CMAKE_PATH "${qt_translations_dir}" qt_translations_dir)
+        set( QT_TRANSLATIONS_DIR ${qt_translations_dir} CACHE PATH
+        "The location of the Qt translations" FORCE)
+    endif()
+
+    install(FILES ${${NAME}_TRANSLATIONS_BIN} DESTINATION ${QT_TRANSLATIONS_DIR})
+
+    ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
+      ${${NAME}_HEADERS}
+      ${${NAME}_SOURCES}
+      ${${NAME}_HEADERS_MOC}
+      ${${NAME}_HEADERS_NO_MOC}
+      ${${NAME}_HEADERS_UI}
+      ${${NAME}_RES_RCC}
+      ${${NAME}_DBUS_INTERFACE_OM}
+      ${${NAME}_TRANSLATIONS_BIN}
+    )
+
+    TARGET_INCLUDE_DIRECTORIES(${NAME} PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}
+        camera
+        gpio
+        gui
+        settings
+        printer
+        statemachine
+        worker
+        storage
+        )
+
+
+    TARGET_LINK_LIBRARIES(${NAME}
+        ${TL_LIBRARIES}
+    )
+
+    target_compile_definitions(${NAME} PUBLIC "-DBUILD_QTPHOTOBOX")
 ENDIF()
-QT5_CREATE_TRANSLATION(${NAME}_TRANSLATIONS_BIN ${${NAME}_TRANSLATIONS_SRC} ${${NAME}_TRANSLATIONS})
-add_custom_target(translations DEPENDS ${${NAME}_TRANSLATIONS_BIN})
+
+IF(BUILD_STANDALONE_SETTINGS_EDITOR)
+
+    QT5_WRAP_CPP(${NAME}_settings_HEADERS_MOC ${${NAME}_settings_HEADERS})
+    QT5_WRAP_UI(${NAME}_settings_HEADERS_UI ${${NAME}_settings_UI})
+    QT5_ADD_RESOURCES(${NAME}_settings_RES_RCC ${${NAME}_settings_RES})
+    QT5_CREATE_TRANSLATION(${NAME}_settings_TRANSLATIONS_BIN ${${NAME}_settings_TRANSLATIONS_SRC} ${${NAME}_settings_TRANSLATIONS})
+    add_custom_target(translations_settings DEPENDS ${${NAME}_settings_TRANSLATIONS_BIN})
 
 
-if(NOT QT_TRANSLATIONS_DIR)
-    # If this directory is missing, we are in a Qt5 environment.
-    # Extract the qmake executable location
-    get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
-    # Ask Qt5 where to put the translations
-    execute_process( COMMAND ${QT5_QMAKE_EXECUTABLE} -query QT_INSTALL_TRANSLATIONS
-    OUTPUT_VARIABLE qt_translations_dir OUTPUT_STRIP_TRAILING_WHITESPACE )
-    # make sure we have / and not \ as qmake gives on windows
-    file( TO_CMAKE_PATH "${qt_translations_dir}" qt_translations_dir)
-    set( QT_TRANSLATIONS_DIR ${qt_translations_dir} CACHE PATH
-    "The location of the Qt translations" FORCE)
-endif()
+    if(NOT QT_TRANSLATIONS_DIR)
+        # If this directory is missing, we are in a Qt5 environment.
+        # Extract the qmake executable location
+        get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
+        # Ask Qt5 where to put the translations
+        execute_process( COMMAND ${QT5_QMAKE_EXECUTABLE} -query QT_INSTALL_TRANSLATIONS
+        OUTPUT_VARIABLE qt_translations_dir OUTPUT_STRIP_TRAILING_WHITESPACE )
+        # make sure we have / and not \ as qmake gives on windows
+        file( TO_CMAKE_PATH "${qt_translations_dir}" qt_translations_dir)
+        set( QT_TRANSLATIONS_DIR ${qt_translations_dir} CACHE PATH
+        "The location of the Qt translations" FORCE)
+    endif()
 
-install(FILES ${${NAME}_TRANSLATIONS_BIN} DESTINATION ${QT_TRANSLATIONS_DIR})
+    install(FILES ${${NAME}_settings_TRANSLATIONS_BIN} DESTINATION ${QT_TRANSLATIONS_DIR})
 
-ADD_EXECUTABLE(${NAME} ${WIN32_DEFINE}
-  ${${NAME}_HEADERS}
-  ${${NAME}_SOURCES}
-  ${${NAME}_HEADERS_MOC}
-  ${${NAME}_HEADERS_NO_MOC}
-  ${${NAME}_HEADERS_UI}
-  ${${NAME}_RES_RCC}
-  ${${NAME}_DBUS_INTERFACE_OM}
-  ${${NAME}_TRANSLATIONS_BIN}
-)
 
-TARGET_LINK_LIBRARIES(${NAME}
-    ${TL_LIBRARIES}
-)
+    ADD_EXECUTABLE(${NAME}_settings
+        ${${NAME}_settings_SOURCES}
+        ${${NAME}_settings_HEADERS}
+        ${${NAME}_settings_HEADERS_MOC}
+        ${${NAME}_settings_HEADERS_NO_MOC}
+        ${${NAME}_settings_HEADERS_UI}
+        ${${NAME}_settings_RES_RCC}
+        ${${NAME}_settings_TRANSLATIONS_BIN}
+        )
+
+    TARGET_INCLUDE_DIRECTORIES(${NAME}_settings PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}
+        gui
+        settings
+        settings_standalone
+        )
+
+    TARGET_LINK_LIBRARIES(${NAME}_settings
+        ${Qt5Core_LIBRARIES}
+        ${Qt5Widgets_LIBRARIES}
+        ${Qt5Gui_LIBRARIES}
+        )
+    target_compile_definitions(${NAME}_settings PUBLIC "-DBUILD_SETTINGSEDITOR")
+ENDIF()
+
 
 IF(FALSE)
 IF(WIN32)

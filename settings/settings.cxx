@@ -120,7 +120,8 @@ void pbSettings::initDefaultConfg()
     gpioSettings.insert("idle_lamp_pwm_value", 50);
 
     printerSettings.insert("enable", true);
-    printerSettings.insert("confirmation", true);
+    printerSettings.insert("autoprint", false);
+    printerSettings.insert("allowprinting", true);
     printerSettings.insert("max_copies", 10);
     printerSettings.insert("width", 148);
     printerSettings.insert("height", 100);

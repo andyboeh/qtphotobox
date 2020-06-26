@@ -56,7 +56,8 @@ private slots:
 
     void on_cmbCaptureBackend_currentIndexChanged(const QString &arg1);
 
-    void on_cmbPreviewBackend_currentIndexChanged(const QString &arg1);
+    void on_cmbPreviewBackend_currentIndexChanged(const QString &arg1);    
+    void on_chkPasswordProtectPrinting_stateChanged(int arg1);
 
 private:
     Ui::settingsWidget *ui;

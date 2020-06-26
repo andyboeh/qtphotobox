@@ -1,15 +1,18 @@
 #include "settingswidget.h"
 #include "ui_settingswidget.h"
+#ifdef BUILD_QTPHOTOBOX
 #include "statemachine.h"
+    #ifdef BUILD_GENERIC_CAMERA
+    #include "camera_generic.h"
+    #endif
+#endif
 #include "settings.h"
 #include <QLineEdit>
 #include <QLabel>
 #include <QSpacerItem>
 #include <QFileDialog>
 #include <QDebug>
-#ifdef BUILD_GENERIC_CAMERA
-#include "camera_generic.h"
-#endif
+
 
 settingsWidget::settingsWidget(QFrame *parent) :
     QFrame(parent),
@@ -113,6 +116,19 @@ void settingsWidget::loadFromSettings()
     else
         ui->chkAllowReprint->setChecked(Qt::Unchecked);
 
+    if(pbs.getBool("archive", "printingpassword")) {
+        ui->chkPasswordProtectPrinting->setChecked(Qt::Checked);
+        on_chkPasswordProtectPrinting_stateChanged(Qt::Checked);
+    } else {
+        ui->chkPasswordProtectPrinting->setChecked(Qt::Unchecked);
+        on_chkPasswordProtectPrinting_stateChanged(Qt::Unchecked);
+    }
+
+    ui->spinPassword1->setValue(pbs.getInt("archive", "password1"));
+    ui->spinPassword2->setValue(pbs.getInt("archive", "password2"));
+    ui->spinPassword3->setValue(pbs.getInt("archive", "password3"));
+    ui->spinPassword4->setValue(pbs.getInt("archive", "password4"));
+
     ui->cmbCaptureBackend->clear();
     ui->cmbCaptureBackend->addItems(mCameraBackendMapping.values());
     QString camBackend = pbs.get("camera", "capturebackend");
@@ -137,7 +153,11 @@ void settingsWidget::loadFromSettings()
 
 #ifdef BUILD_GENERIC_CAMERA
     QString camName = pbs.get("camera", "capturename");
+#ifdef BUILD_QTPHOTOBOX
     QStringList camNames = CameraGeneric::getCameraNames();
+#else
+    QStringList camNames;
+#endif
     ui->cmbCaptureCamera->clear();
     ui->cmbCaptureCamera->addItems(camNames);
     if(camNames.contains(camName)) {
@@ -187,10 +207,15 @@ void settingsWidget::loadFromSettings()
         on_chkEnablePrinting_stateChanged(Qt::Unchecked);
     }
 
-    if(pbs.getBool("printer", "confirmation"))
-        ui->chkConfirmPrinting->setChecked(Qt::Checked);
+    if(pbs.getBool("printer", "autoprint"))
+        ui->chkAutoPrint->setChecked(Qt::Checked);
     else
-        ui->chkConfirmPrinting->setChecked(Qt::Unchecked);
+        ui->chkAutoPrint->setChecked(Qt::Unchecked);
+
+    if(pbs.getBool("printer", "allowprinting"))
+        ui->chkAllowPrinting->setChecked(Qt::Checked);
+    else
+        ui->chkAllowPrinting->setChecked(Qt::Unchecked);
 
     ui->spinPaperWidth->setValue(pbs.getInt("printer", "width"));
     ui->spinPaperHeight->setValue(pbs.getInt("printer", "height"));
@@ -281,6 +306,11 @@ void settingsWidget::saveToSettings()
 
     pbs.setBool("archive", "enable", ui->chkEnableArchive->isChecked());
     pbs.setBool("archive", "allow_reprint", ui->chkAllowReprint->isChecked());
+    pbs.setBool("archive", "printingpassword", ui->chkPasswordProtectPrinting->isChecked());
+    pbs.setInt("archive", "password1", ui->spinPassword1->value());
+    pbs.setInt("archive", "password2", ui->spinPassword2->value());
+    pbs.setInt("archive", "password3", ui->spinPassword3->value());
+    pbs.setInt("archive", "password4", ui->spinPassword4->value());
 
     pbs.set("camera", "capturebackend", mCameraBackendMapping.key(ui->cmbCaptureBackend->currentText()));
 #ifdef BUILD_GENERIC_CAMERA
@@ -321,7 +351,8 @@ void settingsWidget::saveToSettings()
     }
 
     pbs.setBool("printer", "enable", ui->chkEnablePrinting->isChecked());
-    pbs.setBool("printer", "confirmation", ui->chkConfirmPrinting->isChecked());
+    pbs.setBool("printer", "autoprint", ui->chkAutoPrint->isChecked());
+    pbs.setBool("printer", "allowprinting", ui->chkAllowPrinting->isChecked());
     pbs.setInt("printer", "width", ui->spinPaperWidth->value());
     pbs.setInt("printer", "height", ui->spinPaperHeight->value());
     pbs.setInt("printer", "max_copies", ui->spinMaxCopies->value());
@@ -358,14 +389,18 @@ void settingsWidget::saveToSettings()
 void settingsWidget::on_btnSave_clicked()
 {
     saveToSettings();
+#ifdef BUILD_QTPHOTOBOX
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerState("restart");
+#endif
 }
 
 void settingsWidget::on_btnCancel_clicked()
 {
+#ifdef BUILD_QTPHOTOBOX
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerState("init");
+#endif
 }
 
 void settingsWidget::on_btnRestoreDefaults_clicked()
@@ -412,6 +447,20 @@ void settingsWidget::on_chkEnableArchive_stateChanged(int arg1)
         enabled = false;
     }
     ui->chkAllowReprint->setEnabled(enabled);
+    ui->chkPasswordProtectPrinting->setEnabled(enabled);
+    if(enabled) {
+        if(ui->chkPasswordProtectPrinting->isChecked()) {
+            ui->spinPassword1->setEnabled(true);
+            ui->spinPassword2->setEnabled(true);
+            ui->spinPassword3->setEnabled(true);
+            ui->spinPassword4->setEnabled(true);
+        }
+    } else {
+        ui->spinPassword1->setEnabled(false);
+        ui->spinPassword2->setEnabled(false);
+        ui->spinPassword3->setEnabled(false);
+        ui->spinPassword4->setEnabled(false);
+    }
 }
 
 void settingsWidget::on_chkEnableGPIO_stateChanged(int arg1)
@@ -449,7 +498,8 @@ void settingsWidget::on_chkEnablePrinting_stateChanged(int arg1)
     } else {
         enabled = false;
     }
-    ui->chkConfirmPrinting->setEnabled(enabled);
+    ui->chkAllowPrinting->setEnabled(enabled);
+    ui->chkAutoPrint->setEnabled(enabled);
     ui->cmbPrinterBackend->setEnabled(enabled);
     ui->editPrinterIP->setEnabled(enabled);
     ui->spinMaxCopies->setEnabled(enabled);
@@ -578,4 +628,18 @@ void settingsWidget::on_cmbPreviewBackend_currentIndexChanged(const QString &arg
     } else {
         ui->cmbPreviewCamera->setEnabled(false);
     }
+}
+void settingsWidget::on_chkPasswordProtectPrinting_stateChanged(int arg1)
+{
+    bool enabled;
+    if(arg1 == Qt::Checked) {
+        enabled = true;
+    } else {
+        enabled = false;
+    }
+
+    ui->spinPassword1->setEnabled(enabled);
+    ui->spinPassword2->setEnabled(enabled);
+    ui->spinPassword3->setEnabled(enabled);
+    ui->spinPassword4->setEnabled(enabled);
 }

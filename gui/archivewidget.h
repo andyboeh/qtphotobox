@@ -8,6 +8,7 @@ class archiveWidget;
 }
 
 class picturedetailWidget;
+class passwordWidget;
 
 class archiveWidget : public QFrame
 {
@@ -24,12 +25,15 @@ private slots:
     void on_listView_clicked(const QModelIndex &index);
 
     void changeEvent(QEvent *event);
+    void passwordDialogClosed();
+    void printFromPasswordDialog(QString filename, int copies);
 private:
     Ui::archiveWidget *ui;
     QString mBasepath;
     QString mBasename;
     QString mStoragepath;
     picturedetailWidget *mDetailWidget;
+    passwordWidget *mPasswordWidget;
 };
 
 #endif // ARCHIVEWIDGET_H
