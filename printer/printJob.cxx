@@ -3,6 +3,7 @@
 
 printJob::printJob()
 {
+    mRemoveFile = false;
     mCopies = 0;
     mCopiesPrinted = 0;
     mWidth = 0;
@@ -12,6 +13,7 @@ printJob::printJob()
 
 printJob::printJob(QPixmap image)
 {
+    mRemoveFile = false;
     mWidth = 0;
     mHeight = 0;
     mCopies = 1;
@@ -22,6 +24,7 @@ printJob::printJob(QPixmap image)
 
 printJob::printJob(QPixmap image, int copies)
 {
+    mRemoveFile = false;
     mWidth = 0;
     mHeight = 0;
     mImage = image;
@@ -32,6 +35,7 @@ printJob::printJob(QPixmap image, int copies)
 
 printJob::printJob(QString filename, int copies)
 {
+    mRemoveFile = false;
     mWidth = 0;
     mHeight = 0;
     mFilename = filename;
