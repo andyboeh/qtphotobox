@@ -7,6 +7,8 @@ namespace Ui {
 class postprocessWidget;
 }
 
+class passwordWidget;
+
 class postprocessWidget : public QFrame
 {
     Q_OBJECT
@@ -23,8 +25,11 @@ private slots:
     void on_sliderNumCopies_valueChanged(int value);
 
     void changeEvent(QEvent *event);
+    void printFromPasswordDialog();
+    void passwordDialogClosed();
 private:
     Ui::postprocessWidget *ui;
+    passwordWidget *mPasswordWidget;
 };
 
 #endif // POSTPROCESSWIDGET_H

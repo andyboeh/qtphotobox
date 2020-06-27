@@ -388,7 +388,9 @@ void MainWindow::errorOk()
     mOverlayWidget = nullptr;
     mErrorPresent = false;
     StateMachine &sm = StateMachine::getInstance();
-    sm.triggerState(sm.getCurrentState());
+    QString currentState = sm.getCurrentState();
+    if(currentState == "init" || currentState == "postprocess")
+        sm.triggerState(currentState);
 }
 
 void MainWindow::errorQuit()

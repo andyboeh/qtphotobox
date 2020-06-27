@@ -122,6 +122,7 @@ void pbSettings::initDefaultConfg()
     printerSettings.insert("enable", true);
     printerSettings.insert("autoprint", false);
     printerSettings.insert("allowprinting", true);
+    printerSettings.insert("enforcepassword", false);
     printerSettings.insert("max_copies", 10);
     printerSettings.insert("width", 148);
     printerSettings.insert("height", 100);

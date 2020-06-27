@@ -37,6 +37,7 @@ archiveWidget::archiveWidget(QWidget *parent) :
 archiveWidget::~archiveWidget()
 {
     delete mDetailWidget;
+    delete mPasswordWidget;
     delete ui;
 }
 
@@ -50,6 +51,7 @@ void archiveWidget::printArchivePicture(QString filename, int copies)
 {
     pbSettings &pbs = pbSettings::getInstance();
     if(pbs.getBool("archive", "printingpassword")) {
+        delete mPasswordWidget;
         mPasswordWidget = new passwordWidget(filename, copies, this);
         connect(mPasswordWidget, SIGNAL(printArchivePicture(QString,int)), this, SLOT(printFromPasswordDialog(QString,int)));
         connect(mPasswordWidget, SIGNAL(cancelled()), this, SLOT(passwordDialogClosed()));
@@ -68,6 +70,7 @@ void archiveWidget::printFromPasswordDialog(QString filename, int copies)
 void archiveWidget::passwordDialogClosed()
 {
     delete mPasswordWidget;
+    mPasswordWidget = nullptr;
 }
 
 void archiveWidget::on_listView_clicked(const QModelIndex &index)

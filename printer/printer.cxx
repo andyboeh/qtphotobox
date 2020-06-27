@@ -66,6 +66,7 @@ void printerWorker::start()
     connect(mPrinter, SIGNAL(printerError(QString,QString)), this, SLOT(printerErrorInternal(QString,QString)));
 
     bool running = true;
+    bool initialized = false;
 
     emit started();
 
@@ -81,6 +82,10 @@ void printerWorker::start()
             if(mPrintJobs.isEmpty())
                 continue;
 
+            if(!initialized) {
+                mCommandList.prepend("initPrinter");
+                continue;
+            }
             printJob job = mPrintJobs.takeFirst();
             if(mPrinter) {
                 if(job.isFileJob()) {
@@ -89,9 +94,19 @@ void printerWorker::start()
                     mPrinter->printImage(job.getImage(), job.getCopies());
                 }
             }
+        } else if(command == "processJobs") {
+            int count = mPrintJobs.size();
+            for(int i=0; i<count; i++)
+                mCommandList.append("processJob");
         } else if(command == "initPrinter") {
             if(!mPrinter->initPrinter())
                 emit printerError(tr("Error initializing printer. Is it turned on?"));
+            else {
+                initialized = true;
+                if(mCommandList.isEmpty() && !mPrintJobs.isEmpty()) {
+                    mCommandList.append("processJobs");
+                }
+            }
         } else if(command == "startStatusPolling") {
             if(!mTimer->isActive()) {
                 mTimer->start();

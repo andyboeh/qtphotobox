@@ -2,6 +2,7 @@
 #include "ui_postprocesswidget.h"
 #include "statemachine.h"
 #include "settings.h"
+#include "passwordwidget.h"
 #include <QDebug>
 
 postprocessWidget::postprocessWidget(QWidget *parent) :
@@ -45,9 +46,31 @@ postprocessWidget::~postprocessWidget()
 
 void postprocessWidget::on_btnPrint_clicked()
 {
-    int numcopies = ui->sliderNumCopies->value();
+    pbSettings &pbs = pbSettings::getInstance();
+    if(pbs.getBool("printer", "enforcepassword")) {
+        mPasswordWidget = new passwordWidget(this);
+        connect(mPasswordWidget, SIGNAL(printPicture()), this, SLOT(printFromPasswordDialog()));
+        connect(mPasswordWidget, SIGNAL(cancelled()), this, SLOT(passwordDialogClosed()));
+        mPasswordWidget->show();
+    } else {
+        int numcopies = ui->sliderNumCopies->value();
+        ui->btnPrint->setEnabled(false);
+        emit startPrintJob(numcopies);
+    }
+}
+
+void postprocessWidget::printFromPasswordDialog() {
+    delete mPasswordWidget;
+    mPasswordWidget = nullptr;
+
     ui->btnPrint->setEnabled(false);
+    int numcopies = ui->sliderNumCopies->value();
     emit startPrintJob(numcopies);
+}
+
+void postprocessWidget::passwordDialogClosed() {
+    delete mPasswordWidget;
+    mPasswordWidget = nullptr;
 }
 
 void postprocessWidget::on_btnStartOver_clicked()

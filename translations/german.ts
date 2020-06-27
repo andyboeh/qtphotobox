@@ -313,8 +313,8 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/postprocesswidget.cxx" line="30"/>
-        <location filename="../gui/postprocesswidget.cxx" line="61"/>
+        <location filename="../gui/postprocesswidget.cxx" line="31"/>
+        <location filename="../gui/postprocesswidget.cxx" line="84"/>
         <source>Print %1 copies.</source>
         <translation>Drucke %1 Kopien.</translation>
     </message>
@@ -368,7 +368,7 @@
         <translation>Druckermodul nicht gefunden oder unbekannt.</translation>
     </message>
     <message>
-        <location filename="../printer/printer.cxx" line="94"/>
+        <location filename="../printer/printer.cxx" line="103"/>
         <source>Error initializing printer. Is it turned on?</source>
         <translation>Fehler beim Initialisieren des Druckers. Ist er eingeschaltet?</translation>
     </message>
@@ -650,17 +650,17 @@
         <translation>Drucker</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="553"/>
+        <location filename="../gui/settingswidget.ui" line="530"/>
         <source>Printing Backend</source>
         <translation>Druckermodul</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="506"/>
+        <location filename="../gui/settingswidget.ui" line="503"/>
         <source>Enable Printing Support</source>
         <translation>Druckunterstützung aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="560"/>
+        <location filename="../gui/settingswidget.ui" line="594"/>
         <source>Maximum Copies</source>
         <translation>Max. Anzahl Kopien</translation>
     </message>
@@ -669,227 +669,232 @@
         <translation type="vanished">Drucken bestätigen</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="594"/>
+        <location filename="../gui/settingswidget.ui" line="537"/>
         <source>Paper Height [mm]</source>
         <translation>Papierhöhe [mm]</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="546"/>
+        <location filename="../gui/settingswidget.ui" line="510"/>
         <source>Paper Width [mm]</source>
         <translation>Papierbreite [mm]</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="520"/>
+        <location filename="../gui/settingswidget.ui" line="601"/>
         <source>Print automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="587"/>
+        <location filename="../gui/settingswidget.ui" line="584"/>
         <source>Printer IP</source>
         <translation>Drucker IP</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="601"/>
+        <location filename="../gui/settingswidget.ui" line="557"/>
         <source>Allow printing after assembling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="609"/>
+        <location filename="../gui/settingswidget.ui" line="608"/>
+        <source>Enforce Password Protection (see Archive)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="616"/>
         <source>Storage</source>
         <translation>Speicher</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="615"/>
+        <location filename="../gui/settingswidget.ui" line="622"/>
         <source>Ignore Removable Devices (separate by Comma)</source>
         <translation>Wechsellaufwerke ignorieren (durch Beistrich getrennt)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="622"/>
+        <location filename="../gui/settingswidget.ui" line="629"/>
         <source>Wait for Removable Device on Startup</source>
         <translation>Auf Wechsellaufwerk beim Starten warten</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="629"/>
+        <location filename="../gui/settingswidget.ui" line="636"/>
         <source>Keep individual pictures</source>
         <translation>Speichere einzelne Bilder</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="636"/>
+        <location filename="../gui/settingswidget.ui" line="643"/>
         <source>Picture Base Name</source>
         <translation>Basis des Bildnamens</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="652"/>
+        <location filename="../gui/settingswidget.ui" line="659"/>
         <source>Base Directory Name</source>
         <translation>Basisverzeichnis</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="686"/>
+        <location filename="../gui/settingswidget.ui" line="693"/>
         <source>GPIO</source>
         <translation>GPIO</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="698"/>
+        <location filename="../gui/settingswidget.ui" line="705"/>
         <source>Idle Lamp Pin</source>
         <translation>Pin der Idle-Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="711"/>
+        <location filename="../gui/settingswidget.ui" line="718"/>
         <source>Exit Pin</source>
         <translation>Pin des Exit-Knopfes</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="731"/>
+        <location filename="../gui/settingswidget.ui" line="738"/>
         <source>Enable GPIO Support</source>
         <translation>GPIO Unterstützung aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="738"/>
+        <location filename="../gui/settingswidget.ui" line="745"/>
         <source>AF Lamp Pin</source>
         <translation>Pin der Autofokus Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="745"/>
+        <location filename="../gui/settingswidget.ui" line="752"/>
         <source>Idel Lamp PWM Value</source>
         <translation>PWM-Wert der Idle-Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="752"/>
+        <location filename="../gui/settingswidget.ui" line="759"/>
         <source>Trigger Pin</source>
         <translation>Pin des Auslösers</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="759"/>
+        <location filename="../gui/settingswidget.ui" line="766"/>
         <source>AF Lamp PWM Value</source>
         <translation>PWM-Wert der Autofokus-Lampe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="794"/>
+        <location filename="../gui/settingswidget.ui" line="801"/>
         <source>Archive</source>
         <translation>Archiv</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="833"/>
+        <location filename="../gui/settingswidget.ui" line="840"/>
         <source>Password-protect printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="840"/>
+        <location filename="../gui/settingswidget.ui" line="847"/>
         <source>Enable Archive</source>
         <translation>Archiv aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="861"/>
+        <location filename="../gui/settingswidget.ui" line="868"/>
         <source>Allow Reprinting</source>
         <translation>Erneutes Drucken erlauben</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="876"/>
+        <location filename="../gui/settingswidget.ui" line="883"/>
         <source>Show</source>
         <translation>Show</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="895"/>
+        <location filename="../gui/settingswidget.ui" line="902"/>
         <source>Enable Show</source>
         <translation>Show aktivieren</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="902"/>
+        <location filename="../gui/settingswidget.ui" line="909"/>
         <source>Show Full Screen</source>
         <translation>Show in Vollbildmodus</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="932"/>
+        <location filename="../gui/settingswidget.ui" line="939"/>
         <source>Swap Screens (QtPhotobox and Show)</source>
         <translation>Bildschirme vertauschen (QtPhotobox und Show)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="939"/>
+        <location filename="../gui/settingswidget.ui" line="946"/>
         <source>Show full images</source>
         <translation>Zeige vollständige Bilder</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="949"/>
+        <location filename="../gui/settingswidget.ui" line="956"/>
         <source>Show images randomly</source>
         <translation>Zeige Bilder in zufälliger Reihenfolge</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="963"/>
+        <location filename="../gui/settingswidget.ui" line="970"/>
         <source>Display Time [s]</source>
         <translation>Anzeigezeit [s]</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="970"/>
+        <location filename="../gui/settingswidget.ui" line="977"/>
         <source>Width</source>
         <translation>Breite</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="977"/>
+        <location filename="../gui/settingswidget.ui" line="984"/>
         <source>Height</source>
         <translation>Höhe</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="984"/>
+        <location filename="../gui/settingswidget.ui" line="991"/>
         <source>Footer Text</source>
         <translation>Text in der Fußzeile</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="992"/>
+        <location filename="../gui/settingswidget.ui" line="999"/>
         <source>Screensaver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1017"/>
+        <location filename="../gui/settingswidget.ui" line="1024"/>
         <source>Text Line 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1024"/>
+        <location filename="../gui/settingswidget.ui" line="1031"/>
         <source>Text Line 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1038"/>
+        <location filename="../gui/settingswidget.ui" line="1045"/>
         <source>Text Line 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1048"/>
+        <location filename="../gui/settingswidget.ui" line="1055"/>
         <source>Screensaver Timeout [seconds]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1055"/>
+        <location filename="../gui/settingswidget.ui" line="1062"/>
         <source>Enable Screensaver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1081"/>
+        <location filename="../gui/settingswidget.ui" line="1088"/>
         <source>Save and Restart</source>
         <translation>Speichern und Neu starten</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1088"/>
+        <location filename="../gui/settingswidget.ui" line="1095"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1095"/>
+        <location filename="../gui/settingswidget.ui" line="1102"/>
         <source>Restore Defaults</source>
         <translation>Standardwerte Laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="521"/>
+        <location filename="../gui/settingswidget.cxx" line="528"/>
         <source>Open Background image</source>
         <translation>Hintergrundbild laden</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="522"/>
+        <location filename="../gui/settingswidget.cxx" line="529"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG Bilder (*.jpg)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="564"/>
+        <location filename="../gui/settingswidget.cxx" line="571"/>
         <source>Filters for Picture %1</source>
         <translation>Filter für Bild %1</translation>
     </message>

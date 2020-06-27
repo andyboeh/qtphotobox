@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>7</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabInterface">
       <attribute name="title">
@@ -497,15 +497,22 @@
        <string>Printer</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="4" column="0">
-        <widget class="QComboBox" name="cmbPrinterBackend"/>
-       </item>
        <item row="0" column="0">
         <widget class="QCheckBox" name="chkEnablePrinting">
          <property name="text">
           <string>Enable Printing Support</string>
          </property>
         </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Paper Width [mm]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLineEdit" name="editPrinterIP"/>
        </item>
        <item row="6" column="0">
         <widget class="QSpinBox" name="spinPaperWidth">
@@ -514,10 +521,20 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="chkAutoPrint">
+       <item row="8" column="0">
+        <widget class="QSpinBox" name="spinMaxCopies"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLabel" name="label_18">
          <property name="text">
-          <string>Print automatically</string>
+          <string>Printing Backend</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Paper Height [mm]</string>
          </property>
         </widget>
        </item>
@@ -534,30 +551,10 @@
          </property>
         </spacer>
        </item>
-       <item row="5" column="0">
-        <widget class="QLineEdit" name="editPrinterIP"/>
-       </item>
-       <item row="8" column="0">
-        <widget class="QSpinBox" name="spinMaxCopies"/>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLabel" name="label_15">
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="chkAllowPrinting">
          <property name="text">
-          <string>Paper Width [mm]</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLabel" name="label_18">
-         <property name="text">
-          <string>Printing Backend</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="QLabel" name="label_17">
-         <property name="text">
-          <string>Maximum Copies</string>
+          <string>Allow printing after assembling</string>
          </property>
         </widget>
        </item>
@@ -588,17 +585,27 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
-        <widget class="QLabel" name="label_16">
+       <item row="4" column="0">
+        <widget class="QComboBox" name="cmbPrinterBackend"/>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLabel" name="label_17">
          <property name="text">
-          <string>Paper Height [mm]</string>
+          <string>Maximum Copies</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="chkAllowPrinting">
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="chkAutoPrint">
          <property name="text">
-          <string>Allow printing after assembling</string>
+          <string>Print automatically</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="chkPasswordProtectPrintingAfterAssembly">
+         <property name="text">
+          <string>Enforce Password Protection (see Archive)</string>
          </property>
         </widget>
        </item>

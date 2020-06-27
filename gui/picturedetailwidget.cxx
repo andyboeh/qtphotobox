@@ -63,13 +63,10 @@ void picturedetailWidget::on_sliderCopies_valueChanged(int value)
 
 void picturedetailWidget::paintEvent(QPaintEvent *event)
 {
-    qDebug() << "paintEvent";
     if(ui->lblPicture->size().width() != mWidth || ui->lblPicture->size().height() != mHeight) {
-        qDebug() << "not resized.";
         QPixmap image(mFilename);
         if(image.isNull())
             return;
-        qDebug() << "pixmap not null";
         mScaledImage = image.scaled(ui->lblPicture->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         mWidth = ui->lblPicture->size().width();
         mHeight = ui->lblPicture->size().height();

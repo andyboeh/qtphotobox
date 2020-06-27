@@ -217,6 +217,11 @@ void settingsWidget::loadFromSettings()
     else
         ui->chkAllowPrinting->setChecked(Qt::Unchecked);
 
+    if(pbs.getBool("printer", "enforcepassword"))
+        ui->chkPasswordProtectPrintingAfterAssembly->setChecked(Qt::Checked);
+    else
+        ui->chkPasswordProtectPrintingAfterAssembly->setChecked(Qt::Unchecked);
+
     ui->spinPaperWidth->setValue(pbs.getInt("printer", "width"));
     ui->spinPaperHeight->setValue(pbs.getInt("printer", "height"));
     ui->spinMaxCopies->setValue(pbs.getInt("printer", "max_copies"));
@@ -353,6 +358,7 @@ void settingsWidget::saveToSettings()
     pbs.setBool("printer", "enable", ui->chkEnablePrinting->isChecked());
     pbs.setBool("printer", "autoprint", ui->chkAutoPrint->isChecked());
     pbs.setBool("printer", "allowprinting", ui->chkAllowPrinting->isChecked());
+    pbs.setBool("printer", "enforcepassword", ui->chkPasswordProtectPrintingAfterAssembly->isChecked());
     pbs.setInt("printer", "width", ui->spinPaperWidth->value());
     pbs.setInt("printer", "height", ui->spinPaperHeight->value());
     pbs.setInt("printer", "max_copies", ui->spinMaxCopies->value());
@@ -505,6 +511,7 @@ void settingsWidget::on_chkEnablePrinting_stateChanged(int arg1)
     ui->spinMaxCopies->setEnabled(enabled);
     ui->spinPaperWidth->setEnabled(enabled);
     ui->spinPaperHeight->setEnabled(enabled);
+    ui->chkPasswordProtectPrintingAfterAssembly->setEnabled(enabled);
 }
 
 void settingsWidget::on_btnBackground_clicked()

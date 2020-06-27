@@ -13,11 +13,13 @@ class passwordWidget : public QFrame
     Q_OBJECT
 
 public:
+    explicit passwordWidget(QWidget *parent = nullptr);
     explicit passwordWidget(QString filename, int copies, QWidget *parent = nullptr);
     ~passwordWidget();
 
 signals:
     void printArchivePicture(QString filename, int copies);
+    void printPicture();
     void cancelled();
 
 private slots:
@@ -52,6 +54,7 @@ private:
     QList<int> mDigits;
     QList<int> mPassword;
     int mCurrentDigit;
+    void loadSettings();
 };
 
 #endif // PASSWORDWIDGET_H

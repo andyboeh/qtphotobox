@@ -3,6 +3,20 @@
 #include "settings.h"
 #include <QDebug>
 
+passwordWidget::passwordWidget(QWidget *parent) :
+    QFrame(parent),
+    ui(new Ui::passwordWidget),
+    mCopies(0)
+{
+    ui->setupUi(this);
+    if(parent) {
+        QRect parentRect = parent->rect();
+        setGeometry(parentRect);
+    }
+
+    loadSettings();
+}
+
 passwordWidget::passwordWidget(QString filename, int copies, QWidget *parent) :
     QFrame(parent),
     ui(new Ui::passwordWidget),
@@ -15,6 +29,10 @@ passwordWidget::passwordWidget(QString filename, int copies, QWidget *parent) :
         setGeometry(parentRect);
     }
 
+    loadSettings();
+}
+
+void passwordWidget::loadSettings(void) {
     pbSettings &pbs = pbSettings::getInstance();
     mDigits.clear();
     mPassword.clear();
@@ -116,5 +134,8 @@ void passwordWidget::checkPassword()
 
     qDebug() << "matched.";
     // Passwords match!
-    emit printArchivePicture(mFilename, mCopies);
+    if(!mFilename.isEmpty())
+        emit printArchivePicture(mFilename, mCopies);
+    else
+        emit printPicture();
 }
