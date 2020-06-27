@@ -135,10 +135,10 @@ void pbSettings::initDefaultConfg()
     qtPhotoboxSettings.insert("display_time", 5);
 
     pictureSettings.insert("num_pictures", 4);
-    pictureSettings.insert("filters_picture1", "scale:45,move:top=30:left=30");
-    pictureSettings.insert("filters_picture2", "scale:45,move:top=30:right=30");
-    pictureSettings.insert("filters_picture3", "scale:45,move:bottom=30:left=30");
-    pictureSettings.insert("filters_picture4", "scale:45,move:bottom=30:right=30");
+    pictureSettings.insert("filters_picture1", "scale:width=47%,move:top=30:left=30");
+    pictureSettings.insert("filters_picture2", "scale:width=47%,move:top=30:right=30");
+    pictureSettings.insert("filters_picture3", "scale:width=47%,move:bottom=30:left=30");
+    pictureSettings.insert("filters_picture4", "scale:width=47%,move:bottom=30:right=30");
     pictureSettings.insert("size_x", 3496);
     pictureSettings.insert("size_y", 2362);
     pictureSettings.insert("background", "");

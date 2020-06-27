@@ -151,10 +151,43 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                 QStringList filterArgs = filter.split(":");
                 QString op = filterArgs.at(0);
                 if(op == "scale") {
-                    int fr = filterArgs.at(1).toInt();
-                    int nw = image.width() * fr / 100;
-                    qDebug() << "Applying scaling: " << fr << " width: " << nw;
-                    imageToDraw = imageToDraw.scaledToWidth(nw, Qt::SmoothTransformation);
+                    bool sw = false;
+                    bool sh = false;
+                    int fw = 100;
+                    int fh = 100;
+                    int nw;
+                    int nh;
+                    for(int i=1; i<filterArgs.size(); i++) {
+                        QStringList opArgs = filterArgs.at(i).split("=");
+                        QString scale = opArgs.at(1);
+                        if(opArgs.at(0) == "width") {
+                            sw = true;
+                            if(scale.contains("%")) {
+                                fw = scale.remove("%").trimmed().toInt();
+                                nw = image.width() * fw / 100;
+                            } else {
+                                nw = scale.toInt();
+                            }
+                        } else if(opArgs.at(0) == "height") {
+                            sh = true;
+                            if(scale.contains("%")) {
+                                fh = scale.remove("%").trimmed().toInt();
+                                nh = image.height() * fh / 100;
+                            } else {
+                                nh = scale.toInt();
+                            }
+                        }
+                    }
+                    if(sw && sh) {
+                        qDebug() << "Applying width and height scaling, width = " << nw << ", height = " << nh;
+                        imageToDraw = imageToDraw.scaled(nw, nh, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                    } else if(sw) {
+                        qDebug() << "Applying width scaling, width = " << nw;
+                        imageToDraw = imageToDraw.scaledToWidth(nw, Qt::SmoothTransformation);
+                    } else if(sh) {
+                        qDebug() << "Applygin height scaling, height = " << nh;
+                        imageToDraw = imageToDraw.scaledToHeight(nh, Qt::SmoothTransformation);
+                    }
                 } else if(op == "move") {
                     qDebug() << "Applying move";
                     for(int i=1; i<filterArgs.size(); i++) {
