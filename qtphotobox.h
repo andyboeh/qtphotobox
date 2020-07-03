@@ -82,6 +82,7 @@ private:
     bool mErrorPresent;
     QString mImageToPrint;
     void initThreads();
+    QString mStateBeforeError;
 };
 
 #endif //_QTPHOTOBOX_H

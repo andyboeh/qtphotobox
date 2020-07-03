@@ -296,7 +296,11 @@ QMap<QString, QVariant> CameraGphoto2::getConfigRecursively(CameraWidget *widget
         return config;
     }
     if(ret == 0) {
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
+        config = config.unite(getChildValue(widget));
+#else
         config.insert(getChildValue(widget));
+#endif
     }
     count = ret;
     for(int i=0; i<count; i++) {
@@ -304,9 +308,17 @@ QMap<QString, QVariant> CameraGphoto2::getConfigRecursively(CameraWidget *widget
         ret = gp_widget_get_child(widget, i, &child);
         if(ret == GP_OK) {
             if(gp_widget_count_children(child) > 0) {
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
+                config = config.unite(getConfigRecursively(child));
+#else
                 config.insert(getConfigRecursively(child));
+#endif
             } else {
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
+                config = config.unite(getChildValue(child));
+#else
                 config.insert(getChildValue(child));
+#endif
             }
         }
     }

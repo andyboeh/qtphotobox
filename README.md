@@ -76,7 +76,7 @@ Then you can compile from the command line.
 Step-by-step:
 
 ```
-sudo apt-get install build-essential libgphoto2-dev libpigpio-dev cmake libusb-1.0-0-dev qttools5-dev
+sudo apt-get install build-essential libgphoto2-dev libpigpio-dev cmake libusb-1.0-0-dev qttools5-dev qtmultimedia5-dev
 git clone https://github.com/andyboeh/qtphotobox
 mkdir qtphotobox-build
 cd qtphotobox-build

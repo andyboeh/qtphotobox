@@ -389,7 +389,7 @@ void MainWindow::errorOk()
     mErrorPresent = false;
     StateMachine &sm = StateMachine::getInstance();
     QString currentState = sm.getCurrentState();
-    if(currentState == "init" || currentState == "postprocess")
+    if(currentState != mStateBeforeError || currentState == "init" || currentState == "postprocess")
         sm.triggerState(currentState);
 }
 
@@ -439,6 +439,7 @@ void MainWindow::pictureAssembled(QPixmap image)
 
 void MainWindow::printerError(QString error)
 {
+    mStateBeforeError = StateMachine::getInstance().getCurrentState();
     mErrorPresent = true;
     delete mOverlayWidget;
     mOverlayWidget = new errorWidget(errorWidget::BTN_OK, error, this);
@@ -448,6 +449,7 @@ void MainWindow::printerError(QString error)
 
 void MainWindow::cameraError(QString error)
 {
+    mStateBeforeError = StateMachine::getInstance().getCurrentState();
     mErrorPresent = true;
     delete mOverlayWidget;
     mOverlayWidget = new errorWidget(errorWidget::BTN_RETRY_QUIT, error, this);
@@ -459,6 +461,7 @@ void MainWindow::cameraError(QString error)
 
 void MainWindow::genericError(QString error)
 {
+    mStateBeforeError = StateMachine::getInstance().getCurrentState();
     mErrorPresent = true;
     delete mOverlayWidget;
     mOverlayWidget = new errorWidget(errorWidget::BTN_OK_QUIT, error, this);
