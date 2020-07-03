@@ -32,6 +32,7 @@ archiveWidget::archiveWidget(QWidget *parent) :
     ui->listView->setIconSize(QSize(150,150));
 
     mDetailWidget = nullptr;
+    mPasswordWidget = nullptr;
 }
 
 archiveWidget::~archiveWidget()
