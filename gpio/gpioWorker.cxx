@@ -37,6 +37,7 @@ bool gpioWorker::setupGpio() {
     mGpioMapping.insert("idle_lamp_pwm_value", pbs.getInt("gpio", "idle_lamp_pwm_value"));
     mGpioMapping.insert("af_lamp_pin", pbs.getInt("gpio", "af_lamp_pin"));
     mGpioMapping.insert("af_lamp_pwm_value", pbs.getInt("gpio", "af_lamp_pwm_value"));
+
     mPi = pigpio_start(NULL, NULL);
     if(mPi < 0)
         goto out;
@@ -50,12 +51,12 @@ bool gpioWorker::setupGpio() {
     if(ret != 0)
         goto out;
 
-    ret = set_glitch_filter(mPi, mGpioMapping.value("trigger_pin"), PI_PUD_UP);
+    ret = set_glitch_filter(mPi, mGpioMapping.value("trigger_pin"), 1000);
     if(ret != 0)
         goto out;
 
     ret = callback(mPi, mGpioMapping.value("trigger_pin"), FALLING_EDGE, cbFunc);
-    if(ret != 0)
+    if(ret < 0)
         goto out;
 
     ret = set_mode(mPi, mGpioMapping.value("exit_pin"), PI_INPUT);
@@ -66,12 +67,12 @@ bool gpioWorker::setupGpio() {
     if(ret != 0)
         goto out;
 
-    ret = set_glitch_filter(mPi, mGpioMapping.value("exit_pin"), PI_PUD_UP);
+    ret = set_glitch_filter(mPi, mGpioMapping.value("exit_pin"), 1000);
     if(ret != 0)
         goto out;
 
     ret = callback(mPi, mGpioMapping.value("exit_pin"), FALLING_EDGE, cbFunc);
-    if(ret != 0)
+    if(ret < 0)
         goto out;
 
     ret = set_mode(mPi, mGpioMapping.value("idle_lamp_pin"), PI_OUTPUT);
@@ -84,9 +85,6 @@ bool gpioWorker::setupGpio() {
 
     set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), 0);
     set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), 0);
-
-    //ret = callback(mPi, mGpioMapping.value("trigger_pin"), FALLING_EDGE, &cbFunc);
-    //ret = callback(mPi, mGpioMapping.value("exit_pin"), FALLING_EDGE, &cbFunc);
 
     return true;
 

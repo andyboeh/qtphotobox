@@ -13,12 +13,12 @@ class gpioWorker : public Worker
 public:
     gpioWorker();
     ~gpioWorker();
-    void callbackFunc(unsigned int gpio, unsigned int level);
 public slots:
     void start(void);
     void stop(void);
     void setState(QString state);
     void initGpio();
+    void callbackFunc(unsigned int gpio, unsigned int level);
 signals:
     void gpioError(QString message);
 private slots:
