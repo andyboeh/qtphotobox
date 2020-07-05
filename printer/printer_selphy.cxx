@@ -1,5 +1,6 @@
 #include "printer_selphy.h"
 #include "settings.h"
+#include "printJob.h"
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QUdpSocket>
 #include <QDebug>
@@ -252,9 +253,9 @@ QByteArray printerSelphy::makeFileHeader(quint32 offset, quint32 length) {
     data = data.replace(0x0c, 1, "\x1");
     const quint32 fsize = qToLittleEndian<quint32>(mCurrentFile->size());
     data = data.replace(0x14, 4, (const char*)&fsize, 4);
-    const quint32 width = qToLittleEndian<quint32>(mPrintJobs.first().getWidth());
+    const quint32 width = qToLittleEndian<quint32>(mPrintJobs.first()->getWidth());
     data = data.replace(0x18, 4, (const char*)&width, 4);
-    const quint32 height = qToLittleEndian<quint32>(mPrintJobs.first().getHeight());
+    const quint32 height = qToLittleEndian<quint32>(mPrintJobs.first()->getHeight());
     data = data.replace(0x1c, 4, (const char*)&height, 4);
     const quint32 coffset = offset;
     data = data.replace(0x60, 4, (const char*)&coffset, 4);
@@ -289,13 +290,13 @@ void printerSelphy::processPrintJob(bool tcp) {
     {
         if(mPrintJobs.isEmpty())
             return;
-        printJob job = mPrintJobs.first();
+        printJob *job = mPrintJobs.first();
         if(mCurrentFile) {
             mCurrentFile->close();
             delete mCurrentFile;
             mCurrentFile = nullptr;
         }
-        mCurrentFile = new QFile(job.getFile());
+        mCurrentFile = new QFile(job->getFile());
         if(!mCurrentFile->open(QIODevice::ReadOnly)) {
             qDebug() << "Error opening file.";
         } else {
@@ -312,7 +313,7 @@ void printerSelphy::processPrintJob(bool tcp) {
         QString appname("QtPhotobox");
         QByteArray an = encoderWithoutBom->fromUnicode(appname);
 
-        QFileInfo info(job.getFile());
+        QFileInfo info(job->getFile());
 
         QString filename = info.fileName();
         QByteArray fn = encoderWithoutBom->fromUnicode(filename);
@@ -420,16 +421,20 @@ void printerSelphy::processPrintJob(bool tcp) {
         }
         break;
     case JOB_STATE_DONE:
+    {
+        printJob *job = mPrintJobs.first();
         mCurrentFile->close();
-        mPrintJobs.first().setCopiesPrinted(mPrintJobs.first().getCopiesPrinted() + 1);
-        qDebug() << "So far, I printed " << mPrintJobs.first().getCopiesPrinted() << " copies.";
-        if(mPrintJobs.first().getCopiesPrinted() >= mPrintJobs.first().getCopies()) {
+        job->setCopiesPrinted(job->getCopiesPrinted() + 1);
+        qDebug() << "So far, I printed " << job->getCopiesPrinted() << " copies.";
+        if(job->getCopiesPrinted() >= job->getCopies()) {
             qDebug() << "Removing job as all copies have been printed.";
+            delete job;
             mPrintJobs.removeFirst();
         }
         mTcpSocket->close();
         mJobState = JOB_STATE_IDLE;
         break;
+    }
     case JOB_STATE_FAILED:
         mCurrentFile->close();
         mJobState = JOB_STATE_IDLE;
@@ -497,8 +502,8 @@ void printerSelphy::tcpConnected()
 bool printerSelphy::printFile(QString filename, int numcopies, bool removeFile)
 {
     qDebug() << "printerSelphy::printFile";
-    printJob job(filename, numcopies);
-    job.setRemoveFile(removeFile);
+    printJob *job = new printJob(filename, numcopies);
+    job->setRemoveFile(removeFile);
     mPrintJobs.append(job);
     return true;
 }

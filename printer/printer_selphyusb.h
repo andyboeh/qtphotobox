@@ -2,7 +2,6 @@
 #define _PRINTER_SELPHYUSB_H
 
 #include "printer_interface.h"
-#include "printJob.h"
 #include <QList>
 #include <QMap>
 #include <QString>
@@ -11,6 +10,7 @@
 struct libusb_device_handle;
 struct libusb_context;
 class QTimer;
+class printJob;
 
 class printerSelphyUsb : public printerInterface {
     Q_OBJECT
@@ -40,7 +40,7 @@ private:
     uint8_t mInterface;
     uint8_t mAltSetting;
     int mXferTimeout;
-    QList<printJob> mPrintJobs;
+    QList<printJob*> mPrintJobs;
     QTimer *mTimer;
     selphyUsbJobState mJobState;
     bool mErrorState;

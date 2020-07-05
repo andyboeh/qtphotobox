@@ -227,10 +227,10 @@ void printerSelphyUsb::processPrintJob() {
         // The printer is idle now, we're good to go!
         mErrorState = false;
 
-        printJob &job = mPrintJobs.first();
+        printJob *job = mPrintJobs.first();
 
 
-        QFile file(job.getSpoolFile());
+        QFile file(job->getSpoolFile());
         if(!file.open(QIODevice::ReadOnly)) {
             qDebug() << "Error opening spool file!";
             mJobState = JOB_STATE_IDLE;
@@ -245,6 +245,7 @@ void printerSelphyUsb::processPrintJob() {
             if(!writeData(data.mid(sent, chunk))) {
                 qDebug() << "Error sending chunk!";
                 emit printerError("comm", tr("Error communicating with the printer"));
+                delete job;
                 mPrintJobs.removeFirst();
                 mTimer->start();
                 mJobState = JOB_STATE_IDLE;
@@ -283,16 +284,20 @@ void printerSelphyUsb::processPrintJob() {
         break;
     }
     case JOB_STATE_DONE:
-        mPrintJobs.first().setCopiesPrinted(mPrintJobs.first().getCopiesPrinted() + 1);
-        qDebug() << "So far, I printed " << mPrintJobs.first().getCopiesPrinted() << " copies.";
-        if(mPrintJobs.first().getCopiesPrinted() >= mPrintJobs.first().getCopies()) {
+    {
+        printJob *job = mPrintJobs.first();
+        job->setCopiesPrinted(job->getCopiesPrinted() + 1);
+        qDebug() << "So far, I printed " << job->getCopiesPrinted() << " copies.";
+        if(job->getCopiesPrinted() >= job->getCopies()) {
             qDebug() << "Removing job as all copies have been printed.";
-            QFile file(mPrintJobs.first().getSpoolFile());
+            QFile file(job->getSpoolFile());
             if(file.exists())
                 file.remove();
             mPrintJobs.removeFirst();
+            delete job;
         }
         mJobState = JOB_STATE_IDLE;
+    }
     }
 }
 
@@ -303,7 +308,7 @@ bool printerSelphyUsb::printFile(QString filename, int numcopies)
 }
 
 bool printerSelphyUsb::prepareSpoolData(QPixmap image, int numcopies) {
-    printJob job;
+    printJob *job = new printJob();
     int size_x = 1872;
     int size_y = 1248;
     int off_x = 0;
@@ -339,12 +344,12 @@ bool printerSelphyUsb::prepareSpoolData(QPixmap image, int numcopies) {
 
     QImage spooledImage = spoolImage.toImage();
 
-    QFile file(job.getSpoolFile());
+    QFile file(job->getSpoolFile());
     if(!file.open(QIODevice::ReadWrite)) {
         return false;
     }
 
-    job.setCopies(numcopies);
+    job->setCopies(numcopies);
 
     QByteArray planeCyan(size_x * size_y, '\0');
     QByteArray planeMagenta(size_x * size_y, '\0');

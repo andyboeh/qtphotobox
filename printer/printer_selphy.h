@@ -3,7 +3,6 @@
 
 #include "printer_interface.h"
 #include <QByteArray>
-#include "printJob.h"
 #include <QList>
 #include <QAbstractSocket>
 
@@ -11,6 +10,7 @@ class QFile;
 class QTcpSocket;
 class QUdpSocket;
 class QTimer;
+class printJob;
 
 class printerSelphy : public printerInterface {
     Q_OBJECT
@@ -66,7 +66,7 @@ private:
     QByteArray mData;
     QByteArray mLastData;
     QString mIp;
-    QList<printJob> mPrintJobs;
+    QList<printJob*> mPrintJobs;
     QByteArray mJobSeq;
     QFile *mCurrentFile;
     QByteArray mFileData;

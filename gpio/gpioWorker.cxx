@@ -46,6 +46,9 @@ bool gpioWorker::setupGpio() {
     if(ret != 0)
         goto out;
 
+    set_PWM_dutycycle(mPi, mGpioMapping.value("idle_lamp_pin"), 0);
+    set_PWM_dutycycle(mPi, mGpioMapping.value("af_lamp_pin"), 0);
+
     //ret = callback(mPi, mGpioMapping.value("trigger_pin"), FALLING_EDGE, &cbFunc);
     //ret = callback(mPi, mGpioMapping.value("exit_pin"), FALLING_EDGE, &cbFunc);
 
