@@ -78,7 +78,9 @@ void pictureWorker::start()
         if(mCommandList.isEmpty())
             continue;
 
+        mMutex.lock();
         QString command = mCommandList.takeFirst();
+        mMutex.unlock();
         if(command == "processTask") {
             if(mPictureTasks.isEmpty())
                 continue;
@@ -108,7 +110,9 @@ void pictureWorker::start()
 void pictureWorker::stop()
 {
     qDebug() << "stopThread";
+    mMutex.lock();
     mCommandList.append("stopThread");
+    mMutex.unlock();
 }
 
 void pictureWorker::initTask(pictureTask::eTaskType type)

@@ -23,22 +23,30 @@ showWorker::~showWorker()
 
 void showWorker::showRandomPicture()
 {
+    mMutex.lock();
     mCommandList.append("showRandomPicture");
+    mMutex.unlock();
 }
 
 void showWorker::showNextPicture()
 {
+    mMutex.lock();
     mCommandList.append("showNextPicture");
+    mMutex.unlock();
 }
 
 void showWorker::scanPictures()
 {
+    mMutex.lock();
     mCommandList.append("scanPictures");
+    mMutex.unlock();
 }
 
 void showWorker::addPicture(QString path)
 {
+    mMutex.lock();
     mFileList.append(path);
+    mMutex.unlock();
 }
 
 void showWorker::start()
@@ -101,7 +109,9 @@ void showWorker::start()
         if(mCommandList.isEmpty())
             continue;
 
+        mMutex.lock();
         QString command = mCommandList.takeFirst();
+        mMutex.unlock();
 
         if(command == "showRandomPicture") {
             if(mFileList.isEmpty()) {
@@ -122,7 +132,9 @@ void showWorker::start()
                 mCurrentIndex = 0;
             emit showPicture(image);
         } else if(command == "scanPictures") {
+            mMutex.lock();
             mFileList = dir.entryList(filterlist);
+            mMutex.unlock();
         }
         else if(command == "stopThread") {
             running = false;
@@ -137,5 +149,7 @@ void showWorker::start()
 
 void showWorker::stop()
 {
+    mMutex.lock();
     mCommandList.append("stopThread");
+    mMutex.unlock();
 }

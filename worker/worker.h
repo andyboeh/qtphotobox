@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QAbstractEventDispatcher>
+#include <QMutex>
 
 class Worker : public QObject
 {
@@ -23,7 +24,9 @@ signals:
 public slots:
 
     void cancel() {
+        mMutex.lock();
         mCommandList.append("stopThread");
+        mMutex.unlock();
     }
 
 protected:
@@ -59,6 +62,7 @@ protected:
         return !mCommandList.isEmpty();
     }
 
+    QMutex mMutex;
     QStringList mCommandList;
 
 };

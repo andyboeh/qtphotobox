@@ -141,7 +141,10 @@ void pbCamera::start()
         waitForCommand();
         if(mCommandList.isEmpty())
             continue;
+
+        mMutex.lock();
         QString command = mCommandList.takeFirst();
+        mMutex.unlock();
         if(command == "initCamera" || command == "retryOperation") {
             if(mPreviewCamera && !mInitialized) {
                 if(mPreviewCamera != mCaptureCamera) {
@@ -247,13 +250,17 @@ void pbCamera::start()
 void pbCamera::stop()
 {
     qDebug() << "Stop" << QThread::currentThreadId();
+    mMutex.lock();
     mCommandList.append("stopThread");
+    mMutex.unlock();
 }
 
 void pbCamera::startPreview()
 {
     qDebug() << "startPreview";
+    mMutex.lock();
     mCommandList.append("startPreview");
+    mMutex.unlock();
 }
 
 void pbCamera::stopPreview()
@@ -262,17 +269,23 @@ void pbCamera::stopPreview()
     if(mLimitFps) {
         mLimitTimer->stop();
     }
+    mMutex.lock();
     mCommandList.append("stopPreview");
+    mMutex.unlock();
 }
 
 void pbCamera::retryOperation()
 {
     qDebug() << "retryOperation";
+    mMutex.lock();
     mCommandList.append("retryOperation");
+    mMutex.unlock();
 }
 
 void pbCamera::captureImage()
 {
     qDebug() << "captureImage";
+    mMutex.lock();
     mCommandList.append("captureImage");
+    mMutex.unlock();
 }

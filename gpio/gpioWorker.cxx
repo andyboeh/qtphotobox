@@ -146,7 +146,9 @@ void gpioWorker::start()
         if(mCommandList.isEmpty())
             continue;
 
+        mMutex.lock();
         QString command = mCommandList.takeFirst();
+        mMutex.unlock();
 
         if(command == "setState") {
             if(mState == "idle") {
@@ -192,25 +194,35 @@ void gpioWorker::start()
 void gpioWorker::callbackFunc(unsigned int gpio, unsigned int level) {
     if(gpio == (unsigned int)mGpioMapping.value("trigger_pin")) {
         qDebug() << "Trigger activated!";
+        mMutex.lock();
         mCommandList.append("triggerActivated");
+        mMutex.unlock();
     } else if(gpio == (unsigned int)mGpioMapping.value("exit_pin")) {
         qDebug() << "Exit activated!";
+        mMutex.lock();
         mCommandList.append("exitActivated");
+        mMutex.unlock();
     }
 }
 
 void gpioWorker::initGpio()
 {
+    mMutex.lock();
     mCommandList.append("initGpio");
+    mMutex.unlock();
 }
 
 void gpioWorker::stop()
 {
+    mMutex.lock();
     mCommandList.append("stopThread");
+    mMutex.unlock();
 }
 
 void gpioWorker::setState(QString state)
 {
+    mMutex.lock();
     mState = state;
     mCommandList.append("setState");
+    mMutex.unlock();
 }

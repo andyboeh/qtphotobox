@@ -76,7 +76,9 @@ void printerWorker::start()
         if(mCommandList.isEmpty())
             return;
 
+        mMutex.lock();
         QString command = mCommandList.takeFirst();
+        mMutex.unlock();
 
         if(command == "processJob") {
             if(mPrintJobs.isEmpty())
@@ -134,28 +136,37 @@ void printerWorker::start()
 void printerWorker::stop()
 {
     qDebug() << "printerWorker::stop";
+    mMutex.lock();
     mCommandList.append("stopThread");
+    mMutex.unlock();
 }
 
 void printerWorker::startStatusPolling()
 {
+    mMutex.lock();
     mCommandList.append("startStatusPolling");
+    mMutex.unlock();
 }
 
 void printerWorker::stopStatusPolling()
 {
+    mMutex.lock();
     mCommandList.append("stopStatusPolling");
+    mMutex.unlock();
 }
 
 void printerWorker::addPrintJob(QPixmap image, int numcopies)
 {
+    mMutex.lock();
     printJob job(image, numcopies);
     mPrintJobs.append(job);
     mCommandList.append("processJob");
+    mMutex.unlock();
 }
 
 void printerWorker::addFilePrintJob(QString filename, int numcopies)
 {
+    mMutex.lock();
     if(mPrinter->canPrintFiles())
     {
         printJob job(filename, numcopies);
@@ -165,9 +176,12 @@ void printerWorker::addFilePrintJob(QString filename, int numcopies)
         QPixmap image(filename);
         addPrintJob(image, numcopies);
     }
+    mMutex.unlock();
 }
 
 void printerWorker::initPrinter()
 {
+    mMutex.lock();
     mCommandList.append("initPrinter");
+    mMutex.unlock();
 }

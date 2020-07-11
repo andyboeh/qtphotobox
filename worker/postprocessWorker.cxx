@@ -18,24 +18,30 @@ void postprocessWorker::saveThumbnail(QString file)
 {
     postprocessTask task(postprocessTask::POSTPROCESS_TYPE_CREATE_THUMBNAIL);
     task.setFile(file);
+    mMutex.lock();
     mPostprocessTasks.append(task);
     mCommandList.append("processTask");
+    mMutex.unlock();
 }
 
 void postprocessWorker::saveFullImage(QPixmap image)
 {
     postprocessTask task(postprocessTask::POSTPROCESS_TYPE_SAVE_FULL_IMAGE);
     task.setPicture(image);
+    mMutex.lock();
     mPostprocessTasks.append(task);
     mCommandList.append("processTask");
+    mMutex.unlock();
 }
 
 void postprocessWorker::saveAssembledImage(QPixmap image)
 {
     postprocessTask task(postprocessTask::POSTPROCESS_TYPE_SAVE_ASSEMBLED_IMAGE);
     task.setPicture(image);
+    mMutex.lock();
     mPostprocessTasks.append(task);
     mCommandList.append("processTask");
+    mMutex.unlock();
 }
 
 void postprocessWorker::start()
@@ -52,13 +58,17 @@ void postprocessWorker::start()
         if(mCommandList.isEmpty())
             continue;
 
+        mMutex.lock();
         QString command = mCommandList.takeFirst();
+        mMutex.unlock();
 
         if(command == "processTask") {
             qDebug() << "processTask";
             if(mPostprocessTasks.isEmpty())
                 continue;
+            mMutex.lock();
             postprocessTask task = mPostprocessTasks.takeFirst();
+            mMutex.unlock();
 
             switch(task.getTaskType()) {
             case postprocessTask::POSTPROCESS_TYPE_SAVE_FULL_IMAGE:
@@ -90,7 +100,9 @@ void postprocessWorker::start()
 
 void postprocessWorker::stop()
 {
+    mMutex.lock();
     mCommandList.append("stopThread");
+    mMutex.unlock();
 }
 
 bool postprocessWorker::saveFullImageReal(QPixmap image)
