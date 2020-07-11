@@ -14,7 +14,7 @@ public:
     QPixmap getCaptureImage();
     void setIdle();
     void setActive();
-    bool setConfigValueString(QString key, QString val);
+    bool setConfigValue(QString key, QVariant val);
     QMap<QString, QVariant> getConfig();
     QVariant getConfig(QString key);
 private:
@@ -29,6 +29,9 @@ private:
     QMap<QString, QVariant> mShutdownConfig;
     QMap<QString, QVariant> mIdleConfig;
     QMap<QString, QVariant> mActiveConfig;
+    QMap<QString, QVariant> mPreviewConfig;
+    QMap<QString, QVariant> mCaptureConfig;
+    void setCaptureConfig();
 };
 
 #endif //_CAMERA_GPHOTO2_H

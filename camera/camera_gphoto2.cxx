@@ -85,6 +85,12 @@ bool CameraGphoto2::initCamera()
                     }
                     settings.endGroup();
                 }
+                if(sections.contains("capture")) {
+                    settings.beginGroup("capture");
+                    foreach(QString key, settings.childKeys()) {
+                        mCaptureConfig.insert(key, settings.value(key));
+                    }
+                }
             }
         }
         setStartupConfig();
@@ -137,6 +143,8 @@ QPixmap CameraGphoto2::getCaptureImage()
     strcpy(camera_file_path.folder, "/");
     strcpy(camera_file_path.name, "foo.jpg");
 
+    setCaptureConfig();
+
     ret = gp_camera_capture(mCamera, GP_CAPTURE_IMAGE, &camera_file_path, mContext);
     if(ret != GP_OK) {
         qDebug() << "gp_camera_capture failed.";
@@ -177,18 +185,18 @@ out:
 void CameraGphoto2::setIdle()
 {
     foreach(QString key, mIdleConfig.keys()) {
-        setConfigValueString(key, mIdleConfig.value(key).toString());
+        setConfigValue(key, mIdleConfig.value(key));
     }
 }
 
 void CameraGphoto2::setActive()
 {
     foreach(QString key, mActiveConfig.keys()) {
-        setConfigValueString(key, mActiveConfig.value(key).toString());
+        setConfigValue(key, mActiveConfig.value(key));
     }
 }
 
-bool CameraGphoto2::setConfigValueString(QString key, QString val)
+bool CameraGphoto2::setConfigValue(QString key, QVariant val)
 {
     CameraWidget *widget = NULL;
     CameraWidget *child = NULL;
@@ -223,18 +231,30 @@ bool CameraGphoto2::setConfigValueString(QString key, QString val)
         case GP_WIDGET_MENU:
         case GP_WIDGET_RADIO:
         case GP_WIDGET_TEXT:
+        /* This is the actual set call. Note that we keep
+         * ownership of the string and have to free it if necessary.
+         */
+        ret = gp_widget_set_value(child, val.toString().toStdString().c_str());
+        if (ret < GP_OK) {
+            qDebug() << "could not set widget value.";
+            goto out;
+        }
         break;
+    case GP_WIDGET_TOGGLE:
+    {
+        int value = val.toInt();
+        /* This is the actual set call. Note that we keep
+         * ownership of the string and have to free it if necessary.
+         */
+        ret = gp_widget_set_value(child, &value);
+        if (ret < GP_OK) {
+            qDebug() << "could not set widget value.";
+            goto out;
+        }
+        break;
+    }
     default:
         qDebug() <<  "widget has bad type.";
-        goto out;
-    }
-
-    /* This is the actual set call. Note that we keep
-     * ownership of the string and have to free it if necessary.
-     */
-    ret = gp_widget_set_value(child, val.toStdString().c_str());
-    if (ret < GP_OK) {
-        qDebug() << "could not set widget value.";
         goto out;
     }
 
@@ -355,13 +375,20 @@ QVariant CameraGphoto2::getConfig(QString key)
 void CameraGphoto2::setStartupConfig()
 {
     foreach(QString key, mStartupConfig.keys()) {
-        setConfigValueString(key, mStartupConfig.value(key).toString());
+        setConfigValue(key, mStartupConfig.value(key));
     }
 }
 
 void CameraGphoto2::setShutdownConfig()
 {
     foreach(QString key, mShutdownConfig.keys()) {
-        setConfigValueString(key, mShutdownConfig.value(key).toString());
+        setConfigValue(key, mShutdownConfig.value(key));
+    }
+}
+
+void CameraGphoto2::setCaptureConfig()
+{
+    foreach(QString key, mCaptureConfig.keys()) {
+        setConfigValue(key, mCaptureConfig.value(key));
     }
 }
