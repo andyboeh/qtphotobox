@@ -3,7 +3,7 @@ QtPhotobox
 
 QtPhotobox is a Qt-based C++ application for building a custom Photobox. It is
 inspired and heavily based on design (software and look-and-feel) of 
-https://github.com/reuterbal/photoobooth with a few
+https://github.com/reuterbal/photobooth with a few
 newly added features and some adaptations to my personal use-case.
 
 **Warning:** This is a very, very, *very* quick rewrite in C++ that has not been
@@ -24,6 +24,7 @@ Features
   * Interface to Cameras via QtMultimedia (Generic Webcams etc.)
   * Interface to printers via CUPS or an internal Canon Selphy backend (WiFi or USB)
   * GPIO-based LED control (PWM only)
+  * Support for GPIO trigger button
   * Review and reprinting of stored images
   * Possibility to wait for a USB drive and save all files there
   * If a second screen/projectos is attached, slide show on the external screen
@@ -55,8 +56,8 @@ TODO
 ----
 
  * Support Raspberry Pi Camera Module (should work with the generic module if configured correctly)
- * Support Hardware Trigger Button (GPIO)
  * Auto-Upload to web service
+ * Auto-generate Gphoto2 configuration file
 
 Installation
 ------------
@@ -73,7 +74,7 @@ system for:
 
 Then you can compile from the command line.
 
-Step-by-step:
+Step-by-step (on raspbian):
 
 ```
 sudo apt-get install build-essential libgphoto2-dev libpigpio-dev cmake libusb-1.0-0-dev qttools5-dev qtmultimedia5-dev
@@ -100,6 +101,11 @@ Configuration
 
 QtPhotobox can be entirely configured using the GUI. All settings are stored
 in a configuration file at `~/.qtphotobox/settings.ini`.
+
+If you use the GPhoto2 backend, there might be some camera-specific
+initialization values required. These values need to be stored in a file at 
+`~/.qtphotobox/<cameraname>.cfg`. For now, you can find some examples
+in the `config` folder.
 
 License
 -------
