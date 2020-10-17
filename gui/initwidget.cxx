@@ -23,6 +23,8 @@ initWidget::initWidget(QFrame *parent) :
 
 initWidget::~initWidget()
 {
+    mTimer->stop();
+    mTimer->deleteLater();
     delete ui;
 }
 

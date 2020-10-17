@@ -127,7 +127,10 @@ QPixmap CameraGphoto2::getPreviewImage()
     image.loadFromData((const unsigned char *)data, (unsigned int)size);
 
 out:
-    gp_file_free(file);
+    if(file) {
+        gp_file_free(file);
+        file = NULL;
+    }
     return image;
 }
 
@@ -179,6 +182,10 @@ QPixmap CameraGphoto2::getCaptureImage()
     }
 
 out:
+    if(file) {
+        gp_file_free(file);
+        file = NULL;
+    }
     return image;
 }
 
