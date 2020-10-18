@@ -12,7 +12,7 @@
 #include <QSpacerItem>
 #include <QFileDialog>
 #include <QDebug>
-
+#include <QMessageBox>
 
 settingsWidget::settingsWidget(QFrame *parent) :
     QFrame(parent),
@@ -72,8 +72,10 @@ void settingsWidget::loadFromSettings()
 {
     pbSettings &pbs = pbSettings::getInstance();
     QString path = pbs.getConfigPath();
-    path += "settings.ini";
-    pbs.mergeConfigFile(path);
+    if(!path.isEmpty()) {
+        path += "settings.ini";
+        pbs.mergeConfigFile(path);
+    }
     if(pbs.getBool("gui", "hide_cursor"))
         ui->chkHideCursor->setCheckState(Qt::Checked);
     else
@@ -387,9 +389,11 @@ void settingsWidget::saveToSettings()
     pbs.set("screensaver", "text2", ui->editScreensaver2->text());
     pbs.set("screensaver", "text3", ui->editScreensaver3->text());
 
+#ifdef BUILD_QTPHOTOBOX
     QString path = pbs.getConfigPath();
     path += "settings.ini";
     pbs.saveConfigFile(path);
+#endif
 }
 
 void settingsWidget::on_btnSave_clicked()
@@ -398,6 +402,14 @@ void settingsWidget::on_btnSave_clicked()
 #ifdef BUILD_QTPHOTOBOX
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerState("restart");
+#else
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    tr("Save Settings File"),
+                                                    "settings.ini", tr("Settings File (*.ini)"));
+    if(!filename.isEmpty()) {
+        pbSettings &pbs = pbSettings::getInstance();
+        pbs.saveConfigFile(filename);
+    }
 #endif
 }
 
@@ -406,12 +418,19 @@ void settingsWidget::on_btnCancel_clicked()
 #ifdef BUILD_QTPHOTOBOX
     StateMachine &sm = StateMachine::getInstance();
     sm.triggerState("init");
+#else
+    QApplication::quit();
 #endif
 }
 
 void settingsWidget::on_btnRestoreDefaults_clicked()
 {
-
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, tr("Restore Defaults"), tr("Are you sure to restore defaults? Current settings will be lost."),
+                                  QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes) {
+        loadDefaultsFromSettings();
+    }
 }
 
 void settingsWidget::on_chkEnableshow_stateChanged(int arg1)
