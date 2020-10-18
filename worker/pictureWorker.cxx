@@ -192,6 +192,22 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                         qDebug() << "Applygin height scaling, height = " << nh;
                         imageToDraw = imageToDraw.scaledToHeight(nh, Qt::SmoothTransformation);
                     }
+                } else if(op == "grayscale") {
+                    qDebug() << "Applying grayscale";
+                    imageToDraw = QPixmap::fromImage(imageToDraw.toImage().convertToFormat(QImage::Format_Grayscale8));
+                } else if(op == "copy") {
+                    qDebug() << "Applying copy";
+                    // For copy, we simply apply all operations so far
+                    // and restart with the same image again.
+                    if(dx < 0)
+                        dx = 0;
+                    if(dy < 0)
+                        dy = 0;
+                    painter.setCompositionMode(QPainter::CompositionMode_Source);
+                    painter.drawImage(dx, dy, imageToDraw.toImage());
+                    dx = 0;
+                    dy = 0;
+                    imageToDraw = images.at(i);
                 } else if(op == "move") {
                     qDebug() << "Applying move";
                     for(int i=1; i<filterArgs.size(); i++) {
