@@ -151,20 +151,22 @@ void gpioWorker::start()
         mMutex.unlock();
 
         if(command == "setState") {
-            if(mState == "idle") {
+            if(mState == "idle" ||
+                    mState == "greeter" ||
+                    mState == "init" ||
+                    mState == "assemble" ||
+                    mState == "review" ||
+                    mState == "postprocess" ||
+                    mState == "archive") {
+                mAfTarget = 0;
+                mIdleTarget = 0;
+                mTimer->start();
+            } else if(mState == "countdown") {
                 mAfTarget = 0;
                 mIdleTarget = mGpioMapping.value("idle_lamp_pwm_value");
                 mTimer->start();
-            } else if(mState == "greeter" || mState == "init") {
+            } else if(mState == "capture") {
                 mAfTarget = mGpioMapping.value("af_lamp_pwm_value");
-                mIdleTarget = 0;
-                mTimer->start();
-            } else if(mState == "archive") {
-                mAfTarget = 0;
-                mIdleTarget = 0;
-                mTimer->start();
-            } else if(mState == "review") {
-                mAfTarget = 0;
                 mIdleTarget = 0;
                 mTimer->start();
             }
