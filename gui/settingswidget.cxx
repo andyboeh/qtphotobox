@@ -53,6 +53,11 @@ settingsWidget::settingsWidget(QFrame *parent) :
     mPrinterBackendMapping.insert("cups", "CUPS");
 #endif
 
+#ifndef BUILD_QTPHOTOBOX
+    ui->btnCancel->setText(tr("Quit"));
+    ui->btnSave->setText(tr("Save As..."));
+#endif
+
     loadFromSettings();
 }
 

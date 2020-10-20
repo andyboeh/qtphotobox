@@ -20,10 +20,10 @@ class settingsWidget : public QFrame
 public:
     explicit settingsWidget(QFrame *parent = nullptr);
     ~settingsWidget();
+    void loadFromSettings();
 
 private:
     void loadDefaultsFromSettings();
-    void loadFromSettings();
     void saveToSettings();
 
 private slots:

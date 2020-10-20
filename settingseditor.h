@@ -9,6 +9,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
     ~MainWindow();
+private:
+    void askLoadFile();
 };
 
 #endif //_SETTINGSEDITOR_H
