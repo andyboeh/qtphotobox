@@ -19,6 +19,7 @@ settingsWidget::settingsWidget(QFrame *parent) :
     ui(new Ui::settingsWidget)
 {
     ui->setupUi(this);
+    mStyleMapping.insert("dark-1024x600-touch", "Dark (1024x600) Touch");
     mStyleMapping.insert("dark-1024x600", "Dark (1024x600)");
     mStyleMapping.insert("dark-800x600", "Dark (800x600)");
     mStyleMapping.insert("dark-800x480", "Dark (800x480)");

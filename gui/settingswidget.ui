@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>618</width>
+    <width>646</width>
     <height>385</height>
    </rect>
   </property>
@@ -64,6 +64,11 @@
          <item>
           <property name="text">
            <string>Dark (1024x600)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dark (1024x600) Touch</string>
           </property>
          </item>
          <item>
