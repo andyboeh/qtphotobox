@@ -137,7 +137,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
     QPixmap image(mPictureSizeX, mPictureSizeY);
     qDebug() << "New image dimensions: " << image.width() << " x " << image.height();
     QPainter painter(&image);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     if(mBackgroundImage.isNull()) {
         painter.fillRect(image.rect(), Qt::white);
     } else {
@@ -149,6 +149,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
         int dy = 0;
         QString filter = mFilterList.at(i);
         QPixmap imageToDraw = images.at(i);
+
         if(!filter.isEmpty()) {
             QStringList filters = filter.split(",");
             foreach(QString filter, filters) {
@@ -203,7 +204,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                         dx = 0;
                     if(dy < 0)
                         dy = 0;
-                    painter.setCompositionMode(QPainter::CompositionMode_Source);
+                    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
                     painter.drawImage(dx, dy, imageToDraw.toImage());
                     dx = 0;
                     dy = 0;
@@ -262,7 +263,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                 dx = 0;
             if(dy < 0)
                 dy = 0;
-            painter.setCompositionMode(QPainter::CompositionMode_Source);
+            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
             painter.drawImage(dx, dy, imageToDraw.toImage());
         } else {
             qDebug() << "Empty filter for picture " << i;

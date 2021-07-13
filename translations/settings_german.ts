@@ -2,6 +2,29 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../settingseditor.cxx" line="18"/>
+        <source>Load File?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingseditor.cxx" line="18"/>
+        <source>Do you want to load a settings file to start with?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingseditor.cxx" line="21"/>
+        <source>Open Settings File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingseditor.cxx" line="22"/>
+        <source>Settings File (*.ini)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>settingsWidget</name>
     <message>
         <location filename="../gui/settingswidget.ui" line="14"/>
@@ -454,21 +477,47 @@
     </message>
     <message>
         <location filename="../gui/settingswidget.ui" line="1102"/>
+        <location filename="../gui/settingswidget.cxx" line="434"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="528"/>
+        <location filename="../gui/settingswidget.cxx" line="57"/>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="58"/>
+        <source>Save As...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="412"/>
+        <source>Save Settings File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="413"/>
+        <source>Settings File (*.ini)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="434"/>
+        <source>Are you sure to restore defaults? Current settings will be lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="552"/>
         <source>Open Background image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="529"/>
+        <location filename="../gui/settingswidget.cxx" line="553"/>
         <source>JPEG Images (*.jpg)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="571"/>
+        <location filename="../gui/settingswidget.cxx" line="595"/>
         <source>Filters for Picture %1</source>
         <translation type="unfinished"></translation>
     </message>

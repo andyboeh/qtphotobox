@@ -89,8 +89,8 @@
 <context>
     <name>gpioWorker</name>
     <message>
-        <location filename="../gpio/gpioWorker.cxx" line="102"/>
-        <location filename="../gpio/gpioWorker.cxx" line="134"/>
+        <location filename="../gpio/gpioWorker.cxx" line="139"/>
+        <location filename="../gpio/gpioWorker.cxx" line="175"/>
         <source>Error initializing GPIO.</source>
         <translation>Error initialising GPIO.</translation>
     </message>
@@ -224,20 +224,20 @@
         <translation type="vanished">Error initialising camera. Check connection.</translation>
     </message>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="150"/>
+        <location filename="../camera/pbcamera.cxx" line="153"/>
         <source>Error initializing preview camera. Check connection. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="158"/>
+        <location filename="../camera/pbcamera.cxx" line="161"/>
         <source>Error initializing capture camera. Check connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../camera/pbcamera.cxx" line="167"/>
-        <location filename="../camera/pbcamera.cxx" line="183"/>
-        <location filename="../camera/pbcamera.cxx" line="199"/>
-        <location filename="../camera/pbcamera.cxx" line="220"/>
+        <location filename="../camera/pbcamera.cxx" line="170"/>
+        <location filename="../camera/pbcamera.cxx" line="186"/>
+        <location filename="../camera/pbcamera.cxx" line="202"/>
+        <location filename="../camera/pbcamera.cxx" line="223"/>
         <source>Error capturing image. Camera connected?</source>
         <translation>Error capturing image. Camera connected?</translation>
     </message>
@@ -250,7 +250,7 @@
         <translation>Background image not found: %1</translation>
     </message>
     <message>
-        <location filename="../worker/pictureWorker.cxx" line="92"/>
+        <location filename="../worker/pictureWorker.cxx" line="94"/>
         <source>Error assembling picture.</source>
         <translation>Error assembling picture.</translation>
     </message>
@@ -322,17 +322,17 @@
 <context>
     <name>postprocessWorker</name>
     <message>
-        <location filename="../worker/postprocessWorker.cxx" line="67"/>
+        <location filename="../worker/postprocessWorker.cxx" line="77"/>
         <source>Error saving full image.</source>
         <translation>Error saving full image.</translation>
     </message>
     <message>
-        <location filename="../worker/postprocessWorker.cxx" line="72"/>
+        <location filename="../worker/postprocessWorker.cxx" line="82"/>
         <source>Error saving assembled image.</source>
         <translation>Error saving assembled image.</translation>
     </message>
     <message>
-        <location filename="../worker/postprocessWorker.cxx" line="77"/>
+        <location filename="../worker/postprocessWorker.cxx" line="87"/>
         <source>Error saving thumbnail image.</source>
         <translation>Error saving thumbnail image.</translation>
     </message>
@@ -340,7 +340,7 @@
 <context>
     <name>printerSelphy</name>
     <message>
-        <location filename="../printer/printer_selphy.cxx" line="368"/>
+        <location filename="../printer/printer_selphy.cxx" line="369"/>
         <source>The printer is either out of paper or out of ribbon and needs your attention!</source>
         <translation>The printer is either out of paper or out of ribbon and needs your attentiont!</translation>
     </message>
@@ -350,7 +350,7 @@
     <message>
         <location filename="../printer/printer_selphyusb.cxx" line="198"/>
         <location filename="../printer/printer_selphyusb.cxx" line="222"/>
-        <location filename="../printer/printer_selphyusb.cxx" line="272"/>
+        <location filename="../printer/printer_selphyusb.cxx" line="273"/>
         <source>The printer is either out of paper or out of ribbon and needs your attention!</source>
         <translation>The printer is either out of paper or out of ribbon and needs your attention!</translation>
     </message>
@@ -368,7 +368,7 @@
         <translation>Priner backend not found or unknown.</translation>
     </message>
     <message>
-        <location filename="../printer/printer.cxx" line="103"/>
+        <location filename="../printer/printer.cxx" line="105"/>
         <source>Error initializing printer. Is it turned on?</source>
         <translation>Error initialising printer. Is it turned on?</translation>
     </message>
@@ -900,21 +900,47 @@
     </message>
     <message>
         <location filename="../gui/settingswidget.ui" line="1102"/>
+        <location filename="../gui/settingswidget.cxx" line="434"/>
         <source>Restore Defaults</source>
         <translation>Restore Defaults</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="528"/>
+        <location filename="../gui/settingswidget.cxx" line="57"/>
+        <source>Quit</source>
+        <translation type="unfinished">Quit</translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="58"/>
+        <source>Save As...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="412"/>
+        <source>Save Settings File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="413"/>
+        <source>Settings File (*.ini)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="434"/>
+        <source>Are you sure to restore defaults? Current settings will be lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.cxx" line="552"/>
         <source>Open Background image</source>
         <translation>Open Background image</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="529"/>
+        <location filename="../gui/settingswidget.cxx" line="553"/>
         <source>JPEG Images (*.jpg)</source>
         <translation>JPEG Images (*.jpg)</translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="571"/>
+        <location filename="../gui/settingswidget.cxx" line="595"/>
         <source>Filters for Picture %1</source>
         <translation>Filter for Picture %1</translation>
     </message>
