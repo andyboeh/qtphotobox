@@ -34,7 +34,7 @@ QFrame#idleWidget {
 }
 
 QFrame#idleWidget QLabel {
-    font-size: 160px;
+    font-size: 140px;
     qproperty-alignment: AlignCenter;
 }
 
@@ -50,9 +50,8 @@ QFrame#idleWidget QPushButton#btnArchive:pressed {
 }
 
 QFrame#idleWidget QPushButton#btnTrigger {
-    /* border: none; */
     color: rgba(255, 27, 0, 200);
-    font-size: 200px;
+    font-size: 190px;
     text-align: center;
 }
 
