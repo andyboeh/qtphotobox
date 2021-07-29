@@ -326,6 +326,11 @@ bool printerSelphyUsb::prepareSpoolData(QPixmap image, int numcopies) {
     // 0x00 = Y'CbCr data
     // 0x01 = CMY data
 
+    // Auto-rotate image
+    if(image.width() < image.height()) {
+        QTransform transform = QTransform().rotate(90);
+        image = image.transformed(transform);
+    }
     QImage scaled = image.scaled(size_x, size_y, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage();
 
     if(scaled.width() < size_x) {
