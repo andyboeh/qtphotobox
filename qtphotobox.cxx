@@ -178,7 +178,7 @@ void MainWindow::changeState(QString name)
         setCentralWidget(mCurrentWidget);
     } else if(name == "assemble") {
         if(mImagesCaptured < mImagesToCapture) {
-            sm.triggerState("countdown");
+            QMetaObject::invokeMethod(&sm, "triggerState", Qt::QueuedConnection, Q_ARG(QString, "countdown"));
         } else {
             emit finishTask();
             delete mCurrentWidget;
