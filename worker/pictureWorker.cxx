@@ -148,7 +148,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
         int dx = 0;
         int dy = 0;
         QString filter = mFilterList.at(i);
-        QPixmap imageToDraw = images.at(i);
+        QPixmap imageToDraw(images.at(i));
 
         if(!filter.isEmpty()) {
             QStringList filters = filter.split(",");
@@ -190,7 +190,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                         qDebug() << "Applying width scaling, width = " << nw;
                         imageToDraw = imageToDraw.scaledToWidth(nw, Qt::SmoothTransformation);
                     } else if(sh) {
-                        qDebug() << "Applygin height scaling, height = " << nh;
+                        qDebug() << "Applyign height scaling, height = " << nh;
                         imageToDraw = imageToDraw.scaledToHeight(nh, Qt::SmoothTransformation);
                     }
                 } else if(op == "grayscale") {
@@ -205,7 +205,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                     if(dy < 0)
                         dy = 0;
                     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-                    painter.drawImage(dx, dy, imageToDraw.toImage());
+                    painter.drawPixmap(dx, dy, imageToDraw);
                     dx = 0;
                     dy = 0;
                     imageToDraw = images.at(i);
@@ -257,6 +257,29 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                     if(h > y + imageToDraw.height())
                         h = imageToDraw.height() - y;
                     imageToDraw = imageToDraw.copy(x, y, w, h);
+                } else if(op == "border") {
+                    qDebug() << "Applying border";
+                    int size = 5;
+                    QColor color(0,0,0,180);
+                    for(int i=1; i<filterArgs.size(); i++) {
+                        QStringList opArgs = filterArgs.at(i).split("=");
+                        if(opArgs.at(0) == "size") {
+                            size = opArgs.at(1).toInt();
+                        } else if(opArgs.at(0) == "style") {
+                            QString style = opArgs.at(1);
+                            if(style == "black")
+                                color = QColor(0,0,0,180);
+                            else if(style == "white")
+                                color = QColor(255,255,255,180);
+                        }
+                    }
+                    QPixmap dst(imageToDraw.width() + size * 2, imageToDraw.height() + size * 2);
+                    dst.fill(color);
+                    QPainter pnt(&dst);
+                    pnt.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                    pnt.drawPixmap(size, size, imageToDraw);
+                    pnt.end();
+                    imageToDraw = dst;
                 }
             }
             if(dx < 0)
@@ -264,7 +287,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
             if(dy < 0)
                 dy = 0;
             painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-            painter.drawImage(dx, dy, imageToDraw.toImage());
+            painter.drawPixmap(dx, dy, imageToDraw);
         } else {
             qDebug() << "Empty filter for picture " << i;
         }

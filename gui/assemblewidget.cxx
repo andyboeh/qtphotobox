@@ -25,7 +25,7 @@ assembleWidget::~assembleWidget()
 }
 
 void assembleWidget::paintEvent(QPaintEvent *event) {
-    QColor fg = ui->label->palette().color(QPalette::Foreground);
+    QColor fg = ui->label->palette().color(QPalette::WindowText);
     if(mSpinner->color() != fg) {
         mSpinner->setColor(fg);
     }
