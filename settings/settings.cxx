@@ -94,6 +94,7 @@ void pbSettings::initDefaultConfg()
     guiSettings.insert("style", "default");
     guiSettings.insert("direct_start", false);
     guiSettings.insert("language", "english");
+    guiSettings.insert("shutdown", false);
 
     screensaverSettings.insert("enable", true);
     screensaverSettings.insert("timeout", 60);
@@ -110,6 +111,8 @@ void pbSettings::initDefaultConfg()
     cameraSettings.insert("previewrotation", 0);
     cameraSettings.insert("previewflip", true);
     cameraSettings.insert("fps", 0);
+    cameraSettings.insert("previewportrait", false);
+    cameraSettings.insert("captureportrait", false);
 
     gpioSettings.insert("enable", true);
     gpioSettings.insert("exit_pin", 24);

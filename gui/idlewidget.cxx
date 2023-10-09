@@ -14,6 +14,11 @@ idleWidget::idleWidget(QFrame *parent) :
     } else {
         ui->btnArchive->setVisible(false);
     }
+    if(pbs.getBool("gui", "shutdown")) {
+        ui->btnShutdown->setVisible(true);
+    } else {
+        ui->btnShutdown->setVisible(false);
+    }
 }
 
 idleWidget::~idleWidget()
@@ -41,3 +46,10 @@ void idleWidget::changeEvent(QEvent *event)
 
     QFrame::changeEvent(event);
 }
+
+void idleWidget::on_btnShutdown_clicked()
+{
+    StateMachine &sm = StateMachine::getInstance();
+    sm.triggerState("askteardown");
+}
+

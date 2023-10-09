@@ -64,6 +64,17 @@ void pbCamera::start()
     int previewRotation = pbs.getInt("camera", "previewrotation");
     int captureRotation = pbs.getInt("camera", "capturerotation");
 
+    bool portraitPreview = pbs.getBool("camera", "previewportrait");
+    bool portraitCapture = pbs.getBool("camera", "captureportrait");
+
+    int previewCropW = 0;
+    int previewCropH = 0;
+    int previewCropO = 0;
+    int captureCropW = 0;
+    int captureCropH = 0;
+    int captureCropO = 0;
+
+
 #ifdef BUILD_GPHOTO2
     if(previewBackend == "gphoto2") {
         if(mPreviewCamera)
@@ -166,6 +177,13 @@ void pbCamera::start()
                         QTransform transform = QTransform().rotate(captureRotation);
                         testshot = testshot.transformed(transform);
                     }
+                    if(portraitCapture) {
+                        captureCropH = testshot.size().height();
+                        float ratio = testshot.size().width() / (float)testshot.size().height();
+                        captureCropW = captureCropH / ratio;
+                        captureCropO = (testshot.size().width() - captureCropW) / 2;
+                        testshot = testshot.copy(captureCropO, 0, captureCropW, captureCropH);
+                    }
                     if(testshot.isNull()) {
                         emit cameraError(tr("Error capturing image. Camera connected?"));
                     } else {
@@ -191,6 +209,15 @@ void pbCamera::start()
                         QTransform transform = QTransform().rotate(previewRotation);
                         image = image.transformed(transform);
                     }
+                    if(portraitPreview) {
+                        if(previewCropO == 0) {
+                            previewCropH = image.size().height();
+                            float ratio = image.size().width() / (float)image.size().height();
+                            previewCropW = previewCropH / ratio;
+                            previewCropO = (image.size().width() - previewCropW) / 2;
+                        }
+                        image = image.copy(previewCropO, 0, previewCropW, previewCropH);
+                    }
                     emit previewImageCaptured(image);
                 }
             } else {
@@ -206,6 +233,15 @@ void pbCamera::start()
                         if(previewRotation != 0) {
                             QTransform transform = QTransform().rotate(previewRotation);
                             image = image.transformed(transform);
+                        }
+                        if(portraitPreview) {
+                            if(previewCropO == 0) {
+                                previewCropH = image.size().height();
+                                float ratio = image.size().width() / (float)image.size().height();
+                                previewCropW = previewCropH / ratio;
+                                previewCropO = (image.size().width() - previewCropW) / 2;
+                            }
+                            image = image.copy(previewCropO, 0, previewCropW, previewCropH);
                         }
                         emit previewImageCaptured(image);
                     }
@@ -227,6 +263,15 @@ void pbCamera::start()
                 if(captureRotation != 0) {
                     QTransform transform = QTransform().rotate(captureRotation);
                     image = image.transformed(transform);
+                }
+                if(portraitCapture) {
+                    if(captureCropO == 0) {
+                        captureCropH = image.size().height();
+                        float ratio = image.size().width() / (float)image.size().height();
+                        captureCropW = captureCropH / ratio;
+                        captureCropO = (image.size().width() - captureCropW) / 2;
+                    }
+                    image = image.copy(captureCropO, 0, previewCropW, captureCropH);
                 }
                 emit imageCaptured(image);
             }

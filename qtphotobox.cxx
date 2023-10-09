@@ -23,6 +23,7 @@
 #include "waitremovablewidget.h"
 #include "screensaver.h"
 #include "screensaverwidget.h"
+#include "shutdownwidget.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -196,6 +197,9 @@ void MainWindow::changeState(QString name)
         mOverlayWidget->show();
     } else if(name == "error") {
         //mOverlayWidget = new errorWidget(centralWidget());
+    } else if(name == "askteardown") {
+        mOverlayWidget = new shutdownWidget(centralWidget());
+        mOverlayWidget->show();
     } else if(name == "teardown") {
         QApplication::quit();
     }
@@ -609,6 +613,7 @@ int main(int argc, char *argv[]) {
     sm.addState("review");
     sm.addState("postprocess");
     sm.addState("error");
+    sm.addState("askteardown");
     sm.addState("teardown");
     sm.addState("restart");
     sm.addState("screensaver");

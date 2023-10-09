@@ -193,6 +193,7 @@ SET(${NAME}_SOURCES
   gui/screensaver.cxx
   gui/screensaverwidget.cxx
   gui/passwordwidget.cxx
+  gui/shutdownwidget.cxx
   worker/pictureWorker.cxx
   worker/pictureTask.cxx
   worker/postprocessWorker.cxx
@@ -231,6 +232,7 @@ SET(${NAME}_HEADERS
   gui/screensaver.h
   gui/screensaverwidget.h
   gui/passwordwidget.h
+  gui/shutdownwidget.h
   worker/worker.h
   worker/pictureWorker.h
   worker/pictureTask.h
@@ -262,6 +264,7 @@ SET(${NAME}_UI
   gui/errorwidget.ui
   gui/waitremovablewidget.ui
   gui/screensaverwidget.ui
+  gui/shutdownwidget.ui
 )
 
 SET(${NAME}_RES

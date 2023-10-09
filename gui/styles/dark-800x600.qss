@@ -306,6 +306,40 @@ QFrame#screensaverWidget QLabel#lblText4 {
 	color: rgba(255, 27, 0, 200);
 }
 
+/* Shutdown Widget */
+
+QFrame#shutdownWidget {
+    background-color: #f0eeeeee;
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 30px;
+    border-color: #eeeeee;
+    color: #333333;
+    padding: 40px;
+}
+
+QFrame#shutdownWidget QLabel {
+    color: #333333;
+    font-size: 30px;
+    qproperty-alignment: AlignCenter;
+}
+
+QFrame#shutdownWidget QPushButton {
+    color: #333333;
+    border-color: #333333;
+    margin: 20px;
+}
+
+QFrame#shutdownWidget QPushButton:pressed {
+    background-color: #66eeeeee;
+}
+
+QFrame#shutdownWidget QPushButton:disabled {
+    background-color: #66eeeeee;
+    color: #33eeeeee;
+    border-color: #33eeeeee;
+}
+
 /* Customizing settings */
 
 QTabWidget::pane {

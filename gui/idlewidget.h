@@ -21,6 +21,9 @@ private slots:
     void on_btnArchive_clicked();
 
     void changeEvent(QEvent *event);
+
+    void on_btnShutdown_clicked();
+
 private:
     Ui::idleWidget *ui;
 };

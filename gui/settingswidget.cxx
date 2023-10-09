@@ -111,6 +111,12 @@ void settingsWidget::loadFromSettings()
     QString language = pbs.get("gui", "language");
     ui->cmbLanguage->setCurrentText(mLanguageMapping.value(language));
 
+    if(pbs.getBool("gui", "shutdown")) {
+        ui->chkEnableShutdown->setChecked(Qt::Checked);
+    } else {
+        ui->chkEnableShutdown->setChecked(Qt::Unchecked);
+    }
+
     if(pbs.getBool("archive", "enable")) {
         ui->chkEnableArchive->setChecked(Qt::Checked);
         on_chkEnableArchive_stateChanged(Qt::Checked);
@@ -158,6 +164,16 @@ void settingsWidget::loadFromSettings()
         ui->chkFlipPreview->setChecked(Qt::Checked);
     else
         ui->chkFlipPreview->setChecked(Qt::Unchecked);
+
+    if(pbs.getBool("camera", "previewportrait"))
+        ui->chkPortraitPreview->setChecked(Qt::Checked);
+    else
+        ui->chkPortraitPreview->setChecked(Qt::Unchecked);
+
+    if(pbs.getBool("camera", "captureportrait"))
+        ui->chkPortraitCapture->setChecked(Qt::Checked);
+    else
+        ui->chkPortraitCapture->setChecked(Qt::Unchecked);
 
 #ifdef BUILD_GENERIC_CAMERA
     QString camName = pbs.get("camera", "capturename");
@@ -310,6 +326,7 @@ void settingsWidget::saveToSettings()
     pbs.setBool("gui", "hide_cursor", ui->chkHideCursor->isChecked());
     pbs.setBool("gui", "direct_start", ui->chkStartDirectly->isChecked());
     pbs.setBool("gui", "fullscreen", ui->chkStartFullscreen->isChecked());
+    pbs.setBool("gui", "shutdown", ui->chkEnableShutdown->isChecked());
 
     pbs.setInt("gui", "height", ui->spinHeight->value());
     pbs.setInt("gui", "width", ui->spinWidth->value());
@@ -339,6 +356,8 @@ void settingsWidget::saveToSettings()
     pbs.setInt("camera", "previewrotation", mRotationMapping.key(ui->cmbPreviewRotation->currentText()));
     pbs.setBool("camera", "captureflip", ui->chkFlipCapture->isChecked());
     pbs.setBool("camera", "previewflip", ui->chkFlipPreview->isChecked());
+    pbs.setBool("camera", "previewportrait", ui->chkPortraitPreview->isChecked());
+    pbs.setBool("camera", "previewcapture", ui->chkPortraitCapture->isChecked());
 
     pbs.setBool("gpio", "enable", ui->chkEnableGPIO->isChecked());
 
