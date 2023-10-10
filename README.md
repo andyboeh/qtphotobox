@@ -27,11 +27,13 @@ Features
   * Support for GPIO trigger button
   * Review and reprinting of stored images
   * Possibility to wait for a USB drive and save all files there
-  * If a second screen/projectos is attached, slide show on the external screen
-  * Flexible positioning/arranging of images on the final print (move, rotate, scale)
+  * If a second screen/projector is attached, slide show on the external screen
+  * Flexible positioning/arranging of images on the final print (move, rotate, scale, grayscale, multiple times the same image, crop, border)
   * Custom background for final print
   * Theming support
   * Screensaver during idle time (for advertisements etc.)
+  * Portrait made (it's actually cropped landscape)
+  * Sending of pictures via E-Mail
   * ...
   
 Requirements
@@ -71,13 +73,14 @@ system for:
   * libusb
   * CUPS
   * pigpio
+  * libcurl
 
 Then you can compile from the command line.
 
 Step-by-step (on raspbian):
 
 ```
-sudo apt-get install build-essential libgphoto2-dev libpigpio-dev cmake libusb-1.0-0-dev qttools5-dev qtmultimedia5-dev
+sudo apt-get install build-essential libgphoto2-dev libpigpio-dev cmake libusb-1.0-0-dev qttools5-dev qtmultimedia5-dev libcurl-dev
 git clone https://github.com/andyboeh/qtphotobox
 mkdir qtphotobox-build
 cd qtphotobox-build

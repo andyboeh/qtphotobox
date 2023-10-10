@@ -1,6 +1,6 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1 FATAL_ERROR)
 PROJECT(QtPhotobox)
 SET(NAME "qtphotobox")
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1 FATAL_ERROR)
 
 CMAKE_POLICY(SET CMP0020 NEW)
 IF(CMP0028)
@@ -18,6 +18,7 @@ FIND_PACKAGE(Qt5Multimedia)
 FIND_PACKAGE(GPHOTO2)
 FIND_PACKAGE(Cups)
 FIND_PACKAGE(LibUSB)
+FIND_PACKAGE(CURL)
 FIND_LIBRARY(PIGPIO_LIBRARY pigpiod_if2)
 find_package(Qt5LinguistTools REQUIRED)
 
@@ -110,6 +111,19 @@ ELSE()
     SET(TL_LIBRARIES
         ${TL_LIBRARIES}
         ${LIBUSB_LIBRARIES}
+    )
+ENDIF()
+
+IF(NOT CURL_FOUND)
+    MESSAGE(STATUS "Not building support for E-Mail: libcurl not found.")
+    SET(BUILD_CURL FALSE)
+ELSE()
+    SET(BUILD_CURL TRUE)
+    add_definitions("-DBUILD_CURL")
+    include_directories(${CURL_INCLUDE_DIR})
+    SET(TL_LIBRARIES
+        ${TL_LIBRARIES}
+        ${CURL_LIBRARIES}
     )
 ENDIF()
 
@@ -346,6 +360,18 @@ IF(BUILD_CUPS)
     SET(${NAME}_HEADERS
         ${${NAME}_HEADERS}
         printer/printer_cups.h
+    )
+ENDIF()
+
+IF(BUILD_CURL)
+    SET(${NAME}_SOURCES
+        ${${NAME}_SOURCES}
+        worker/curlWorker.cxx
+    )
+
+    SET(${NAME}_HEADERS
+        ${${NAME}_HEADERS}
+        worker/curlWorker.h
     )
 ENDIF()
 

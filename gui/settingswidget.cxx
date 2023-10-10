@@ -316,6 +316,25 @@ void settingsWidget::loadFromSettings()
     ui->editScreensaver1->setText(pbs.get("screensaver", "text1"));
     ui->editScreensaver2->setText(pbs.get("screensaver", "text2"));
     ui->editScreensaver3->setText(pbs.get("screensaver", "text3"));
+
+    if(pbs.getBool("upload", "curl")) {
+        ui->chkEnableCurl->setChecked(Qt::Checked);
+        on_chkEnableCurl_stateChanged(Qt::Checked);
+    } else {
+        ui->chkEnableCurl->setChecked(Qt::Unchecked);
+        on_chkEnableCurl_stateChanged(Qt::Unchecked);
+    }
+    if(pbs.getBool("upload", "usessl")) {
+        ui->chkUseSsl->setChecked(Qt::Checked);
+    } else {
+        ui->chkUseSsl->setChecked(Qt::Unchecked);
+    }
+
+    ui->editMailfrom->setText(pbs.get("upload", "mailfrom"));
+    ui->editMailto->setText(pbs.get("upload", "mailto"));
+    ui->editMailuser->setText(pbs.get("upload", "mailuser"));
+    ui->editMailpassword->setText(pbs.get("upload", "mailpassword"));
+    ui->editMailserver->setText(pbs.get("upload", "mailserver"));
 }
 
 void settingsWidget::saveToSettings()
@@ -413,6 +432,14 @@ void settingsWidget::saveToSettings()
     pbs.set("screensaver", "text1", ui->editScreensaver1->text());
     pbs.set("screensaver", "text2", ui->editScreensaver2->text());
     pbs.set("screensaver", "text3", ui->editScreensaver3->text());
+
+    pbs.setBool("upload", "curl", ui->chkEnableCurl->isChecked());
+    pbs.setBool("upload", "usessl", ui->chkUseSsl->isChecked());
+    pbs.set("upload", "mailfrom", ui->editMailfrom->text());
+    pbs.set("upload", "mailto", ui->editMailto->text());
+    pbs.set("upload", "mailserver", ui->editMailserver->text());
+    pbs.set("upload", "mailuser", ui->editMailuser->text());
+    pbs.set("upload", "mailpassword", ui->editMailpassword->text());
 
 #ifdef BUILD_QTPHOTOBOX
     QString path = pbs.getConfigPath();
@@ -694,3 +721,20 @@ void settingsWidget::on_chkPasswordProtectPrinting_stateChanged(int arg1)
     ui->spinPassword3->setEnabled(enabled);
     ui->spinPassword4->setEnabled(enabled);
 }
+
+void settingsWidget::on_chkEnableCurl_stateChanged(int arg1)
+{
+    bool enabled;
+    if(arg1 == Qt::Checked) {
+        enabled = true;
+    } else {
+        enabled = false;
+    }
+
+    ui->editMailfrom->setEnabled(enabled);
+    ui->editMailpassword->setEnabled(enabled);
+    ui->editMailserver->setEnabled(enabled);
+    ui->editMailto->setEnabled(enabled);
+    ui->editMailuser->setEnabled(enabled);
+}
+

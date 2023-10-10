@@ -18,12 +18,17 @@
 #include "postprocesswidget.h"
 #include "archivewidget.h"
 #include "showWorker.h"
+#ifdef BUILD_PIGPIO
 #include "gpioWorker.h"
+#endif
 #include "errorwidget.h"
 #include "waitremovablewidget.h"
 #include "screensaver.h"
 #include "screensaverwidget.h"
 #include "shutdownwidget.h"
+#ifdef BUILD_CURL
+#include "curlWorker.h"
+#endif
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -43,13 +48,19 @@ MainWindow::MainWindow()
     mShowThread = nullptr;
     mShowThreadObject = nullptr;
     mPrinterThreadObject = nullptr;
+#ifdef BUILD_CURL
+    mCurlWorkerThread = nullptr;
+    mCurlWorkerObject = nullptr;
+#endif
     mPictureWorkerThread = nullptr;
     mPictureWorkerThreadObject = nullptr;
     mPostprocessWorkerThread = nullptr;
     mPostprocessWorkerThreadObject = nullptr;
     mCameraThreadObject = nullptr;
+#ifdef BUILD_PIGPIO
     mGpioThread = nullptr;
     mGpioThreadObject = nullptr;
+#endif
     mScreenSaver = nullptr;
     mImagesCaptured = 0;
     mImagesToCapture = 0;
@@ -97,6 +108,7 @@ MainWindow::~MainWindow()
             mShowThread->wait();
         }
     }
+#ifdef BUILD_PIGPIO
     if(mGpioThread) {
         if(mGpioThread->isRunning()) {
             emit stopGpioThread();
@@ -104,6 +116,16 @@ MainWindow::~MainWindow()
             mGpioThread->wait();
         }
     }
+#endif
+#ifdef BUILD_CURL
+    if(mCurlWorkerThread) {
+        if(mCurlWorkerThread->isRunning()) {
+            emit stopCurlThread();
+            mCurlWorkerThread->quit();
+            mCurlWorkerThread->wait();
+        }
+    }
+#endif
     mCurrentWidget->deleteLater();
     mCurrentWidget = nullptr;
 }
@@ -305,6 +327,22 @@ void MainWindow::initThreads()
         }
     }
 #endif
+#ifdef BUILD_CURL
+    if(pbs.getBool("upload", "curl")) {
+        if(!mCurlWorkerThread) {
+            mCurlWorkerThread = new QThread();
+            mCurlWorkerObject = new curlWorker();
+            mCurlWorkerObject->moveToThread(mCurlWorkerThread);
+            connect(mCurlWorkerObject, SIGNAL(finished()), mCurlWorkerThread, SLOT(quit()));
+            connect(mCurlWorkerObject, SIGNAL(finished()), mCurlWorkerThread, SLOT(deleteLater()));
+            connect(mCurlWorkerThread, SIGNAL(started()), mCurlWorkerObject, SLOT(start()));
+            connect(mCurlWorkerThread, SIGNAL(finished()), mCurlWorkerObject, SLOT(deleteLater()));
+            connect(this, SIGNAL(stopCurlThread()), mCurlWorkerObject, SLOT(stop()));
+            connect(this, SIGNAL(sendAttachmentViaEmail(QString)), mCurlWorkerObject, SLOT(sendAttachmentViaEmail(QString)));
+            mCurlWorkerThread->start();
+        }
+    }
+#endif
 }
 
 void MainWindow::loadSettingsToGui(bool showWindow)
@@ -500,6 +538,12 @@ void MainWindow::assembledImageSaved(QString path, QString filename, bool ret)
     mImageToPrint = path + QDir::separator() + filename;
     if(ret)
         emit saveThumbnail(filename);
+#ifdef BUILD_CURL
+    pbSettings &pbs = pbSettings::getInstance();
+    if(pbs.getBool("upload", "curl")) {
+        emit sendAttachmentViaEmail(mImageToPrint);
+    }
+#endif
 }
 
 void MainWindow::removableDeviceDetected(QString path)

@@ -86,6 +86,7 @@ void pbSettings::initDefaultConfg()
     QMap<QString, QVariant> archiveSettings;
     QMap<QString, QVariant> showSettings;
     QMap<QString, QVariant> screensaverSettings;
+    QMap<QString, QVariant> uploadSettings;
 
     guiSettings.insert("fullscreen", false);
     guiSettings.insert("width", 1024);
@@ -106,10 +107,12 @@ void pbSettings::initDefaultConfg()
     cameraSettings.insert("capturename", "UVC Camera");
     cameraSettings.insert("capturerotation", 0);
     cameraSettings.insert("captureflip", false);
+    cameraSettings.insert("captureportrait", false);
     cameraSettings.insert("previewbackend", "gphoto2");
     cameraSettings.insert("previewname", "UVC Camera");
     cameraSettings.insert("previewrotation", 0);
     cameraSettings.insert("previewflip", true);
+    cameraSettings.insert("previewportrait", false);
     cameraSettings.insert("fps", 0);
     cameraSettings.insert("previewportrait", false);
     cameraSettings.insert("captureportrait", false);
@@ -165,6 +168,14 @@ void pbSettings::initDefaultConfg()
     showSettings.insert("footertext", "QtPhotobox");
     showSettings.insert("full_images", false);
 
+    uploadSettings.insert("curl", false);
+    uploadSettings.insert("usessl", true);
+    uploadSettings.insert("mailuser", "");
+    uploadSettings.insert("mailpassword", "");
+    uploadSettings.insert("mailfrom", "");
+    uploadSettings.insert("mailto", "");
+    uploadSettings.insert("mailserver", "");
+
     mSettings.insert("gui", guiSettings);
     mSettings.insert("qtphotobox", qtPhotoboxSettings);
     mSettings.insert("printer", printerSettings);
@@ -175,6 +186,7 @@ void pbSettings::initDefaultConfg()
     mSettings.insert("archive", archiveSettings);
     mSettings.insert("show", showSettings);
     mSettings.insert("screensaver", screensaverSettings);
+    mSettings.insert("upload", uploadSettings);
 }
 
 QString pbSettings::get(QString section, QString key)

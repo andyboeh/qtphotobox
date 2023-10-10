@@ -190,7 +190,7 @@ QPixmap pictureWorker::assemblePictureTask(pictureTask task)
                         qDebug() << "Applying width scaling, width = " << nw;
                         imageToDraw = imageToDraw.scaledToWidth(nw, Qt::SmoothTransformation);
                     } else if(sh) {
-                        qDebug() << "Applyign height scaling, height = " << nh;
+                        qDebug() << "Applying height scaling, height = " << nh;
                         imageToDraw = imageToDraw.scaledToHeight(nh, Qt::SmoothTransformation);
                     }
                 } else if(op == "grayscale") {

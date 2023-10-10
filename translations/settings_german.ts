@@ -482,18 +482,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1114"/>
+        <location filename="../gui/settingswidget.ui" line="1109"/>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1154"/>
+        <source>Mailserver (smtp://mail.example.com:587)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1161"/>
+        <source>Enable cURL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1137"/>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1182"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1175"/>
+        <source>Mail Recipient Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1144"/>
+        <source>Mail From Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1202"/>
+        <source>Use SSL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gui/settingswidget.ui" line="1215"/>
         <source>Save and Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1121"/>
+        <location filename="../gui/settingswidget.ui" line="1222"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.ui" line="1128"/>
-        <location filename="../gui/settingswidget.cxx" line="454"/>
+        <location filename="../gui/settingswidget.ui" line="1229"/>
+        <location filename="../gui/settingswidget.cxx" line="481"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
@@ -508,32 +548,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="432"/>
+        <location filename="../gui/settingswidget.cxx" line="459"/>
         <source>Save Settings File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="433"/>
+        <location filename="../gui/settingswidget.cxx" line="460"/>
         <source>Settings File (*.ini)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="454"/>
+        <location filename="../gui/settingswidget.cxx" line="481"/>
         <source>Are you sure to restore defaults? Current settings will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="572"/>
+        <location filename="../gui/settingswidget.cxx" line="599"/>
         <source>Open Background image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="573"/>
+        <location filename="../gui/settingswidget.cxx" line="600"/>
         <source>JPEG Images (*.jpg)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gui/settingswidget.cxx" line="615"/>
+        <location filename="../gui/settingswidget.cxx" line="642"/>
         <source>Filters for Picture %1</source>
         <translation type="unfinished"></translation>
     </message>

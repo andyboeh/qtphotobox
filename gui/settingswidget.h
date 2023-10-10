@@ -59,6 +59,8 @@ private slots:
     void on_cmbPreviewBackend_currentIndexChanged(const QString &arg1);    
     void on_chkPasswordProtectPrinting_stateChanged(int arg1);
 
+    void on_chkEnableCurl_stateChanged(int arg1);
+
 private:
     Ui::settingsWidget *ui;
     QMap<QString, QString> mStyleMapping;
