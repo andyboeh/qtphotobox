@@ -6,9 +6,6 @@ inspired and heavily based on design (software and look-and-feel) of
 https://github.com/reuterbal/photobooth with a few
 newly added features and some adaptations to my personal use-case.
 
-**Warning:** This is a very, very, *very* quick rewrite in C++ that has not been
-tested for stability. Be aware that there may be tons of bugs.
-
 Why a rewrite?
 --------------
 
@@ -59,7 +56,6 @@ TODO
 
  * Support Raspberry Pi Camera Module (should work with the generic module if configured correctly)
  * Auto-Upload to web service
- * Auto-generate Gphoto2 configuration file
 
 Installation
 ------------
@@ -107,8 +103,8 @@ in a configuration file at `~/.qtphotobox/settings.ini`.
 
 If you use the GPhoto2 backend, there might be some camera-specific
 initialization values required. These values need to be stored in a file at 
-`~/.qtphotobox/<cameraname>.cfg`. For now, you can find some examples
-in the `config` folder.
+`~/.qtphotobox/<cameraname>.cfg`. This file is auto-created on first startup. For now, you can find some examples
+in the `config` folder. The values there are often required to get AF working properly.
 
 License
 -------

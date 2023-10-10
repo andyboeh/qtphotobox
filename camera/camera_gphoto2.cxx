@@ -91,6 +91,12 @@ bool CameraGphoto2::initCamera()
                         mCaptureConfig.insert(key, settings.value(key));
                     }
                 }
+            } else {
+                qDebug() << "Config file not found, creating empty config file";
+                QFile file(filename);
+                file.open(QFile::WriteOnly);
+                file.write("[startup]\n\n[shutdown]\n\n[active]\n\n[idle]\n\n[capture]");
+                file.close();
             }
         }
         setStartupConfig();
