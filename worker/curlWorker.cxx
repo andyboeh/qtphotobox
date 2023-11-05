@@ -53,19 +53,23 @@ void curlWorker::start()
             curl = curl_easy_init();
             if(curl) {
                 curl_easy_setopt(curl, CURLOPT_URL, pbs.get("upload", "mailserver").toStdString().c_str());
-                // FIXME: Make configurable
                 if(pbs.getBool("upload", "usessl"))
                     curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
                 curl_easy_setopt(curl, CURLOPT_USERNAME, pbs.get("upload", "mailuser").toStdString().c_str());
                 curl_easy_setopt(curl, CURLOPT_PASSWORD, pbs.get("upload", "mailpassword").toStdString().c_str());
                 curl_easy_setopt(curl, CURLOPT_LOGIN_OPTIONS, "AUTH=PLAIN");
                 curl_easy_setopt(curl, CURLOPT_MAIL_FROM, pbs.get("upload", "mailfrom").toStdString().c_str());
-                recipients = curl_slist_append(recipients, pbs.get("upload", "mailto").toStdString().c_str());
+                QStringList recpts = pbs.get("upload", "mailto").split(",");
+                QStringList headerRecpts;;
+                foreach(QString recpt, recpts) {
+                    headerRecpts.append("<" + recpt + ">");
+                    recipients = curl_slist_append(recipients, recpt.toStdString().c_str());
+                }
                 curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
 
                 QStringList headersList;
                 headersList.append("Date: " + QDateTime::currentDateTime().toString(Qt::RFC2822Date));
-                headersList.append("To: <" + pbs.get("upload", "mailto") + ">");
+                headersList.append("To: " + headerRecpts.join(", "));
                 headersList.append("From: <" + pbs.get("upload", "mailfrom") + ">");
                 headersList.append("Message-ID: <" + QUuid::createUuid().toString() + "@qtphotobox.aboehler.at>");
                 headersList.append("Subject: Picture from QtPhotobox");
