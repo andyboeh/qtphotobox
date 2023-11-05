@@ -271,7 +271,7 @@ void pbCamera::start()
                         captureCropW = captureCropH / ratio;
                         captureCropO = (image.size().width() - captureCropW) / 2;
                     }
-                    image = image.copy(captureCropO, 0, previewCropW, captureCropH);
+                    image = image.copy(captureCropO, 0, captureCropW, captureCropH);
                 }
                 emit imageCaptured(image);
             }
