@@ -16,10 +16,7 @@
 printerWorker::printerWorker()
 {
     mPrinter = nullptr;
-    mTimer = new QTimer();
-    mTimer->setInterval(5000);
-    mTimer->setSingleShot(false);
-    connect(mTimer, SIGNAL(timeout()), this, SLOT(startStatusPolling()));
+    mTimer = nullptr;
 }
 
 printerWorker::~printerWorker()
@@ -64,6 +61,12 @@ void printerWorker::start()
         return;
     }
     connect(mPrinter, SIGNAL(printerError(QString,QString)), this, SLOT(printerErrorInternal(QString,QString)));
+    if(!mTimer) {
+        mTimer = new QTimer();
+        mTimer->setInterval(5000);
+        mTimer->setSingleShot(false);
+        connect(mTimer, SIGNAL(timeout()), this, SLOT(startStatusPolling()));
+    }
 
     bool running = true;
     bool initialized = false;
