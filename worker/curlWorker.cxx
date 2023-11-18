@@ -105,6 +105,8 @@ void curlWorker::start()
 
                 if(res != CURLE_OK) {
                     qDebug() << "curl_easy_perform() failed" << curl_easy_strerror(res);
+                    qDebug() << "Re-queuing mail";
+                    sendAttachmentViaEmail(path);
                 }
 
                 curl_slist_free_all(headers);
