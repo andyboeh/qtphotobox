@@ -376,7 +376,7 @@ void settingsWidget::saveToSettings()
     pbs.setBool("camera", "captureflip", ui->chkFlipCapture->isChecked());
     pbs.setBool("camera", "previewflip", ui->chkFlipPreview->isChecked());
     pbs.setBool("camera", "previewportrait", ui->chkPortraitPreview->isChecked());
-    pbs.setBool("camera", "previewcapture", ui->chkPortraitCapture->isChecked());
+    pbs.setBool("camera", "captureportrait", ui->chkPortraitCapture->isChecked());
 
     pbs.setBool("gpio", "enable", ui->chkEnableGPIO->isChecked());
 
