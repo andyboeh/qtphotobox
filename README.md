@@ -14,6 +14,8 @@ it is not the fastest-performing. Plus, I hit some roadblocks when trying
 to add new features given the software design. Thus, I decided to rewrite
 it in a language I'm currently more fluent.
 
+If you like my work, consider sponsoring this project via [Github Sponsors](https://github.com/sponsors/andyboeh) or by acquiring one of my [Amazon Wishlist](https://www.amazon.de/hz/wishlist/ls/ROO2X0G63PCT?ref_=wl_share) items.
+
 Features
 --------
 
