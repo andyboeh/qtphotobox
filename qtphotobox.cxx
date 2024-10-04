@@ -538,8 +538,11 @@ void MainWindow::assembledImageSaved(QString path, QString filename, bool ret)
     mImageToPrint = path + QDir::separator() + filename;
     if(ret)
         emit saveThumbnail(filename);
-#ifdef BUILD_CURL
     pbSettings &pbs = pbSettings::getInstance();
+    if(pbs.getBool("printer", "autoprint")) {
+        startPrintJob(1);
+    }
+#ifdef BUILD_CURL
     if(pbs.getBool("upload", "curl")) {
         emit sendAttachmentViaEmail(mImageToPrint);
     }

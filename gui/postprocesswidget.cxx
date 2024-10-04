@@ -34,9 +34,6 @@ postprocessWidget::postprocessWidget(QWidget *parent) :
         ui->sliderNumCopies->setVisible(false);
         ui->lblNumCopies->setVisible(false);
     }
-    if(pbs.getBool("printer", "enable") && pbs.getBool("printer", "autoprint")) {
-        emit startPrintJob(1);
-    }
 }
 
 postprocessWidget::~postprocessWidget()
